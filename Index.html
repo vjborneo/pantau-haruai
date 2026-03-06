@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANTAU HARUAI - Pengawasan Terpadu Kecamatan Haruai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        .fade-transition { transition: opacity 1s ease-in-out; }
+        .view-enter { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .print-table th, .print-table td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+        .print-table th { background-color: #f1f5f9; }
+    </style>
+</head>
+<body class="bg-slate-900 bg-[url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center bg-fixed min-h-screen font-sans text-slate-800 relative overflow-x-hidden">
+
+    <!-- Overlay Latar Belakang -->
+    <div class="fixed inset-0 bg-blue-900/80 backdrop-blur-sm z-0"></div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: HALAMAN WARGA                      -->
+    <!-- ========================================== -->
+    <div id="viewWarga" class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 view-enter">
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl shadow-black/50 max-w-6xl w-full border border-white/20 overflow-hidden flex flex-col md:flex-row">
+            
+            <!-- Aksen Garis Warna -->
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-700 to-yellow-400 z-20"></div>
+
+            <!-- SISI KIRI: CCTV, Statistik & Widget -->
+            <div class="md:w-1/2 relative min-h-[550px] md:min-h-full flex flex-col bg-slate-800 overflow-hidden">
+                <!-- Slideshow Gambar -->
+                <img id="slideImg" src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=800" class="absolute inset-0 w-full h-full object-cover fade-transition opacity-100 z-0" alt="Pantauan CCTV">
+                
+                <!-- Label Lokasi Slideshow -->
+                <div id="slideCaptionContainer" class="absolute top-6 left-6 bg-slate-900/70 backdrop-blur-md border border-white/20 px-3 py-2 rounded-lg z-30 fade-transition opacity-100 shadow-lg flex items-center gap-2 max-w-[70%]">
+                    <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                    <span id="slideCaption" class="text-xs font-bold text-white leading-tight uppercase">Monitoring Simpang Haruai</span>
+                </div>
+
+                <!-- Widget Statistik Laporan -->
+                <div class="absolute top-6 right-6 bg-slate-900/70 backdrop-blur-md border border-white/20 p-4 rounded-xl shadow-lg w-36 z-30 hidden lg:block text-center">
+                    <h3 class="text-white/90 text-[9px] font-bold tracking-widest uppercase mb-2">Statistik Laporan</h3>
+                    <canvas id="statsChart"></canvas>
+                    <div class="mt-2 flex justify-between text-[9px] font-bold">
+                        <span class="text-yellow-400">P: <span id="txtProses">0</span></span>
+                        <span class="text-blue-400">S: <span id="txtSelesai">0</span></span>
+                    </div>
+                </div>
+
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
+                
+                <div class="relative z-20 p-8 w-full mt-auto">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span></span>
+                        <span class="text-xs font-bold text-white tracking-widest uppercase bg-black/50 px-2 py-1 rounded">CCTV Terintegrasi</span>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white leading-tight mb-2 uppercase tracking-tight">Pengawasan Terpadu</h2>
+                    <p class="text-slate-300 text-sm mb-6 leading-relaxed">Sistem informasi dan pelaporan berbasis digital Kecamatan Haruai. Kolaborasi petugas dan warga untuk lingkungan kondusif.</p>
+                    
+                    <!-- WIDGET LAYANAN DARURAT -->
+                    <div class="w-full">
+                        <div class="bg-blue-900/80 border-l-4 border-yellow-400 rounded-r-lg px-4 py-2.5 mb-3 shadow-md backdrop-blur-md">
+                            <p class="text-xs text-yellow-400 font-extrabold uppercase tracking-widest">Layanan & Portal Resmi</p>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 md:gap-3">
+                            <a href="tel:110" class="flex flex-col items-center justify-center gap-1 bg-white/95 hover:bg-white text-slate-800 text-[10px] font-bold p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Logo_of_the_Indonesian_National_Police.png/320px-Logo_of_the_Indonesian_National_Police.png" class="h-8 object-contain mb-1">
+                                <span>POLRI 110</span>
+                            </a>
+                            <a href="https://www.lapor.go.id/" target="_blank" class="flex flex-col items-center justify-center gap-1 bg-white/95 hover:bg-white text-slate-800 text-[10px] font-bold p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Logo_SP4N_LAPOR%21.png/320px-Logo_SP4N_LAPOR%21.png" class="h-8 object-contain mb-1">
+                                <span>SP4N!</span>
+                            </a>
+                            <a href="https://tabalongkab.go.id/" target="_blank" class="flex flex-col items-center justify-center gap-1 bg-white/95 hover:bg-white text-slate-800 text-[10px] font-bold p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Lambang_Kabupaten_Tabalong.png/200px-Lambang_Kabupaten_Tabalong.png" class="h-8 object-contain mb-1">
+                                <span>Portal</span>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?phone=6282210107129" target="_blank" class="flex flex-col items-center justify-center gap-1 bg-white/95 hover:bg-white text-slate-800 text-[10px] font-bold p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Logo_Badan_Nasional_Penanggulangan_Bencana_%28BNPB%29.png/320px-Logo_Badan_Nasional_Penanggulangan_Bencana_%28BNPB%29.png" class="h-8 object-contain mb-1">
+                                <span>BPBD (WA)</span>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?phone=6281228883650" target="_blank" class="flex flex-col items-center justify-center gap-1 bg-white/95 hover:bg-white text-slate-800 text-[10px] font-bold p-3 rounded-xl transition-all shadow-md hover:-translate-y-1 text-center">
+                                <div class="flex gap-1 mb-1"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Logo_Satpol_PP_Indonesia.png/320px-Logo_Satpol_PP_Indonesia.png" class="h-6"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Logo_Pemadam_Kebakaran_Indonesia.png/320px-Logo_Pemadam_Kebakaran_Indonesia.png" class="h-6"></div>
+                                <span>PolPP Damkar</span>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?phone=6282148369301" target="_blank" class="flex flex-col items-center justify-center gap-1 bg-white/95 hover:bg-white text-slate-800 text-[10px] font-bold p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Logo_PU_%28Kementerian_Pekerjaan_Umum_dan_Perumahan_Rakyat%29.png/320px-Logo_PU_%28Kementerian_Pekerjaan_Umum_dan_Perumahan_Rakyat%29.png" class="h-8 object-contain mb-1">
+                                <span>PUPR (WA)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SISI KANAN: Form Laporan -->
+            <div class="md:w-1/2 p-8 md:p-12 relative flex flex-col justify-center max-h-[95vh] overflow-y-auto">
+                <div class="text-center mb-6">
+                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo" class="h-16 mx-auto mb-3">
+                    <h1 class="text-3xl font-black text-blue-900 tracking-tighter uppercase">Pantau Haruai</h1>
+                    <p class="text-[10px] font-bold text-yellow-600 tracking-[0.2em] mt-1 uppercase">Sinergi Pengawasan Masyarakat</p>
+                </div>
+
+                <form id="formLaporan" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kategori Laporan</label>
+                        <select id="inputKategori" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold">
+                            <option value="" disabled selected>Pilih Kategori</option>
+                            <option value="Trantibum">Trantibum (Ketertiban)</option>
+                            <option value="Infrastruktur">Infrastruktur & Fasum</option>
+                            <option value="Lingkungan">Bencana & Lingkungan</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nama</label>
+                            <input type="text" id="inputNama" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm" placeholder="Nama Anda">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Lokasi</label>
+                            <input type="text" id="inputLokasi" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm" placeholder="Contoh: RT 01">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Keterangan Kejadian</label>
+                        <textarea id="inputLaporan" rows="3" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none text-sm" placeholder="Ceritakan detail kejadian..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Foto Bukti (Opsional)</label>
+                        <input type="file" id="inputFoto" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-blue-100 border border-dashed p-2 rounded-xl border-slate-300">
+                    </div>
+
+                    <button type="submit" id="btnKirim" class="w-full bg-blue-900 text-white font-bold py-4 rounded-xl hover:bg-blue-800 transition-all shadow-lg flex justify-center items-center gap-2">
+                        <span>Kirim Laporan</span>
+                    </button>
+                </form>
+
+                <div id="pesanSukses" class="hidden mt-4 p-4 bg-green-100 border-2 border-green-200 text-green-700 text-center rounded-2xl font-bold animate-pulse">
+                    ✅ Laporan Berhasil Dikirim!
+                </div>
+            </div>
+        </div>
+
+        <button onclick="bukaModalLogin()" class="mt-8 text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            Akses Panel Admin
+        </button>
+    </div>
+
+    <!-- MODAL LOGIN -->
+    <div id="modalLogin" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="tutupModalLogin()"></div>
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-blue-900">Login Petugas</h3>
+                <p class="text-sm text-slate-500 mt-1">Gunakan kredensial yang valid.</p>
+            </div>
+            <div class="space-y-4">
+                <input type="text" id="inputUsername" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-semibold outline-none text-sm" placeholder="Username">
+                <input type="password" id="inputPassword" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl outline-none font-semibold text-sm" placeholder="Password">
+            </div>
+            <p id="errorLogin" class="text-red-500 text-xs font-bold text-center hidden mt-4 bg-red-50 py-2 rounded-xl">Login Gagal!</p>
+            <div class="flex gap-3 mt-8">
+                <button onclick="tutupModalLogin()" class="w-1/3 bg-slate-100 py-4 rounded-2xl font-bold text-slate-500">Batal</button>
+                <button onclick="cekLogin()" class="w-2/3 bg-blue-600 py-4 rounded-2xl font-bold text-white hover:bg-blue-700 shadow-lg">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: HALAMAN DASHBOARD ADMIN            -->
+    <!-- ========================================== -->
+    <div id="viewAdmin" class="hidden relative z-10 min-h-screen p-4 md:p-8 view-enter">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-xl text-white">
+                <div class="flex items-center gap-4">
+                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="h-10 bg-white p-1 rounded-lg">
+                    <div>
+                        <h1 class="text-2xl font-bold leading-none">Command Center</h1>
+                        <p class="text-yellow-400 text-[10px] font-bold tracking-[0.3em] uppercase mt-1">Pantau Haruai Dashboard</p>
+                    </div>
+                </div>
+                <button onclick="kembaliKeWarga()" class="bg-red-500/20 hover:bg-red-600 px-6 py-3 rounded-2xl border border-red-500/30 transition-all font-bold">Keluar</button>
+            </div>
+
+            <!-- Tab Navigasi -->
+            <div class="flex flex-wrap gap-3 mb-8">
+                <button id="btnTabLaporan" onclick="switchAdminTab('laporan')" class="bg-yellow-400 text-blue-900 px-8 py-3.5 rounded-2xl font-bold text-sm shadow-lg">Data Laporan</button>
+                <button id="btnTabSlideshow" onclick="switchAdminTab('slideshow')" class="bg-white/10 text-white border border-white/10 px-8 py-3.5 rounded-2xl font-bold text-sm">Slideshow Front</button>
+                <button id="btnTabPengguna" onclick="switchAdminTab('pengguna')" class="bg-white/10 text-white border border-white/10 px-8 py-3.5 rounded-2xl font-bold text-sm">Manajemen Akun</button>
+            </div>
+
+            <!-- Area Konten -->
+            <div id="contentLaporan" class="bg-white/95 rounded-3xl shadow-2xl p-8 border min-h-[400px]">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-blue-900">Daftar Laporan Masuk</h2>
+                    <button class="bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-bold shadow-md">Export PDF</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 text-[10px] uppercase text-slate-500 font-bold">
+                            <tr><th class="p-4">Tanggal</th><th class="p-4">Kategori</th><th class="p-4">Nama</th><th class="p-4">Lokasi</th><th class="p-4">Status</th><th class="p-4 text-center">Aksi</th></tr>
+                        </thead>
+                        <tbody id="tabelDataLaporan" class="divide-y divide-slate-100">
+                            <!-- JS Injection -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB MANAJEMEN PENGGUNA -->
+            <div id="contentPengguna" class="hidden bg-white/95 rounded-3xl overflow-hidden shadow-2xl">
+                <div class="p-6 bg-slate-50 border-b flex justify-between items-center">
+                    <h2 class="font-bold text-blue-900">Daftar Akun Petugas</h2>
+                    <button onclick="bukaModalTambahPetugas()" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs">+ Tambah Akun</button>
+                </div>
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-100 text-[10px] uppercase font-bold text-slate-500 tracking-widest">
+                        <tr><th class="p-6">Username</th><th class="p-6">Role</th><th class="p-6">Status</th><th class="p-6 text-center">Aksi</th></tr>
+                    </thead>
+                    <tbody id="tabelPengguna" class="divide-y"></tbody>
+                </table>
+            </div>
+
+            <!-- TAB SLIDESHOW -->
+            <div id="contentSlideshow" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Slide Item Form 1-3 -->
+                <div class="bg-white p-6 rounded-3xl shadow-xl border">
+                    <h4 class="font-bold mb-4 text-xs uppercase text-blue-900">Slide 1</h4>
+                    <img id="prev1" src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=800" class="w-full h-32 object-cover rounded-2xl mb-4">
+                    <input type="text" id="inputSlide1" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs mb-2" placeholder="URL Foto">
+                    <input type="text" id="inputCaption1" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs" placeholder="Keterangan">
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-xl border">
+                    <h4 class="font-bold mb-4 text-xs uppercase text-blue-900">Slide 2</h4>
+                    <img id="prev2" src="https://images.unsplash.com/photo-1494522358652-f30e61a60313?q=80&w=800" class="w-full h-32 object-cover rounded-2xl mb-4">
+                    <input type="text" id="inputSlide2" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs mb-2" placeholder="URL Foto">
+                    <input type="text" id="inputCaption2" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs" placeholder="Keterangan">
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-xl border">
+                    <h4 class="font-bold mb-4 text-xs uppercase text-blue-900">Slide 3</h4>
+                    <img id="prev3" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800" class="w-full h-32 object-cover rounded-2xl mb-4">
+                    <input type="text" id="inputSlide3" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs mb-2" placeholder="URL Foto">
+                    <input type="text" id="inputCaption3" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs" placeholder="Keterangan">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH/EDIT USER -->
+    <div id="modalUser" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="tutupModalUser()"></div>
+        <div class="bg-white rounded-3xl p-8 max-sm:max-w-xs w-full relative z-10 shadow-2xl">
+            <h3 id="modalUserTitle" class="text-xl font-bold text-blue-900 mb-6">Kelola Akun</h3>
+            <div class="space-y-4">
+                <input type="text" id="inputNewUser" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" placeholder="Username">
+                <input type="text" id="inputNewPass" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" placeholder="Password">
+                <select id="inputNewRole" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm font-semibold">
+                    <option value="Petugas Piket">Petugas Piket</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <div class="flex gap-3 mt-8">
+                <button onclick="tutupModalUser()" class="w-1/2 bg-slate-100 font-bold py-4 rounded-2xl">Batal</button>
+                <button onclick="simpanPetugas()" class="w-1/2 bg-blue-600 text-white font-bold py-4 rounded-2xl">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STATE ---
+        let dataPengguna = [
+            { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" },
+            { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" }
+        ];
+        
+        let slides = [ 
+            { url: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=800", caption: "Pantauan Simpang Pasar Haruai" },
+            { url: "https://images.unsplash.com/photo-1494522358652-f30e61a60313?q=80&w=800", caption: "Situasi Kantor Camat Haruai" },
+            { url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800", caption: "Ruang Kontrol Command Center" }
+        ];
+
+        let dataLaporan = [];
+        let editIndex = -1;
+
+        // --- CHART ---
+        Chart.register(ChartDataLabels);
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        let statsChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: { labels: ['P', 'S'], datasets: [{ data: [1, 1], backgroundColor: ['#facc15', '#1e3a8a'], borderWidth: 0 }] },
+            options: { responsive: true, cutout: '70%', plugins: { legend: { display: false } } }
+        });
+
+        function updateChart() {
+            let p = dataLaporan.filter(d => d.status === "Menunggu").length;
+            let s = dataLaporan.filter(d => d.status === "Selesai").length;
+            statsChart.data.datasets[0].data = [p || 1, s || 1];
+            statsChart.update();
+            document.getElementById('txtProses').innerText = p;
+            document.getElementById('txtSelesai').innerText = s;
+        }
+
+        // --- AUTH & NAV ---
+        function bukaModalLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
+        function tutupModalLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
+        function cekLogin() {
+            const u = document.getElementById('inputUsername').value;
+            const p = document.getElementById('inputPassword').value;
+            const valid = dataPengguna.find(x => x.username === u && x.password === p && x.status === "Aktif");
+            if (valid) {
+                tutupModalLogin();
+                document.getElementById('viewWarga').classList.add('hidden');
+                document.getElementById('viewAdmin').classList.remove('hidden');
+                switchAdminTab('laporan');
+            } else {
+                document.getElementById('errorLogin').classList.remove('hidden');
+            }
+        }
+        function kembaliKeWarga() {
+            document.getElementById('viewAdmin').classList.add('hidden');
+            document.getElementById('viewWarga').classList.remove('hidden');
+        }
+
+        function switchAdminTab(tab) {
+            const lap = tab === 'laporan'; const sld = tab === 'slideshow'; const usr = tab === 'pengguna';
+            document.getElementById('contentLaporan').classList.toggle('hidden', !lap); 
+            document.getElementById('contentSlideshow').classList.toggle('hidden', !sld);
+            document.getElementById('contentPengguna').classList.toggle('hidden', !usr);
+            
+            const active = "bg-yellow-400 text-blue-900 shadow-lg";
+            const inactive = "bg-white/10 text-white border border-white/10";
+            
+            document.getElementById('btnTabLaporan').className = (lap ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
+            document.getElementById('btnTabSlideshow').className = (sld ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
+            document.getElementById('btnTabPengguna').className = (usr ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
+            
+            if(usr) renderUsers();
+        }
+
+        // --- USER MGMT ---
+        function renderUsers() {
+            const tbody = document.getElementById('tabelPengguna'); tbody.innerHTML = '';
+            dataPengguna.forEach((u, i) => {
+                const isSuper = u.username === 'superadmin';
+                const statClass = u.status === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+                const action = isSuper ? '<span class="text-xs italic text-slate-300">Protected</span>' : `
+                    <button onclick="editUser(${i})" class="text-blue-600 font-bold mr-3 text-xs">Edit</button>
+                    <button onclick="toggleUser(${i})" class="${u.status === 'Aktif' ? 'text-red-500' : 'text-green-500'} font-bold text-xs">${u.status === 'Aktif' ? 'Blokir' : 'Aktifkan'}</button>
+                `;
+                tbody.innerHTML += `<tr><td class="p-6 font-bold text-slate-800">${u.username}</td><td class="p-6">${u.role}</td><td class="p-6"><span class="px-3 py-1 rounded-full text-[10px] font-bold ${statClass}">${u.status}</span></td><td class="p-6 text-center">${action}</td></tr>`;
+            });
+        }
+        function toggleUser(i) { dataPengguna[i].status = dataPengguna[i].status === 'Aktif' ? 'Nonaktif' : 'Aktif'; renderUsers(); }
+        function bukaModalTambahPetugas() { editIndex = -1; document.getElementById('modalUserTitle').innerText = "Tambah Akun"; document.getElementById('modalUser').classList.remove('hidden'); document.getElementById('inputNewUser').value = ''; document.getElementById('inputNewPass').value = ''; }
+        function tutupModalUser() { document.getElementById('modalUser').classList.add('hidden'); }
+        function editUser(i) {
+            editIndex = i;
+            document.getElementById('modalUserTitle').innerText = "Edit Akun";
+            document.getElementById('inputNewUser').value = dataPengguna[i].username;
+            document.getElementById('inputNewPass').value = dataPengguna[i].password;
+            document.getElementById('inputNewRole').value = dataPengguna[i].role;
+            document.getElementById('modalUser').classList.remove('hidden');
+        }
+        function simpanPetugas() {
+            const u = document.getElementById('inputNewUser').value;
+            const p = document.getElementById('inputNewPass').value;
+            const r = document.getElementById('inputNewRole').value;
+            if(!u || !p) return;
+            if(editIndex === -1) dataPengguna.push({ username: u, password: p, role: r, status: "Aktif" });
+            else { dataPengguna[editIndex].username = u; dataPengguna[editIndex].password = p; dataPengguna[editIndex].role = r; }
+            tutupModalUser(); renderUsers();
+        }
+
+        // --- SLIDESHOW ENGINE ---
+        let currentSlide = 0;
+        setInterval(() => {
+            const img = document.getElementById('slideImg');
+            const cap = document.getElementById('slideCaption');
+            const cont = document.getElementById('slideCaptionContainer');
+            if(!img) return;
+            img.classList.replace('opacity-100', 'opacity-0');
+            cont.classList.replace('opacity-100', 'opacity-0');
+            setTimeout(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                img.src = slides[currentSlide].url;
+                cap.innerText = slides[currentSlide].caption;
+                img.classList.replace('opacity-0', 'opacity-100');
+                cont.classList.replace('opacity-0', 'opacity-100');
+            }, 1000);
+        }, 5000);
+
+        // --- FORM SUBMIT TO APPS SCRIPT ---
+        document.getElementById('formLaporan').addEventListener('submit', async e => {
+            e.preventDefault();
+            const btn = document.getElementById('btnKirim');
+            const originalText = btn.innerText;
+            btn.disabled = true; btn.innerText = "Sinking...";
+            
+            const kategori = document.getElementById('inputKategori').value;
+            const nama = document.getElementById('inputNama').value;
+            const lokasi = document.getElementById('inputLokasi').value;
+            const laporan = document.getElementById('inputLaporan').value;
+            const fileFoto = document.getElementById('inputFoto').files[0];
+
+            let fotoBase64 = "";
+            if (fileFoto) {
+                const reader = new FileReader();
+                reader.readAsDataURL(fileFoto);
+                await new Promise(r => reader.onload = () => { fotoBase64 = reader.result; r(); });
+            }
+
+            // GANTI DENGAN URL WEB APP GAS KAMU SETELAH DEPLOY!
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxIwEtZKpui91jLhE1BRtgTG8g5TLSD0RbXJv6NGAFcantj__mAXEAr-nf4XdXoBxaQqg/exec'; 
+            
+            if(scriptURL !== 'https://script.google.com/macros/s/AKfycbxIwEtZKpui91jLhE1BRtgTG8g5TLSD0RbXJv6NGAFcantj__mAXEAr-nf4XdXoBxaQqg/exec') {
+                fetch(scriptURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ kategori, nama, lokasi, laporan, fotoBase64 })
+                }).catch(err => console.error(err));
+            }
+
+            setTimeout(() => {
+                dataLaporan.unshift({ kategori, nama, lokasi, laporan, status: "Menunggu", tanggal: new Date().toLocaleDateString() });
+                updateChart();
+                document.getElementById('pesanSukses').classList.remove('hidden');
+                document.getElementById('formLaporan').reset();
+                btn.disabled = false; btn.innerText = originalText;
+                setTimeout(() => document.getElementById('pesanSukses').classList.add('hidden'), 5000);
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

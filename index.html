@@ -93,9 +93,12 @@
                             </div>
 
                             <div class="col-span-1 bg-slate-900/60 backdrop-blur-lg border border-white/20 p-4 rounded-xl shadow-lg flex flex-col items-center justify-center">
-                                <h3 class="text-white/90 text-[10px] font-bold tracking-widest uppercase mb-2">Statistik Laporan</h3>
+                                <h3 class="text-white/90 text-[10px] font-bold tracking-widest uppercase mb-2 text-center leading-tight">Statistik Laporan Yang<br>Sudah Selesai Ditangani</h3>
                                 <div class="relative w-full max-w-[100px] flex-grow flex items-center justify-center">
                                     <canvas id="statsChart"></canvas>
+                                    <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+                                        <span id="chartPercentage" class="text-xl font-black text-white drop-shadow-md">0%</span>
+                                    </div>
                                 </div>
                                 <div class="mt-2 w-full flex justify-between px-2 text-[10px] font-bold">
                                     <span class="text-yellow-400">Proses: <span id="txtProses">0</span></span>
@@ -326,17 +329,31 @@
         const ctx = document.getElementById('statsChart').getContext('2d');
         let statsChart = new Chart(ctx, {
             type: 'doughnut',
-            data: { labels: ['P', 'S'], datasets: [{ data: [1, 1], backgroundColor: ['#facc15', '#1d4ed8'], borderWidth: 0 }] }, // Kuning dan Biru Tua
-            options: { responsive: true, cutout: '70%', plugins: { legend: { display: false } } }
+            data: { labels: ['P', 'S'], datasets: [{ data: [1, 1], backgroundColor: ['#facc15', '#1d4ed8'], borderWidth: 0 }] },
+            options: { 
+                responsive: true, 
+                cutout: '75%', // Diperbesar sedikit lobangnya biar muat teks
+                plugins: { 
+                    legend: { display: false },
+                    datalabels: { display: false } // Mematikan label bawaan agar bersih
+                } 
+            }
         });
 
         function updateChart() {
             let p = dataLaporan.filter(d => d.status === "Menunggu").length;
             let s = dataLaporan.filter(d => d.status === "Selesai").length;
-            statsChart.data.datasets[0].data = [p || 1, s || 1];
+            let total = p + s;
+            
+            // Menghitung persentase "Selesai"
+            let percent = total > 0 ? Math.round((s / total) * 100) : 0;
+            
+            statsChart.data.datasets[0].data = total > 0 ? [p, s] : [1, 0]; // Biar chart ga error klo data kosong
             statsChart.update();
+            
             document.getElementById('txtProses').innerText = p;
             document.getElementById('txtSelesai').innerText = s;
+            document.getElementById('chartPercentage').innerText = percent + '%';
         }
 
         // --- SINKRONISASI GSHEET ---

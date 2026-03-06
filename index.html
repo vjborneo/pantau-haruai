@@ -212,7 +212,15 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse">
                         <thead class="text-[10px] uppercase text-yellow-400 font-bold tracking-widest border-b border-slate-700">
-                            <tr><th class="p-4">Tanggal</th><th class="p-4">Kategori</th><th class="p-4">Nama</th><th class="p-4">Lokasi</th><th class="p-4">Status</th><th class="p-4 text-center">Aksi</th></tr>
+                            <tr>
+                                <th class="p-4 text-center">No</th>
+                                <th class="p-4">Tanggal</th>
+                                <th class="p-4">Kategori</th>
+                                <th class="p-4">Nama</th>
+                                <th class="p-4">Lokasi</th>
+                                <th class="p-4 text-center">Status</th>
+                                <th class="p-4 text-center">Aksi</th>
+                            </tr>
                         </thead>
                         <tbody id="tabelDataLaporan" class="divide-y divide-slate-700/50">
                             </tbody>
@@ -299,7 +307,7 @@
         async function muatDataGSheet() {
             const tbody = document.getElementById('tabelDataLaporan');
             if(!tbody) return;
-            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center font-bold text-yellow-400 animate-pulse">Memuat data dari database...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center font-bold text-yellow-400 animate-pulse">Memuat data dari database...</td></tr>';
             
             try {
                 const res = await fetch(URL_GAS + '?action=read');
@@ -309,23 +317,30 @@
                 tbody.innerHTML = '';
                 
                 if(data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">Belum ada laporan masuk.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-slate-400">Belum ada laporan masuk.</td></tr>';
                 } else {
-                    data.reverse().forEach(item => {
+                    // Karena data di-reverse, indeks nomor urut harus dihitung dari total
+                    const totalData = data.length;
+                    
+                    data.reverse().forEach((item, index) => {
                         const isSelesai = item.status === 'Selesai';
                         const badgeClass = isSelesai ? 'border-green-500 text-green-400 bg-green-900/40' : 'border-yellow-500 text-yellow-400 bg-yellow-900/40';
                         const tgl = item.waktu ? new Date(item.waktu).toLocaleDateString('id-ID') : '-';
+                        
+                        // Menghitung nomor urut (karena di-reverse, data terbaru = no 1)
+                        const noUrut = totalData - index;
 
                         tbody.innerHTML += `
                             <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
+                                <td class="p-4 text-xs font-semibold text-slate-400 text-center">${noUrut}</td>
                                 <td class="p-4 text-xs font-semibold text-slate-300">${tgl}</td>
                                 <td class="p-4 font-bold text-xs text-yellow-400">${item.kategori}</td>
                                 <td class="p-4 text-xs font-semibold text-white">${item.nama}</td>
                                 <td class="p-4 text-xs text-slate-400">${item.lokasi}</td>
-                                <td class="p-4"><span class="px-2 py-1 rounded border ${badgeClass} text-[10px] font-bold tracking-wider uppercase">${item.status}</span></td>
-                                <td class="p-4 text-center">
-                                    ${!isSelesai ? `<button onclick="ubahStatus(${item.rowId}, this)" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all uppercase tracking-widest shadow">Selesaikan</button>` : '<span class="text-green-500 font-bold text-lg">✓</span>'}
-                                    ${item.foto && item.foto !== 'Tanpa Foto' ? `<br><a href="${item.foto}" target="_blank" class="text-blue-400 hover:text-blue-300 text-[10px] underline italic mt-1 inline-block">Lampiran</a>` : ''}
+                                <td class="p-4 text-center"><span class="px-2 py-1 rounded border ${badgeClass} text-[10px] font-bold tracking-wider uppercase">${item.status}</span></td>
+                                <td class="p-4 text-center flex justify-center items-center gap-2">
+                                    ${!isSelesai ? `<button onclick="ubahStatus(${item.rowId}, this)" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all uppercase tracking-widest shadow whitespace-nowrap">Selesaikan</button>` : '<span class="text-green-500 font-bold text-lg px-3 py-1">✓</span>'}
+                                    ${item.foto && item.foto !== 'Tanpa Foto' ? `<a href="${item.foto}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all uppercase tracking-widest shadow whitespace-nowrap border border-slate-600">Lampiran</a>` : ''}
                                 </td>
                             </tr>
                         `;
@@ -333,7 +348,7 @@
                 }
                 updateChart();
             } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold">Koneksi API Gagal. Pastikan URL Web App sudah benar!</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500 font-bold">Koneksi API Gagal. Pastikan URL Web App sudah benar!</td></tr>';
             }
         }
 
@@ -351,42 +366,31 @@
 
         // --- CETAK PDF RESMI ANTI-KETAWA ATASAN ---
         function cetakLaporanResmi() {
-            // Membuat wadah HTML tersembunyi yang bersih (Hitam Putih Resmi)
-            const printContainer = document.createElement('div');
-            printContainer.style.position = 'absolute';
-            printContainer.style.left = '-9999px'; // Disembunyikan jauh dari layar
-            printContainer.style.top = '0';
-            printContainer.style.width = '1000px'; 
-            printContainer.style.background = '#ffffff';
-            printContainer.style.color = '#000000';
-            printContainer.style.padding = '40px';
-            printContainer.style.fontFamily = 'Arial, sans-serif';
-
-            // Merakit Kop Surat dan Tabel Resmi
-            let html = `
-                <div style="text-align: center; border-bottom: 3px solid #000; padding-bottom: 15px; margin-bottom: 25px;">
-                    <h2 style="margin: 0; font-size: 20px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
-                    <h1 style="margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
-                    <p style="margin: 8px 0 0; font-size: 14px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p>
-                </div>
-                <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px;">
-                    <thead>
-                        <tr style="background-color: #f0f0f0;">
-                            <th style="border: 1px solid #000; padding: 10px; text-align: center; width: 5%;">No</th>
-                            <th style="border: 1px solid #000; padding: 10px; text-align: left; width: 15%;">Waktu</th>
-                            <th style="border: 1px solid #000; padding: 10px; text-align: left; width: 15%;">Kategori</th>
-                            <th style="border: 1px solid #000; padding: 10px; text-align: left; width: 20%;">Nama Pelapor</th>
-                            <th style="border: 1px solid #000; padding: 10px; text-align: left; width: 30%;">Lokasi Kejadian</th>
-                            <th style="border: 1px solid #000; padding: 10px; text-align: center; width: 15%;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            let htmlContent = `
+                <div style="padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff; width: 1000px;">
+                    <div style="text-align: center; border-bottom: 3px solid #000; padding-bottom: 15px; margin-bottom: 25px;">
+                        <h2 style="margin: 0; font-size: 20px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
+                        <h1 style="margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
+                        <p style="margin: 8px 0 0; font-size: 14px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px;">
+                        <thead>
+                            <tr style="background-color: #f0f0f0;">
+                                <th style="border: 1px solid #000; padding: 10px; text-align: center; width: 5%;">No</th>
+                                <th style="border: 1px solid #000; padding: 10px; text-align: left; width: 15%;">Waktu</th>
+                                <th style="border: 1px solid #000; padding: 10px; text-align: left; width: 15%;">Kategori</th>
+                                <th style="border: 1px solid #000; padding: 10px; text-align: left; width: 20%;">Nama Pelapor</th>
+                                <th style="border: 1px solid #000; padding: 10px; text-align: left; width: 30%;">Lokasi Kejadian</th>
+                                <th style="border: 1px solid #000; padding: 10px; text-align: center; width: 15%;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
 
-            // Mengisi data ke tabel
+            // Mengisi data ke tabel PDF
             dataLaporan.forEach((item, index) => {
                 const tgl = item.waktu ? new Date(item.waktu).toLocaleDateString('id-ID') : '-';
-                html += `
+                htmlContent += `
                     <tr>
                         <td style="border: 1px solid #000; padding: 10px; text-align: center;">${index + 1}</td>
                         <td style="border: 1px solid #000; padding: 10px;">${tgl}</td>
@@ -398,24 +402,20 @@
                 `;
             });
 
-            // Penutup HTML (Tanda Tangan)
-            html += `
-                    </tbody>
-                </table>
-                <div style="width: 100%; display: flex; justify-content: flex-end; font-size: 14px;">
-                    <div style="text-align: center; width: 250px;">
-                        <p style="margin: 0;">Haruai, ${new Date().toLocaleDateString('id-ID')}</p>
-                        <p style="margin: 0;">Petugas Command Center,</p>
-                        <br><br><br><br>
-                        <p style="margin: 0; text-decoration: underline; font-weight: bold;">( ......................................... )</p>
+            htmlContent += `
+                        </tbody>
+                    </table>
+                    <div style="width: 100%; display: flex; justify-content: flex-end; font-size: 14px;">
+                        <div style="text-align: center; width: 250px;">
+                            <p style="margin: 0;">Haruai, ${new Date().toLocaleDateString('id-ID')}</p>
+                            <p style="margin: 0;">Petugas Command Center,</p>
+                            <br><br><br><br>
+                            <p style="margin: 0; text-decoration: underline; font-weight: bold;">( ......................................... )</p>
+                        </div>
                     </div>
                 </div>
             `;
 
-            printContainer.innerHTML = html;
-            document.body.appendChild(printContainer);
-
-            // Pengaturan Cetak A4 Landscape Biar Lebar & Puas Dibaca
             const opt = {
                 margin:       0.5,
                 filename:     'Arsip-Resmi-Laporan-Pantau-Haruai.pdf',
@@ -424,10 +424,7 @@
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
             };
 
-            // Proses cetak, lalu bersihkan kode sampah pembungkusnya
-            html2pdf().set(opt).from(printContainer).save().then(() => {
-                document.body.removeChild(printContainer);
-            });
+            html2pdf().set(opt).from(htmlContent).save();
         }
 
         // --- AUTH & NAV ---

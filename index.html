@@ -4,11 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PANTAU HARUAI (PENGAWASAN TERPADU KECAMATAN HARUAI)</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cyber: '#0ff', // Cyan neon
+              darkbg: '#050b14' // Biru hacker gelap
+            }
+          }
+        }
+      }
+    </script>
+
     <style>
         .fade-transition { transition: opacity 1s ease-in-out; }
         .view-enter { animation: fadeIn 0.5s ease-out forwards; }
@@ -16,11 +30,36 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Tema CGI Admin */
+        .glass-panel {
+            background: rgba(10, 25, 47, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.05);
+        }
+        .text-glow {
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        }
+        .bg-cctv {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            opacity: 0.02; /* Watermark sangat tipis */
+            pointer-events: none;
+            z-index: 0;
+        }
     </style>
 </head>
-<body class="bg-slate-900 bg-[url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center bg-fixed min-h-screen font-sans text-slate-800 relative overflow-x-hidden">
+<body class="bg-slate-900 bg-[url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center bg-fixed min-h-screen font-sans text-slate-800 relative overflow-x-hidden transition-colors duration-500" id="mainBody">
 
-    <div class="fixed inset-0 bg-blue-900/80 backdrop-blur-sm z-0"></div>
+    <div id="bgOverlayWarga" class="fixed inset-0 bg-blue-900/80 backdrop-blur-sm z-0 transition-opacity duration-500"></div>
+
+    <svg id="bgCCTVAdmin" class="bg-cctv hidden" viewBox="0 0 24 24" fill="#0ff">
+        <path d="M15,2A3,3 0 0,0 12,5A3,3 0 0,0 15,8A3,3 0 0,0 18,5A3,3 0 0,0 15,2M11,10H19A2,2 0 0,1 21,12V22A2,2 0 0,1 19,24H11A2,2 0 0,1 9,22V12A2,2 0 0,1 11,10M11,12V22H19V12H11M3,5H5V15H7V17H5A2,2 0 0,1 3,15V5Z" />
+    </svg>
 
     <div id="viewWarga" class="relative z-10 min-h-screen flex flex-col items-center justify-center p-2 md:p-6 view-enter">
         <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl shadow-black/50 w-full max-w-[96%] 2xl:max-w-[1600px] border border-white/20 overflow-hidden flex flex-col md:flex-row">
@@ -28,11 +67,11 @@
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-700 to-yellow-400 z-20"></div>
 
             <div class="md:w-[70%] relative min-h-[550px] md:min-h-full flex flex-col bg-slate-800 overflow-hidden">
-                <img id="slideImg" src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=800" class="absolute inset-0 w-full h-full object-cover fade-transition opacity-100 z-0" alt="Pantauan CCTV">
+                <img id="slideImg" src="" class="absolute inset-0 w-full h-full object-cover fade-transition opacity-100 z-0" alt="Pantauan CCTV">
                 
                 <div id="slideCaptionContainer" class="absolute top-6 left-6 bg-slate-900/70 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-lg z-30 fade-transition opacity-100 shadow-lg flex items-center gap-2 max-w-[70%]">
                     <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                    <span id="slideCaption" class="text-sm font-bold text-white leading-tight uppercase">Monitoring Simpang Haruai</span>
+                    <span id="slideCaption" class="text-sm font-bold text-white leading-tight uppercase">Loading...</span>
                 </div>
 
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
@@ -44,7 +83,7 @@
                     </div>
 
                     <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight mb-2 uppercase tracking-tight">PANTAU HARUAI</h2>
-                    <p class="text-slate-300 text-sm lg:text-base mb-6 leading-relaxed max-w-2xl">Pengawasan Terpadu Kecamatan Haruai. Sistem informasi dan pelaporan berbasis digital untuk lingkungan yang kondusif hasil kolaborasi FORKOPIMCA Kecamatan Haruai dan Pemerintah Desa se Kecamatan Haruai guna mendukung Misi TABALONG SMART (Sejahtera, Maju, Religius dan Terdepan).</p>
+                    <p class="text-slate-300 text-sm lg:text-base mb-6 leading-relaxed max-w-2xl">Pengawasan Terpadu Kecamatan Haruai. Sistem informasi dan pelaporan berbasis digital untuk lingkungan yang kondusif hasil kolaborasi FORKOPIMCA Kecamatan Haruai dan Pemerintah Desa se Kecamatan Haruai guna mendukung Misi TABALONG SMART.</p>
                     
                     <div class="w-full max-w-5xl">
                         <div class="bg-blue-900/80 border-l-4 border-yellow-400 rounded-r-lg px-4 py-2.5 mb-3 shadow-md backdrop-blur-md inline-block">
@@ -52,42 +91,29 @@
                         </div>
                         
                         <div class="grid grid-cols-1 lg:grid-cols-4 gap-3">
-                            
                             <div class="col-span-1 lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-3">
                                 <a href="tel:110" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-blue-100 p-2.5 rounded-lg text-blue-800">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                                    </div>
+                                    <div class="bg-blue-100 p-2.5 rounded-lg text-blue-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
                                     <span class="text-xs lg:text-sm font-bold">POLRI 110</span>
                                 </a>
                                 <a href="https://www.lapor.go.id/" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-red-100 p-2.5 rounded-lg text-red-700">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                                    </div>
+                                    <div class="bg-red-100 p-2.5 rounded-lg text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
                                     <span class="text-xs lg:text-sm font-bold">SP4N LAPOR!</span>
                                 </a>
                                 <a href="https://tabalongkab.go.id/" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-emerald-100 p-2.5 rounded-lg text-emerald-700">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                                    </div>
+                                    <div class="bg-emerald-100 p-2.5 rounded-lg text-emerald-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
                                     <span class="text-xs lg:text-sm font-bold">Portal Tabalong</span>
                                 </a>
                                 <a href="https://api.whatsapp.com/send?phone=6282210107129" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-orange-100 p-2.5 rounded-lg text-orange-700">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                                    </div>
+                                    <div class="bg-orange-100 p-2.5 rounded-lg text-orange-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
                                     <span class="text-xs lg:text-sm font-bold">BPBD (WA)</span>
                                 </a>
                                 <a href="https://api.whatsapp.com/send?phone=6281228883650" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-amber-100 p-2.5 rounded-lg text-amber-700">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
-                                    </div>
+                                    <div class="bg-amber-100 p-2.5 rounded-lg text-amber-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
                                     <span class="text-xs lg:text-sm font-bold">PolPP & Damkar</span>
                                 </a>
                                 <a href="https://api.whatsapp.com/send?phone=6282148369301" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-yellow-100 p-2.5 rounded-lg text-yellow-800">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-                                    </div>
+                                    <div class="bg-yellow-100 p-2.5 rounded-lg text-yellow-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
                                     <span class="text-xs lg:text-sm font-bold">PUPR (WA)</span>
                                 </a>
                             </div>
@@ -98,8 +124,8 @@
                                     <canvas id="statsChart"></canvas>
                                 </div>
                                 <div class="mt-2 w-full flex justify-between px-2 text-[10px] font-bold">
-                                    <span class="text-yellow-400">P: <span id="txtProses">0</span></span>
-                                    <span class="text-blue-400">S: <span id="txtSelesai">0</span></span>
+                                    <span class="text-yellow-400">Proses: <span id="txtProses">0</span></span>
+                                    <span class="text-blue-400">Selesai: <span id="txtSelesai">0</span></span>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +138,7 @@
                     <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo" class="h-28 mx-auto mb-4 object-contain">
                     <h1 class="text-4xl lg:text-3xl font-black text-blue-900 tracking-tighter uppercase">PANTAU HARUAI</h1>
                     <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu Kecamatan Haruai)</p>
-                    <p class="text-[10px] font-bold text-black tracking-[0.15em] mt-1 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan Anda. Laporan Anda sangat berarti untuk keamanan, ketertiban dan kenyamanan Masyarakat</p>
+                    <p class="text-[10px] font-bold text-black tracking-[0.15em] mt-1 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan Anda.</p>
                 </div>
 
                 <form id="formLaporan" class="space-y-4">
@@ -167,7 +193,6 @@
         <div class="bg-white rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl">
             <div class="text-center mb-8">
                 <h3 class="text-2xl font-bold text-blue-900">Login Petugas</h3>
-                <p class="text-sm text-slate-500 mt-1">Gunakan kredensial yang valid.</p>
             </div>
             <div class="space-y-4">
                 <input type="text" id="inputUsername" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-semibold outline-none text-sm" placeholder="Username">
@@ -183,116 +208,97 @@
 
     <div id="viewAdmin" class="hidden relative z-10 min-h-screen p-4 md:p-8 view-enter">
         <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-xl text-white">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 glass-panel p-6 rounded-3xl shadow-[0_0_20px_rgba(0,255,255,0.2)] text-white relative overflow-hidden">
+                <div class="absolute w-1 h-full bg-cyber left-0 top-0 shadow-[0_0_10px_#0ff]"></div>
                 <div class="flex items-center gap-4">
-                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="h-10 bg-white p-1 rounded-lg">
+                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="h-12 bg-white/90 backdrop-blur p-1 rounded-lg">
                     <div>
-                        <h1 class="text-2xl font-bold leading-none">Command Center</h1>
-                        <p class="text-yellow-400 text-[10px] font-bold tracking-[0.3em] uppercase mt-1">Pantau Haruai Dashboard</p>
+                        <h1 class="text-2xl font-bold leading-none text-cyber text-glow tracking-widest uppercase">Command Center</h1>
+                        <p class="text-gray-400 text-[10px] font-bold tracking-[0.3em] uppercase mt-1">Status: <span class="text-green-400 animate-pulse">SYSTEM ONLINE</span></p>
                     </div>
                 </div>
-                <button onclick="kembaliKeWarga()" class="bg-red-500/20 hover:bg-red-600 px-6 py-3 rounded-2xl border border-red-500/30 transition-all font-bold">Keluar</button>
+                <div class="flex gap-3">
+                    <button onclick="cetakLaporan()" class="bg-transparent border border-cyber text-cyber hover:bg-cyber hover:text-black px-5 py-2.5 rounded-xl font-bold text-sm shadow-[0_0_10px_rgba(0,255,255,0.3)] transition-all flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        Cetak PDF
+                    </button>
+                    <button onclick="kembaliKeWarga()" class="bg-red-900/40 hover:bg-red-600 px-6 py-2.5 rounded-xl border border-red-500/50 transition-all font-bold text-red-400 hover:text-white shadow-[0_0_10px_rgba(255,0,0,0.2)]">Logout</button>
+                </div>
             </div>
 
             <div class="flex flex-wrap gap-3 mb-8">
-                <button id="btnTabLaporan" onclick="switchAdminTab('laporan')" class="bg-yellow-400 text-blue-900 px-8 py-3.5 rounded-2xl font-bold text-sm shadow-lg">Data Laporan</button>
-                <button id="btnTabSlideshow" onclick="switchAdminTab('slideshow')" class="bg-white/10 text-white border border-white/10 px-8 py-3.5 rounded-2xl font-bold text-sm">Slideshow Front</button>
-                <button id="btnTabPengguna" onclick="switchAdminTab('pengguna')" class="bg-white/10 text-white border border-white/10 px-8 py-3.5 rounded-2xl font-bold text-sm">Manajemen Akun</button>
+                <button id="btnTabLaporan" onclick="switchAdminTab('laporan')" class="bg-cyber/20 text-cyber border border-cyber px-8 py-3.5 rounded-2xl font-bold text-sm shadow-[0_0_10px_rgba(0,255,255,0.4)]">Terminal Laporan</button>
+                <button id="btnTabSlideshow" onclick="switchAdminTab('slideshow')" class="bg-transparent text-gray-400 border border-gray-600 px-8 py-3.5 rounded-2xl font-bold text-sm hover:text-cyber">Konfigurasi CCTV</button>
+                <button id="btnTabPengguna" onclick="switchAdminTab('pengguna')" class="bg-transparent text-gray-400 border border-gray-600 px-8 py-3.5 rounded-2xl font-bold text-sm hover:text-cyber">Otorisasi Akses</button>
             </div>
 
-            <div id="contentLaporan" class="bg-white/95 rounded-3xl shadow-2xl p-8 border min-h-[400px]">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-blue-900">Daftar Laporan Masuk</h2>
-                    <button class="bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-bold shadow-md">Export PDF</button>
-                </div>
+            <div id="contentLaporan" class="glass-panel rounded-3xl p-8 min-h-[400px]">
+                <h2 class="text-xl font-bold text-white mb-6 border-l-4 border-cyber pl-3 uppercase tracking-widest text-glow">Data Laporan Masuk</h2>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-100 text-[10px] uppercase text-slate-500 font-bold">
-                            <tr><th class="p-4">Tanggal</th><th class="p-4">Kategori</th><th class="p-4">Nama</th><th class="p-4">Lokasi</th><th class="p-4">Status</th><th class="p-4 text-center">Aksi</th></tr>
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead class="text-[10px] uppercase text-cyber font-bold tracking-widest border-b border-gray-700">
+                            <tr><th class="p-4">Tanggal</th><th class="p-4">Kategori</th><th class="p-4">Nama</th><th class="p-4">Lokasi</th><th class="p-4">Status</th><th class="p-4 text-center data-aksi">Aksi</th></tr>
                         </thead>
-                        <tbody id="tabelDataLaporan" class="divide-y divide-slate-100">
+                        <tbody id="tabelDataLaporan" class="divide-y divide-gray-800">
                             </tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="contentPengguna" class="hidden bg-white/95 rounded-3xl overflow-hidden shadow-2xl">
-                <div class="p-6 bg-slate-50 border-b flex justify-between items-center">
-                    <h2 class="font-bold text-blue-900">Daftar Akun Petugas</h2>
-                    <button onclick="bukaModalTambahPetugas()" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs">+ Tambah Akun</button>
+            <div id="contentPengguna" class="hidden glass-panel rounded-3xl overflow-hidden shadow-2xl">
+                <div class="p-6 border-b border-gray-700 flex justify-between items-center">
+                    <h2 class="font-bold text-white tracking-widest uppercase border-l-4 border-cyber pl-3">Daftar Akun Petugas</h2>
+                    <button onclick="bukaModalTambahPetugas()" class="bg-cyber text-black px-5 py-2.5 rounded-xl font-bold text-xs shadow-[0_0_10px_#0ff] hover:bg-white">+ Tambah Akun</button>
                 </div>
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-100 text-[10px] uppercase font-bold text-slate-500 tracking-widest">
+                <table class="w-full text-left text-sm text-gray-300">
+                    <thead class="text-[10px] uppercase font-bold text-cyber tracking-widest border-b border-gray-700">
                         <tr><th class="p-6">Username</th><th class="p-6">Role</th><th class="p-6">Status</th><th class="p-6 text-center">Aksi</th></tr>
                     </thead>
-                    <tbody id="tabelPengguna" class="divide-y"></tbody>
+                    <tbody id="tabelPengguna" class="divide-y divide-gray-800"></tbody>
                 </table>
             </div>
 
             <div id="contentSlideshow" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-3xl shadow-xl border relative">
-                    <h4 class="font-bold mb-4 text-xs uppercase text-blue-900">Slide 1</h4>
-                    <img id="prev1" src="" class="w-full h-32 object-cover rounded-2xl mb-4 bg-slate-100 border border-slate-200">
-                    <input type="text" id="inputSlide1" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-[10px] mb-2 font-medium" placeholder="URL Foto">
-                    <input type="text" id="inputCaption1" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs font-bold text-slate-700 mb-4" placeholder="Keterangan Teks">
-                    <button onclick="simpanSlideshow(1)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition-all active:scale-95">💾 Simpan Slide 1</button>
                 </div>
-                <div class="bg-white p-6 rounded-3xl shadow-xl border relative">
-                    <h4 class="font-bold mb-4 text-xs uppercase text-blue-900">Slide 2</h4>
-                    <img id="prev2" src="" class="w-full h-32 object-cover rounded-2xl mb-4 bg-slate-100 border border-slate-200">
-                    <input type="text" id="inputSlide2" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-[10px] mb-2 font-medium" placeholder="URL Foto">
-                    <input type="text" id="inputCaption2" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs font-bold text-slate-700 mb-4" placeholder="Keterangan Teks">
-                    <button onclick="simpanSlideshow(2)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition-all active:scale-95">💾 Simpan Slide 2</button>
-                </div>
-                <div class="bg-white p-6 rounded-3xl shadow-xl border relative">
-                    <h4 class="font-bold mb-4 text-xs uppercase text-blue-900">Slide 3</h4>
-                    <img id="prev3" src="" class="w-full h-32 object-cover rounded-2xl mb-4 bg-slate-100 border border-slate-200">
-                    <input type="text" id="inputSlide3" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-[10px] mb-2 font-medium" placeholder="URL Foto">
-                    <input type="text" id="inputCaption3" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-xs font-bold text-slate-700 mb-4" placeholder="Keterangan Teks">
-                    <button onclick="simpanSlideshow(3)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition-all active:scale-95">💾 Simpan Slide 3</button>
-                </div>
-            </div>
         </div>
     </div>
 
     <div id="modalUser" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="tutupModalUser()"></div>
-        <div class="bg-white rounded-3xl p-8 max-sm:max-w-xs w-full relative z-10 shadow-2xl">
-            <h3 id="modalUserTitle" class="text-xl font-bold text-blue-900 mb-6">Kelola Akun</h3>
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="tutupModalUser()"></div>
+        <div class="glass-panel rounded-3xl p-8 max-sm:max-w-xs w-full relative z-10 shadow-[0_0_30px_rgba(0,255,255,0.2)] border border-cyber">
+            <h3 id="modalUserTitle" class="text-xl font-bold text-cyber mb-6 uppercase tracking-widest">Kelola Akun</h3>
             <div class="space-y-4">
-                <input type="text" id="inputNewUser" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" placeholder="Username">
-                <input type="text" id="inputNewPass" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm" placeholder="Password">
-                <select id="inputNewRole" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm font-semibold">
+                <input type="text" id="inputNewUser" class="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-cyber rounded-xl text-sm outline-none focus:border-cyber" placeholder="Username">
+                <input type="text" id="inputNewPass" class="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-cyber rounded-xl text-sm outline-none focus:border-cyber" placeholder="Password">
+                <select id="inputNewRole" class="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-cyber rounded-xl text-sm font-semibold outline-none focus:border-cyber">
                     <option value="Petugas Piket">Petugas Piket</option>
                     <option value="Admin">Admin</option>
                 </select>
             </div>
             <div class="flex gap-3 mt-8">
-                <button onclick="tutupModalUser()" class="w-1/2 bg-slate-100 font-bold py-4 rounded-2xl">Batal</button>
-                <button onclick="simpanPetugas()" class="w-1/2 bg-blue-600 text-white font-bold py-4 rounded-2xl">Simpan</button>
+                <button onclick="tutupModalUser()" class="w-1/2 bg-transparent border border-gray-600 text-gray-400 font-bold py-3 rounded-xl hover:text-white">Batal</button>
+                <button onclick="simpanPetugas()" class="w-1/2 bg-cyber text-black font-bold py-3 rounded-xl shadow-[0_0_10px_#0ff]">Simpan</button>
             </div>
         </div>
     </div>
 
     <script>
         // ==========================================
-        // WAJIB DIGANTI: Masukkan link New Deployment Apps Script di sini
+        // KONFIGURASI LINK APPS SCRIPT BOSKU
         // ==========================================
         const URL_GAS = 'https://script.google.com/macros/s/AKfycbxnq6cIMgKmAiCm0ZaX4ezXSJcdPXTyMJ1XWuNY32UtdU0vmr2Z_cIQw3kfy_uhMrsBBg/exec';
 
-        // --- DATA PENGGUNA ---
+        // --- DATA ---
         let dataPengguna = [
             { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" },
             { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" }
         ];
-        
-        // --- DATA SLIDESHOW ---
         let defaultSlides = [ 
             { url: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=800", caption: "Pantauan Simpang Pasar Haruai" },
             { url: "https://images.unsplash.com/photo-1494522358652-f30e61a60313?q=80&w=800", caption: "Situasi Kantor Camat Haruai" },
             { url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800", caption: "Ruang Kontrol Command Center" }
         ];
-
         let slides = JSON.parse(localStorage.getItem('pantau_slides')) || defaultSlides;
         let dataLaporan = [];
         let editIndex = -1;
@@ -302,19 +308,15 @@
         const ctx = document.getElementById('statsChart').getContext('2d');
         let statsChart = new Chart(ctx, {
             type: 'doughnut',
-            data: { labels: ['P', 'S'], datasets: [{ data: [1, 1], backgroundColor: ['#facc15', '#1e3a8a'], borderWidth: 0 }] },
+            data: { labels: ['P', 'S'], datasets: [{ data: [1, 1], backgroundColor: ['#facc15', '#0ff'], borderWidth: 0 }] },
             options: { responsive: true, cutout: '70%', plugins: { legend: { display: false } } }
         });
 
         function updateChart() {
             let p = dataLaporan.filter(d => d.status === "Menunggu").length;
             let s = dataLaporan.filter(d => d.status === "Selesai").length;
-            
-            // Render Doughnut Chart
             statsChart.data.datasets[0].data = [p || 1, s || 1];
             statsChart.update();
-            
-            // Update Teks
             document.getElementById('txtProses').innerText = p;
             document.getElementById('txtSelesai').innerText = s;
         }
@@ -323,7 +325,7 @@
         async function muatDataGSheet() {
             const tbody = document.getElementById('tabelDataLaporan');
             if(!tbody) return;
-            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center font-bold text-slate-400 animate-pulse">Memuat data dari server...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center font-bold text-cyber animate-pulse text-glow">MENYAMBUNGKAN KE DATABASE...</td></tr>';
             
             try {
                 const res = await fetch(URL_GAS + '?action=read');
@@ -333,23 +335,24 @@
                 tbody.innerHTML = '';
                 
                 if(data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">Belum ada laporan masuk.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-gray-500">Belum ada laporan masuk.</td></tr>';
                 } else {
                     data.reverse().forEach(item => {
                         const isSelesai = item.status === 'Selesai';
-                        const badgeClass = isSelesai ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+                        // Style badge ala UI Hacker
+                        const badgeClass = isSelesai ? 'border-green-500 text-green-400 bg-green-900/30' : 'border-yellow-500 text-yellow-400 bg-yellow-900/30';
                         const tgl = item.waktu ? new Date(item.waktu).toLocaleDateString('id-ID') : '-';
 
                         tbody.innerHTML += `
-                            <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                                <td class="p-4 text-xs font-semibold">${tgl}</td>
-                                <td class="p-4 font-bold text-xs text-blue-900">${item.kategori}</td>
-                                <td class="p-4 text-xs font-semibold">${item.nama}</td>
-                                <td class="p-4 text-xs text-slate-500">${item.lokasi}</td>
-                                <td class="p-4"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${badgeClass}">${item.status}</span></td>
-                                <td class="p-4 text-center">
-                                    ${!isSelesai ? `<button onclick="ubahStatus(${item.rowId}, this)" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow hover:bg-blue-700">Selesaikan</button>` : '<span class="text-green-500 font-bold text-lg">✓</span>'}
-                                    ${item.foto && item.foto !== 'Tanpa Foto' ? `<a href="${item.foto}" target="_blank" class="text-blue-500 text-xs ml-2 underline italic">Foto</a>` : ''}
+                            <tr class="border-b border-gray-800 hover:bg-gray-800/50 transition-colors">
+                                <td class="p-4 text-xs font-semibold text-gray-400">${tgl}</td>
+                                <td class="p-4 font-bold text-xs text-cyber text-glow">${item.kategori}</td>
+                                <td class="p-4 text-xs font-semibold text-white">${item.nama}</td>
+                                <td class="p-4 text-xs text-gray-400">${item.lokasi}</td>
+                                <td class="p-4"><span class="px-2 py-1 rounded border ${badgeClass} text-[10px] font-bold tracking-wider uppercase">${item.status}</span></td>
+                                <td class="p-4 text-center data-aksi">
+                                    ${!isSelesai ? `<button onclick="ubahStatus(${item.rowId}, this)" class="bg-transparent border border-cyber text-cyber px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-cyber hover:text-black transition-all uppercase tracking-widest">Selesaikan</button>` : '<span class="text-green-500 font-bold text-lg text-glow">✓</span>'}
+                                    ${item.foto && item.foto !== 'Tanpa Foto' ? `<br><a href="${item.foto}" target="_blank" class="text-cyber text-[10px] underline italic mt-1 inline-block">Lihat Lampiran</a>` : ''}
                                 </td>
                             </tr>
                         `;
@@ -357,29 +360,41 @@
                 }
                 updateChart();
             } catch (e) {
-                console.error(e);
-                tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold">Koneksi API Gagal. Pastikan URL Web App sudah benar!</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold">SYSTEM ERROR: KONEKSI API GAGAL.</td></tr>';
             }
         }
 
         async function ubahStatus(rowId, btnElement) {
             if(!confirm("Tandai laporan ini SELESAI?")) return;
-            
             const originalText = btnElement.innerText;
-            btnElement.innerText = "Proses...";
-            btnElement.disabled = true;
-
+            btnElement.innerText = "PROSES..."; btnElement.disabled = true;
             try {
-                await fetch(URL_GAS, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'updateStatus', rowId: rowId, newStatus: 'Selesai' })
-                });
+                await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', rowId: rowId, newStatus: 'Selesai' }) });
                 muatDataGSheet(); 
             } catch (e) {
-                alert("Gagal mengupdate status.");
-                btnElement.innerText = originalText;
-                btnElement.disabled = false;
+                alert("Gagal mengupdate status."); btnElement.innerText = originalText; btnElement.disabled = false;
             }
+        }
+
+        // --- CETAK PDF HTML2PDF ---
+        function cetakLaporan() {
+            // Sembunyikan kolom "Aksi" agar tidak ikut terprint di PDF
+            const aksiElements = document.querySelectorAll('.data-aksi');
+            aksiElements.forEach(el => el.style.display = 'none');
+
+            const element = document.getElementById('contentLaporan');
+            const opt = {
+                margin:       0.5,
+                filename:     'Arsip-Data-Laporan-Pantau-Haruai.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#050b14' }, // Background disesuaikan tema dark
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+
+            // Proses cetak PDF, setelah selesai kembalikan tombol Aksi
+            html2pdf().set(opt).from(element).save().then(() => {
+                aksiElements.forEach(el => el.style.display = '');
+            });
         }
 
         // --- AUTH & NAV ---
@@ -393,6 +408,10 @@
                 tutupModalLogin();
                 document.getElementById('viewWarga').classList.add('hidden');
                 document.getElementById('viewAdmin').classList.remove('hidden');
+                // Ubah background jadi gelap total untuk tema CGI
+                document.getElementById('mainBody').classList.replace('bg-slate-900', 'bg-[#03070d]');
+                document.getElementById('bgOverlayWarga').classList.add('hidden');
+                document.getElementById('bgCCTVAdmin').classList.remove('hidden');
                 switchAdminTab('laporan');
             } else {
                 document.getElementById('errorLogin').classList.remove('hidden');
@@ -401,6 +420,10 @@
         function kembaliKeWarga() {
             document.getElementById('viewAdmin').classList.add('hidden');
             document.getElementById('viewWarga').classList.remove('hidden');
+            // Kembalikan ke background normal
+            document.getElementById('mainBody').classList.replace('bg-[#03070d]', 'bg-slate-900');
+            document.getElementById('bgOverlayWarga').classList.remove('hidden');
+            document.getElementById('bgCCTVAdmin').classList.add('hidden');
         }
 
         function switchAdminTab(tab) {
@@ -409,8 +432,8 @@
             document.getElementById('contentSlideshow').classList.toggle('hidden', !sld);
             document.getElementById('contentPengguna').classList.toggle('hidden', !usr);
             
-            const active = "bg-yellow-400 text-blue-900 shadow-lg";
-            const inactive = "bg-white/10 text-white border border-white/10";
+            const active = "bg-cyber/20 text-cyber border border-cyber shadow-[0_0_10px_rgba(0,255,255,0.4)]";
+            const inactive = "bg-transparent text-gray-400 border border-gray-600 hover:text-cyber";
             
             document.getElementById('btnTabLaporan').className = (lap ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
             document.getElementById('btnTabSlideshow').className = (sld ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
@@ -423,32 +446,32 @@
 
         // --- MANAJEMEN SLIDESHOW ---
         function renderSlideshowAdmin() {
+            const container = document.getElementById('contentSlideshow');
+            container.innerHTML = '';
             for(let i=1; i<=3; i++) {
-                if(slides[i-1]) {
-                    document.getElementById(`prev${i}`).src = slides[i-1].url;
-                    document.getElementById(`inputSlide${i}`).value = slides[i-1].url;
-                    document.getElementById(`inputCaption${i}`).value = slides[i-1].caption;
-                }
+                let slide = slides[i-1] || {url: '', caption: ''};
+                container.innerHTML += `
+                <div class="glass-panel p-6 rounded-3xl border border-gray-700 relative">
+                    <h4 class="font-bold mb-4 text-xs uppercase text-cyber tracking-widest">Kamera Slide ${i}</h4>
+                    <img id="prev${i}" src="${slide.url}" class="w-full h-32 object-cover rounded-2xl mb-4 border border-gray-600">
+                    <input type="text" id="inputSlide${i}" value="${slide.url}" class="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-cyber rounded-xl text-[10px] mb-2 font-medium outline-none focus:border-cyber" placeholder="URL Foto">
+                    <input type="text" id="inputCaption${i}" value="${slide.caption}" class="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-xl text-xs font-bold mb-4 outline-none focus:border-cyber" placeholder="Keterangan Teks">
+                    <button onclick="simpanSlideshow(${i})" class="w-full bg-transparent border border-cyber text-cyber hover:bg-cyber hover:text-black font-bold py-2.5 rounded-xl text-xs transition-all tracking-widest uppercase">Update Slide</button>
+                </div>`;
             }
         }
 
         function simpanSlideshow(index) {
             let url = document.getElementById(`inputSlide${index}`).value;
             let cap = document.getElementById(`inputCaption${index}`).value;
-            
-            if(!url) {
-                alert("URL Foto tidak boleh kosong!");
-                return;
-            }
-
+            if(!url) { alert("URL Foto tidak boleh kosong!"); return; }
             slides[index - 1] = { url: url, caption: cap };
             localStorage.setItem('pantau_slides', JSON.stringify(slides)); 
-            
             document.getElementById(`prev${index}`).src = url;
+            
             currentSlide = 0; 
             document.getElementById('slideImg').src = slides[0].url;
             document.getElementById('slideCaption').innerText = slides[0].caption;
-            
             alert(`✅ Slide ${index} berhasil diperbarui!`);
         }
 
@@ -457,29 +480,26 @@
             const tbody = document.getElementById('tabelPengguna'); tbody.innerHTML = '';
             dataPengguna.forEach((u, i) => {
                 const isSuper = u.username === 'superadmin';
-                const statClass = u.status === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-                const action = isSuper ? '<span class="text-xs italic text-slate-300">Protected</span>' : `
-                    <button onclick="editUser(${i})" class="text-blue-600 font-bold mr-3 text-xs">Edit</button>
-                    <button onclick="toggleUser(${i})" class="${u.status === 'Aktif' ? 'text-red-500' : 'text-green-500'} font-bold text-xs">${u.status === 'Aktif' ? 'Blokir' : 'Aktifkan'}</button>
+                const statClass = u.status === 'Aktif' ? 'text-green-400 bg-green-900/30 border border-green-500' : 'text-red-400 bg-red-900/30 border border-red-500';
+                const action = isSuper ? '<span class="text-xs italic text-gray-600">Protected_ROOT</span>' : `
+                    <button onclick="editUser(${i})" class="text-cyber hover:text-white font-bold mr-3 text-xs uppercase tracking-widest">Edit</button>
+                    <button onclick="toggleUser(${i})" class="${u.status === 'Aktif' ? 'text-red-500' : 'text-green-500'} hover:text-white font-bold text-xs uppercase tracking-widest">${u.status === 'Aktif' ? 'Blokir' : 'Aktifkan'}</button>
                 `;
-                tbody.innerHTML += `<tr><td class="p-6 font-bold text-slate-800">${u.username}</td><td class="p-6">${u.role}</td><td class="p-6"><span class="px-3 py-1 rounded-full text-[10px] font-bold ${statClass}">${u.status}</span></td><td class="p-6 text-center">${action}</td></tr>`;
+                tbody.innerHTML += `<tr class="border-b border-gray-800 hover:bg-gray-800/50"><td class="p-6 font-bold text-white">${u.username}</td><td class="p-6 text-gray-400">${u.role}</td><td class="p-6"><span class="px-3 py-1 rounded tracking-widest uppercase text-[10px] font-bold ${statClass}">${u.status}</span></td><td class="p-6 text-center">${action}</td></tr>`;
             });
         }
         function toggleUser(i) { dataPengguna[i].status = dataPengguna[i].status === 'Aktif' ? 'Nonaktif' : 'Aktif'; renderUsers(); }
-        function bukaModalTambahPetugas() { editIndex = -1; document.getElementById('modalUserTitle').innerText = "Tambah Akun"; document.getElementById('modalUser').classList.remove('hidden'); document.getElementById('inputNewUser').value = ''; document.getElementById('inputNewPass').value = ''; }
+        function bukaModalTambahPetugas() { editIndex = -1; document.getElementById('modalUserTitle').innerText = "TAMBAH OTORISASI AKUN"; document.getElementById('modalUser').classList.remove('hidden'); document.getElementById('inputNewUser').value = ''; document.getElementById('inputNewPass').value = ''; }
         function tutupModalUser() { document.getElementById('modalUser').classList.add('hidden'); }
         function editUser(i) {
-            editIndex = i;
-            document.getElementById('modalUserTitle').innerText = "Edit Akun";
+            editIndex = i; document.getElementById('modalUserTitle').innerText = "EDIT OTORISASI AKUN";
             document.getElementById('inputNewUser').value = dataPengguna[i].username;
             document.getElementById('inputNewPass').value = dataPengguna[i].password;
             document.getElementById('inputNewRole').value = dataPengguna[i].role;
             document.getElementById('modalUser').classList.remove('hidden');
         }
         function simpanPetugas() {
-            const u = document.getElementById('inputNewUser').value;
-            const p = document.getElementById('inputNewPass').value;
-            const r = document.getElementById('inputNewRole').value;
+            const u = document.getElementById('inputNewUser').value, p = document.getElementById('inputNewPass').value, r = document.getElementById('inputNewRole').value;
             if(!u || !p) return;
             if(editIndex === -1) dataPengguna.push({ username: u, password: p, role: r, status: "Aktif" });
             else { dataPengguna[editIndex].username = u; dataPengguna[editIndex].password = p; dataPengguna[editIndex].role = r; }
@@ -495,20 +515,13 @@
 
         setInterval(() => {
             if(slides.length === 0) return;
-            
-            const img = document.getElementById('slideImg');
-            const cap = document.getElementById('slideCaption');
-            const cont = document.getElementById('slideCaptionContainer');
+            const img = document.getElementById('slideImg'), cap = document.getElementById('slideCaption'), cont = document.getElementById('slideCaptionContainer');
             if(!img) return;
-            img.classList.replace('opacity-100', 'opacity-0');
-            cont.classList.replace('opacity-100', 'opacity-0');
-            
+            img.classList.replace('opacity-100', 'opacity-0'); cont.classList.replace('opacity-100', 'opacity-0');
             setTimeout(() => {
                 currentSlide = (currentSlide + 1) % slides.length;
-                img.src = slides[currentSlide].url;
-                cap.innerText = slides[currentSlide].caption;
-                img.classList.replace('opacity-0', 'opacity-100');
-                cont.classList.replace('opacity-0', 'opacity-100');
+                img.src = slides[currentSlide].url; cap.innerText = slides[currentSlide].caption;
+                img.classList.replace('opacity-0', 'opacity-100'); cont.classList.replace('opacity-0', 'opacity-100');
             }, 1000);
         }, 5000);
 
@@ -517,60 +530,29 @@
             e.preventDefault();
             const btn = document.getElementById('btnKirim');
             const originalText = btn.innerText;
-            btn.disabled = true; btn.innerText = "Sinking...";
+            btn.disabled = true; btn.innerText = "Mengirim...";
             
-            const kategori = document.getElementById('inputKategori').value;
-            const nama = document.getElementById('inputNama').value;
-            const lokasi = document.getElementById('inputLokasi').value;
-            const laporan = document.getElementById('inputLaporan').value;
+            const kategori = document.getElementById('inputKategori').value, nama = document.getElementById('inputNama').value, lokasi = document.getElementById('inputLokasi').value, laporan = document.getElementById('inputLaporan').value;
             const fileFoto = document.getElementById('inputFoto').files[0];
 
             let fotoBase64 = "";
             if (fileFoto) {
-                const reader = new FileReader();
-                reader.readAsDataURL(fileFoto);
+                const reader = new FileReader(); reader.readAsDataURL(fileFoto);
                 await new Promise(r => reader.onload = () => { fotoBase64 = reader.result; r(); });
             }
 
             try {
-                const res = await fetch(URL_GAS, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ kategori, nama, lokasi, laporan, fotoBase64 })
-                });
+                const res = await fetch(URL_GAS, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ kategori, nama, lokasi, laporan, fotoBase64 }) });
                 const result = await res.json();
-                
                 if(result.status === 'success') {
                     muatDataGSheet(); 
-                    document.getElementById('pesanSukses').classList.remove('hidden');
-                    document.getElementById('formLaporan').reset();
+                    document.getElementById('pesanSukses').classList.remove('hidden'); document.getElementById('formLaporan').reset();
                     setTimeout(() => document.getElementById('pesanSukses').classList.add('hidden'), 5000);
-                } else {
-                    alert("Gagal terhubung ke GSheet: " + result.message);
-                }
-            } catch (err) {
-                alert("Terjadi kesalahan pengiriman. Silakan coba lagi.");
-            } finally {
-                btn.disabled = false; btn.innerText = originalText;
-            }
+                } else { alert("Gagal terhubung ke GSheet: " + result.message); }
+            } catch (err) { alert("Terjadi kesalahan pengiriman. Silakan coba lagi."); } finally { btn.disabled = false; btn.innerText = originalText; }
         });
 
-        // Load data awal untuk update chart
         muatDataGSheet();
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

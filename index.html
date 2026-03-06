@@ -332,10 +332,10 @@
             data: { labels: ['P', 'S'], datasets: [{ data: [1, 1], backgroundColor: ['#facc15', '#1d4ed8'], borderWidth: 0 }] },
             options: { 
                 responsive: true, 
-                cutout: '75%', // Diperbesar sedikit lobangnya biar muat teks
+                cutout: '75%', 
                 plugins: { 
                     legend: { display: false },
-                    datalabels: { display: false } // Mematikan label bawaan agar bersih
+                    datalabels: { display: false } 
                 } 
             }
         });
@@ -345,10 +345,9 @@
             let s = dataLaporan.filter(d => d.status === "Selesai").length;
             let total = p + s;
             
-            // Menghitung persentase "Selesai"
             let percent = total > 0 ? Math.round((s / total) * 100) : 0;
             
-            statsChart.data.datasets[0].data = total > 0 ? [p, s] : [1, 0]; // Biar chart ga error klo data kosong
+            statsChart.data.datasets[0].data = total > 0 ? [p, s] : [1, 0]; 
             statsChart.update();
             
             document.getElementById('txtProses').innerText = p;
@@ -425,20 +424,23 @@
             }
         });
 
-        // --- CETAK PDF RESMI ANTI-KETAWA ATASAN DENGAN LOGO GAGAH ---
+        // --- CETAK PDF RESMI KOP SURAT RAPI KIRI ---
         function cetakLaporanResmi() {
             let htmlContent = `
                 <div style="padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff; width: 1000px;">
                     
-                    <div style="position: relative; text-align: center; border-bottom: 4px solid #000; padding-bottom: 20px; margin-bottom: 30px; min-height: 120px;">
-                        <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" style="position: absolute; left: 0; top: 0; height: 120px; width: auto;">
-                        
-                        <div style="padding-left: 140px; padding-right: 140px; padding-top: 10px;">
-                            <h2 style="margin: 0; font-size: 24px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
-                            <h1 style="margin: 0; font-size: 34px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
-                            <p style="margin: 10px 0 0; font-size: 16px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p>
-                        </div>
-                    </div>
+                    <table style="width: 100%; border-bottom: 4px solid #000; margin-bottom: 30px; padding-bottom: 15px; border-collapse: collapse;">
+                        <tr>
+                            <td style="width: 120px; vertical-align: top; text-align: left;">
+                                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" style="width: 120px; height: auto;">
+                            </td>
+                            <td style="vertical-align: middle; text-align: left; padding-left: 20px;">
+                                <h2 style="margin: 0; font-size: 24px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
+                                <h1 style="margin: 0; font-size: 34px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
+                                <p style="margin: 10px 0 0; font-size: 16px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p>
+                            </td>
+                        </tr>
+                    </table>
 
                     <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px;">
                         <thead>

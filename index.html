@@ -162,24 +162,6 @@
         </button>
     </div>
 
-    <div id="modalLogin" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="tutupModalLogin()"></div>
-        <div class="bg-white rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl">
-            <div class="text-center mb-8">
-                <h3 class="text-2xl font-bold text-blue-900">Login Petugas</h3>
-            </div>
-            <div class="space-y-4">
-                <input type="text" id="inputUsername" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-semibold outline-none text-sm" placeholder="Username">
-                <input type="password" id="inputPassword" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl outline-none font-semibold text-sm" placeholder="Password">
-            </div>
-            <p id="errorLogin" class="text-red-500 text-xs font-bold text-center hidden mt-4 bg-red-50 py-2 rounded-xl">Login Gagal!</p>
-            <div class="flex gap-3 mt-8">
-                <button onclick="tutupModalLogin()" class="w-1/3 bg-slate-100 py-4 rounded-2xl font-bold text-slate-500">Batal</button>
-                <button onclick="cekLogin()" class="w-2/3 bg-blue-600 py-4 rounded-2xl font-bold text-white hover:bg-blue-700 shadow-lg">Login</button>
-            </div>
-        </div>
-    </div>
-
     <div id="viewAdmin" class="hidden relative z-10 min-h-screen p-4 md:p-8 view-enter">
         <div class="max-w-7xl mx-auto">
             
@@ -246,7 +228,25 @@
         </div>
     </div>
 
-    <div id="modalConfirm" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div id="modalLogin" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="tutupModalLogin()"></div>
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-blue-900">Login Petugas</h3>
+            </div>
+            <div class="space-y-4">
+                <input type="text" id="inputUsername" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-semibold outline-none text-sm" placeholder="Username">
+                <input type="password" id="inputPassword" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl outline-none font-semibold text-sm" placeholder="Password">
+            </div>
+            <p id="errorLogin" class="text-red-500 text-xs font-bold text-center hidden mt-4 bg-red-50 py-2 rounded-xl">Login Gagal!</p>
+            <div class="flex gap-3 mt-8">
+                <button onclick="tutupModalLogin()" class="w-1/3 bg-slate-100 py-4 rounded-2xl font-bold text-slate-500">Batal</button>
+                <button onclick="cekLogin()" class="w-2/3 bg-blue-600 py-4 rounded-2xl font-bold text-white hover:bg-blue-700 shadow-lg">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalConfirm" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="tutupModalConfirm()"></div>
         <div class="bg-slate-800 border border-yellow-400/50 rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl text-center">
             <h3 class="text-xl font-bold text-yellow-400 mb-2 uppercase tracking-widest">PANTAU HARUAI</h3>
@@ -258,16 +258,16 @@
         </div>
     </div>
 
-    <div id="modalAlert" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div id="modalAlert" class="hidden fixed inset-0 z-[80] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="tutupModalAlert()"></div>
         <div class="bg-slate-800 border border-yellow-400/50 rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl text-center">
             <h3 class="text-xl font-bold text-yellow-400 mb-2 uppercase tracking-widest">PANTAU HARUAI</h3>
-            <p id="alertMessage" class="text-white mb-8"></p>
+            <p id="alertMessage" class="text-white mb-8 text-sm leading-relaxed"></p>
             <button onclick="tutupModalAlert()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all">Tutup</button>
         </div>
     </div>
 
-    <div id="modalUser" class="hidden fixed inset-0 z-[50] flex items-center justify-center p-4">
+    <div id="modalUser" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="tutupModalUser()"></div>
         <div class="bg-slate-800 border border-yellow-400/50 rounded-3xl p-8 max-sm:max-w-xs w-full relative z-10 shadow-2xl">
             <h3 id="modalUserTitle" class="text-xl font-bold text-white mb-6 uppercase tracking-widest border-b border-slate-700 pb-3">Kelola Akun</h3>
@@ -304,7 +304,6 @@
             document.getElementById('modalConfirm').classList.add('hidden');
         }
 
-        // Variabel global untuk menampung target tombol Selesaikan
         let targetRowId = null;
         let targetBtn = null;
 
@@ -386,14 +385,12 @@
             }
         }
 
-        // Fungsi yang dipanggil saat tombol Selesaikan diklik di tabel
         function ubahStatus(rowId, btnElement) {
             targetRowId = rowId;
             targetBtn = btnElement;
             document.getElementById('modalConfirm').classList.remove('hidden');
         }
 
-        // Eksekusi ketika tombol "Ya, Selesai" di dalam Modal diklik
         document.getElementById('btnConfirmOk').addEventListener('click', async () => {
             tutupModalConfirm();
             if(!targetRowId || !targetBtn) return;
@@ -411,23 +408,20 @@
             }
         });
 
-        // --- CETAK PDF RESMI ANTI-KETAWA ATASAN DENGAN LOGO ---
+        // --- CETAK PDF RESMI ANTI-KETAWA ATASAN DENGAN LOGO GAGAH ---
         function cetakLaporanResmi() {
             let htmlContent = `
                 <div style="padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff; width: 1000px;">
                     
-                    <table style="width: 100%; border-bottom: 3px solid #000; padding-bottom: 15px; margin-bottom: 25px;">
-                        <tr>
-                            <td style="width: 15%; text-align: center; vertical-align: middle;">
-                                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" style="width: 90px; height: auto;">
-                            </td>
-                            <td style="width: 85%; text-align: center; padding-right: 15%; vertical-align: middle;">
-                                <h2 style="margin: 0; font-size: 20px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
-                                <h1 style="margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
-                                <p style="margin: 8px 0 0; font-size: 14px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p>
-                            </td>
-                        </tr>
-                    </table>
+                    <div style="position: relative; text-align: center; border-bottom: 4px solid #000; padding-bottom: 20px; margin-bottom: 30px; min-height: 120px;">
+                        <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" style="position: absolute; left: 0; top: 0; height: 120px; width: auto;">
+                        
+                        <div style="padding-left: 140px; padding-right: 140px; padding-top: 10px;">
+                            <h2 style="margin: 0; font-size: 24px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
+                            <h1 style="margin: 0; font-size: 34px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
+                            <p style="margin: 10px 0 0; font-size: 16px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p>
+                        </div>
+                    </div>
 
                     <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px;">
                         <thead>
@@ -476,7 +470,7 @@
                 margin:       0.5,
                 filename:     'Arsip-Resmi-Laporan-Pantau-Haruai.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true }, // useCORS wajib true biar logo bisa muncul
+                html2canvas:  { scale: 2, useCORS: true }, 
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
             };
 
@@ -495,7 +489,6 @@
                 document.getElementById('viewWarga').classList.add('hidden');
                 document.getElementById('viewAdmin').classList.remove('hidden');
                 
-                // Tema Admin Dark Blue & Siluet CCTV On
                 document.getElementById('mainBody').classList.replace('bg-slate-900', 'bg-[#0f172a]');
                 document.getElementById('bgOverlayWarga').classList.add('hidden');
                 document.getElementById('bgCCTVAdmin').classList.remove('hidden');
@@ -508,7 +501,6 @@
             document.getElementById('viewAdmin').classList.add('hidden');
             document.getElementById('viewWarga').classList.remove('hidden');
             
-            // Kembalikan ke warga (CCTV Off)
             document.getElementById('mainBody').classList.replace('bg-[#0f172a]', 'bg-slate-900');
             document.getElementById('bgOverlayWarga').classList.remove('hidden');
             document.getElementById('bgCCTVAdmin').classList.add('hidden');
@@ -552,7 +544,7 @@
         function simpanSlideshow(index) {
             let url = document.getElementById(`inputSlide${index}`).value;
             let cap = document.getElementById(`inputCaption${index}`).value;
-            if(!url) { tampilkanAlert("URL Foto tidak boleh kosong!"); return; } // Ganti alert jadi custom
+            if(!url) { tampilkanAlert("URL Foto tidak boleh kosong!"); return; } 
             slides[index - 1] = { url: url, caption: cap };
             localStorage.setItem('pantau_slides', JSON.stringify(slides)); 
             document.getElementById(`prev${index}`).src = url;
@@ -560,7 +552,7 @@
             currentSlide = 0; 
             document.getElementById('slideImg').src = slides[0].url;
             document.getElementById('slideCaption').innerText = slides[0].caption;
-            tampilkanAlert(`✅ Slide ${index} berhasil diperbarui!`); // Ganti alert jadi custom
+            tampilkanAlert(`✅ Slide ${index} berhasil diperbarui!`); 
         }
 
         // --- USER MGMT ---
@@ -636,8 +628,8 @@
                     muatDataGSheet(); 
                     document.getElementById('pesanSukses').classList.remove('hidden'); document.getElementById('formLaporan').reset();
                     setTimeout(() => document.getElementById('pesanSukses').classList.add('hidden'), 5000);
-                } else { tampilkanAlert("Gagal terhubung ke GSheet: " + result.message); } // Ganti alert
-            } catch (err) { tampilkanAlert("Terjadi kesalahan pengiriman. Silakan coba lagi."); } // Ganti alert
+                } else { tampilkanAlert("Gagal terhubung ke GSheet: " + result.message); } 
+            } catch (err) { tampilkanAlert("Terjadi kesalahan pengiriman. Silakan coba lagi."); } 
             finally { btn.disabled = false; btn.innerText = originalText; }
         });
 

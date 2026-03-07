@@ -40,6 +40,20 @@
             animation-play-state: paused;
         }
 
+        /* Animasi Galeri Auto-Scroll */
+        @keyframes scrollGallery {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Bergeser 50% karena konten diduplikat */
+        }
+        .gallery-track {
+            display: flex;
+            width: max-content;
+            animation: scrollGallery 40s linear infinite;
+        }
+        .gallery-container:hover .gallery-track {
+            animation-play-state: paused; /* Berhenti kalau disentuh mouse */
+        }
+
         /* Sembunyikan Scrollbar */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -175,11 +189,13 @@
                 <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-yellow-400 pl-2">Giat Forkopimca Tabalong</h3>
             </div>
             
-            <div id="wargaGalleryContainer" class="flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar px-2">
-                </div>
+            <div class="overflow-hidden w-full gallery-container">
+                <div id="wargaGalleryTrack" class="gallery-track gap-4 px-2 pb-4">
+                    </div>
+            </div>
         </div>
 
-        <button onclick="bukaModalLogin()" class="mt-8 mb-8 text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
+        <button onclick="bukaModalLogin()" class="mt-4 mb-8 text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             Akses Panel Admin
         </button>
@@ -208,7 +224,7 @@
 
             <div class="flex flex-wrap gap-3 mb-8">
                 <button id="btnTabLaporan" onclick="switchAdminTab('laporan')" class="bg-yellow-400 text-blue-900 shadow-lg px-8 py-3.5 rounded-2xl font-bold text-sm">Data Laporan</button>
-                <button id="btnTabPengaturan" onclick="switchAdminTab('pengaturan')" class="bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700 px-8 py-3.5 rounded-2xl font-bold text-sm">Pengaturan</button>
+                <button id="btnTabPengaturan" onclick="switchAdminTab('pengaturan')" class="bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700 px-8 py-3.5 rounded-2xl font-bold text-sm">Pengaturan Web</button>
                 <button id="btnTabPengguna" onclick="switchAdminTab('pengguna')" class="bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700 px-8 py-3.5 rounded-2xl font-bold text-sm">Manajemen Akun</button>
             </div>
 
@@ -244,15 +260,15 @@
 
                 <div class="admin-panel p-6 rounded-3xl">
                     <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3 mb-4">2. Pengaturan Slideshow CCTV</h3>
-                    <p class="text-xs text-slate-400 mb-3">Gunakan URL foto berakhiran .jpg/.png. Hindari link Google Drive.</p>
+                    <p class="text-xs text-slate-400 mb-3">Gunakan URL foto berakhiran .jpg/.png.</p>
                     <div id="containerSlideshowAdmin" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         </div>
                 </div>
 
                 <div class="admin-panel p-6 rounded-3xl">
-                    <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3 mb-4">3. Pengaturan Galeri Kegiatan</h3>
-                    <p class="text-xs text-slate-400 mb-3">Gunakan URL foto berakhiran .jpg/.png dari Imgur/Postimages/Github. Hindari link Google Drive.</p>
-                    <div id="containerGalleryAdmin" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3 mb-4">3. Pengaturan Galeri Kegiatan (10 Foto)</h3>
+                    <p class="text-xs text-slate-400 mb-3">Gunakan URL foto .jpg/.png dari Imgur / Postimages / GitHub.</p>
+                    <div id="containerGalleryAdmin" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                         </div>
                 </div>
 
@@ -271,6 +287,18 @@
                 </table>
             </div>
 
+        </div>
+    </div>
+
+    <div id="modalLightbox" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" onclick="tutupLightbox()"></div>
+        <div class="relative z-10 max-w-4xl w-full flex flex-col items-center">
+            <button onclick="tutupLightbox()" class="absolute -top-12 right-0 text-white text-4xl hover:text-yellow-400">&times;</button>
+            <img id="lightboxImg" src="" class="w-full max-h-[75vh] object-contain rounded-t-xl shadow-2xl border-t border-l border-r border-white/20">
+            <div class="bg-slate-900/90 backdrop-blur w-full p-6 rounded-b-xl border border-white/20 text-center">
+                <h4 id="lightboxTitle" class="text-yellow-400 font-black uppercase tracking-widest text-lg"></h4>
+                <p id="lightboxDesc" class="text-white text-sm mt-2"></p>
+            </div>
         </div>
     </div>
 
@@ -338,13 +366,21 @@
         // ==========================================
         const URL_GAS = 'https://script.google.com/macros/s/AKfycbxnq6cIMgKmAiCm0ZaX4ezXSJcdPXTyMJ1XWuNY32UtdU0vmr2Z_cIQw3kfy_uhMrsBBg/exec';
 
-        // --- SISTEM CUSTOM ALERT & CONFIRM ---
-        function tampilkanAlert(pesan) {
-            document.getElementById('alertMessage').innerText = pesan;
-            document.getElementById('modalAlert').classList.remove('hidden');
-        }
+        // --- SISTEM CUSTOM ALERT, CONFIRM, & LIGHTBOX ---
+        function tampilkanAlert(pesan) { document.getElementById('alertMessage').innerText = pesan; document.getElementById('modalAlert').classList.remove('hidden'); }
         function tutupModalAlert() { document.getElementById('modalAlert').classList.add('hidden'); }
         function tutupModalConfirm() { document.getElementById('modalConfirm').classList.add('hidden'); }
+        
+        function bukaLightbox(url, title, desc) {
+            document.getElementById('lightboxImg').src = url;
+            document.getElementById('lightboxTitle').innerText = title;
+            document.getElementById('lightboxDesc').innerText = desc;
+            document.getElementById('modalLightbox').classList.remove('hidden');
+        }
+        function tutupLightbox() {
+            document.getElementById('modalLightbox').classList.add('hidden');
+            document.getElementById('lightboxImg').src = "";
+        }
 
         let targetRowId = null; let targetBtn = null;
 
@@ -366,12 +402,18 @@
         ];
         let slides = JSON.parse(localStorage.getItem('pantau_slides')) || defaultSlides;
 
-        // --- DATA GALERI KEGIATAN ---
+        // --- DATA GALERI KEGIATAN (10 SLOT) ---
         let defaultGallery = [
             { url: "https://images.unsplash.com/photo-1541888081622-385a8647c213?q=80&w=600", title: "Patroli Gabungan", desc: "Cipta Kondisi Malam Minggu Jaga Ketertiban Warga Haruai." },
             { url: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=600", title: "Rapat Koordinasi", desc: "Sinergitas Tiga Pilar Kecamatan Haruai Hadapi Musim Hujan." },
             { url: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=600", title: "Kerja Bakti", desc: "Pembersihan Saluran Air Bersama Warga Desa Cegah Banjir." },
-            { url: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?q=80&w=600", title: "Sosialisasi Warga", desc: "Pengenalan Inovasi PANTAU HARUAI ke Aparatur Desa." }
+            { url: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?q=80&w=600", title: "Sosialisasi Warga", desc: "Pengenalan Inovasi PANTAU HARUAI ke Aparatur Desa." },
+            { url: "https://images.unsplash.com/photo-1593113565214-8ca7eb1fb923?q=80&w=600", title: "Penyaluran Bantuan", desc: "Penyerahan Bansos untuk warga terdampak banjir." },
+            { url: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=600", title: "Apel Siaga", desc: "Gelar Pasukan Kesiapsiagaan Penanggulangan Bencana." },
+            { url: "https://images.unsplash.com/photo-1584483766114-2ceaabcb71f2?q=80&w=600", title: "Pengecekan Posko", desc: "Kunjungan Forkopimca ke Posko Relawan Gabungan." },
+            { url: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?q=80&w=600", title: "Edukasi Karhutla", desc: "Penyuluhan Pencegahan Kebakaran Hutan dan Lahan." },
+            { url: "https://images.unsplash.com/photo-1533604133494-1a9ea8eb28f0?q=80&w=600", title: "Pengamanan Pasar", desc: "Penertiban Arus Lalu Lintas di Area Pasar Haruai." },
+            { url: "https://images.unsplash.com/photo-1577415124269-b911c1d81f21?q=80&w=600", title: "Musyawarah Desa", desc: "Mendengarkan Aspirasi Warga Terkait Pembangunan Fasum." }
         ];
         let galleryData = JSON.parse(localStorage.getItem('pantau_gallery')) || defaultGallery;
 
@@ -383,19 +425,24 @@
             let formattedText = textData.split('|').map((t, i) => `<span class="mx-4 ${i%2===0 ? 'text-white' : 'text-slate-300'}">${t.trim()}</span><span class="mx-4 text-yellow-500">|</span>`).join('');
             document.getElementById('wargaRunningText').innerHTML = formattedText;
 
-            // Render Galeri
-            const galContainer = document.getElementById('wargaGalleryContainer');
+            // Render Galeri Auto-Scroll (Digandakan 2x biar loopnya mulus)
+            const galContainer = document.getElementById('wargaGalleryTrack');
             galContainer.innerHTML = '';
-            galleryData.forEach(g => {
-                galContainer.innerHTML += `
-                <div class="min-w-[260px] max-w-[260px] bg-slate-800/80 backdrop-blur rounded-xl border border-white/10 overflow-hidden snap-start shadow-lg hover:-translate-y-1 transition-transform cursor-pointer">
+            
+            // Fungsi pembuat card
+            const createCard = (g) => `
+                <div onclick="bukaLightbox('${g.url}', '${g.title}', '${g.desc}')" class="min-w-[260px] max-w-[260px] bg-slate-800/80 backdrop-blur rounded-xl border border-white/10 overflow-hidden shadow-lg hover:border-yellow-400/50 hover:bg-slate-700 transition-all cursor-pointer">
                     <img src="${g.url}" class="w-full h-32 object-cover" alt="${g.title}">
                     <div class="p-4">
                         <span class="text-[9px] text-yellow-400 font-bold tracking-widest uppercase">${g.title}</span>
                         <p class="text-white text-xs font-semibold mt-1 leading-snug line-clamp-2">${g.desc}</p>
                     </div>
                 </div>`;
-            });
+
+            // Filter data yang ada fotonya aja, lalu render 2 kali (Set A dan Set B) buat efek infinite marquee
+            let validData = galleryData.filter(g => g.url.trim() !== "");
+            let htmlCards = validData.map(createCard).join('');
+            galContainer.innerHTML = htmlCards + htmlCards; 
         }
         renderTampilanWarga(); // Panggil saat web diload
 
@@ -536,7 +583,7 @@
             if(usr) renderUsers(); if(lap) muatDataGSheet(); if(set) renderPengaturanAdmin(); 
         }
 
-        // --- MANAJEMEN PENGATURAN (TICKER, CCTV, GALERI) ---
+        // --- MANAJEMEN PENGATURAN (TICKER, CCTV, GALERI 10 SLOT) ---
         function renderPengaturanAdmin() {
             // 1. Text
             document.getElementById('inputRunningText').value = textData;
@@ -555,17 +602,17 @@
                 </div>`;
             }
 
-            // 3. Galeri
+            // 3. Galeri (10 Slot, dibuat 5 kolom x 2 baris)
             const contGal = document.getElementById('containerGalleryAdmin'); contGal.innerHTML = '';
-            for(let i=1; i<=4; i++) {
+            for(let i=1; i<=10; i++) {
                 let g = galleryData[i-1] || {url: '', title: '', desc: ''};
                 contGal.innerHTML += `
                 <div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl">
                     <h4 class="font-bold mb-2 text-[10px] uppercase text-yellow-400 tracking-widest">Galeri ${i}</h4>
-                    <img id="prevGal${i}" src="${g.url}" class="w-full h-24 object-cover rounded-xl mb-3 border border-slate-500">
+                    <img id="prevGal${i}" src="${g.url || 'https://via.placeholder.com/300x200?text=Kosong'}" class="w-full h-24 object-cover rounded-xl mb-3 border border-slate-500">
                     <input type="text" id="inputUrlGal${i}" value="${g.url}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-2 outline-none focus:border-yellow-400" placeholder="URL Foto">
-                    <input type="text" id="inputTitleGal${i}" value="${g.title}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-yellow-400 rounded-lg text-[10px] font-bold mb-2 outline-none focus:border-yellow-400" placeholder="Kategori/Judul Singkat">
-                    <textarea id="inputDescGal${i}" rows="2" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-3 outline-none focus:border-yellow-400 resize-none" placeholder="Deskripsi Singkat">${g.desc}</textarea>
+                    <input type="text" id="inputTitleGal${i}" value="${g.title}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-yellow-400 rounded-lg text-[10px] font-bold mb-2 outline-none focus:border-yellow-400" placeholder="Kategori Singkat">
+                    <textarea id="inputDescGal${i}" rows="2" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-3 outline-none focus:border-yellow-400 resize-none" placeholder="Deskripsi">${g.desc}</textarea>
                     <button onclick="simpanGaleri(${i})" class="w-full bg-slate-700 hover:bg-blue-600 text-white font-bold py-2 rounded-lg text-[10px] transition-all uppercase tracking-widest">Simpan Galeri ${i}</button>
                 </div>`;
             }
@@ -589,9 +636,11 @@
 
         function simpanGaleri(i) {
             let url = document.getElementById(`inputUrlGal${i}`).value, title = document.getElementById(`inputTitleGal${i}`).value, desc = document.getElementById(`inputDescGal${i}`).value;
-            if(!url) { tampilkanAlert("URL Foto tidak boleh kosong!"); return; } 
-            galleryData[i - 1] = { url: url, title: title, desc: desc }; localStorage.setItem('pantau_gallery', JSON.stringify(galleryData)); 
-            document.getElementById(`prevGal${i}`).src = url; renderTampilanWarga();
+            // Kalau foto diisi, simpan ke array index (i-1)
+            galleryData[i - 1] = { url: url, title: title, desc: desc }; 
+            localStorage.setItem('pantau_gallery', JSON.stringify(galleryData)); 
+            document.getElementById(`prevGal${i}`).src = url || 'https://via.placeholder.com/300x200?text=Kosong'; 
+            renderTampilanWarga(); // Langsung terupdate di depan
             tampilkanAlert(`✅ Galeri Kegiatan ${i} berhasil diperbarui!`); 
         }
 

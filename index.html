@@ -20,27 +20,56 @@
         
         /* Tema Dark Blue & Yellow Admin */
         .admin-panel {
-            background: rgba(15, 23, 42, 0.85); /* Dark Blue Slate */
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(250, 204, 21, 0.3); /* Border Yellow tipis */
+            border: 1px solid rgba(250, 204, 21, 0.3);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
+
+        /* Animasi Running Text */
+        @keyframes ticker {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 30s linear infinite;
+        }
+        .ticker-container:hover .animate-ticker {
+            animation-play-state: paused;
+        }
+
+        /* Sembunyikan Scrollbar */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-slate-900 bg-[url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center bg-fixed min-h-screen font-sans text-slate-800 relative overflow-x-hidden transition-colors duration-500" id="mainBody">
 
-    <div id="bgOverlayWarga" class="fixed inset-0 bg-blue-900/80 backdrop-blur-sm z-0 transition-opacity duration-500"></div>
+    <div id="bgOverlayWarga" class="fixed inset-0 bg-blue-900/85 backdrop-blur-sm z-0 transition-opacity duration-500"></div>
 
     <svg id="bgCCTVAdmin" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] lg:w-[700px] text-white opacity-10 pointer-events-none hidden z-0" viewBox="0 0 24 24" fill="currentColor">
         <path d="M15,2A3,3 0 0,0 12,5A3,3 0 0,0 15,8A3,3 0 0,0 18,5A3,3 0 0,0 15,2M11,10H19A2,2 0 0,1 21,12V22A2,2 0 0,1 19,24H11A2,2 0 0,1 9,22V12A2,2 0 0,1 11,10M11,12V22H19V12H11M3,5H5V15H7V17H5A2,2 0 0,1 3,15V5Z" />
     </svg>
 
-    <div id="viewWarga" class="relative z-10 min-h-screen flex flex-col items-center justify-center p-2 md:p-6 view-enter">
-        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl shadow-black/50 w-full max-w-[96%] 2xl:max-w-[1600px] border border-white/20 overflow-hidden flex flex-col md:flex-row">
-            
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-700 to-yellow-400 z-20"></div>
+    <div id="viewWarga" class="relative z-10 min-h-screen flex flex-col items-center p-0 md:p-6 view-enter">
+        
+        <div class="w-full bg-slate-900/90 backdrop-blur border-b border-white/10 text-white text-[10px] md:text-xs font-bold py-2 overflow-hidden relative z-50 flex items-center ticker-container mb-4 md:rounded-xl md:max-w-[96%] 2xl:max-w-[1600px] shadow-lg">
+            <div class="bg-yellow-500 text-blue-900 px-4 py-2 absolute left-0 z-10 h-full flex items-center uppercase tracking-widest font-black shadow-lg">
+                <span class="animate-pulse mr-2">🔴</span> INFO TERKINI
+            </div>
+            <div class="w-full relative pl-[140px]">
+                <div id="wargaRunningText" class="animate-ticker text-slate-300">
+                    </div>
+            </div>
+        </div>
 
-            <div class="md:w-[70%] relative min-h-[550px] md:min-h-full flex flex-col bg-slate-800 overflow-hidden">
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl shadow-black/50 w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] border border-white/20 overflow-hidden flex flex-col md:flex-row">
+            
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-700 to-yellow-400 z-20"></div>
+
+            <div class="md:w-[70%] relative min-h-[500px] md:min-h-full flex flex-col bg-slate-800 overflow-hidden">
                 <img id="slideImg" src="" class="absolute inset-0 w-full h-full object-cover fade-transition opacity-100 z-0" alt="Pantauan CCTV">
                 
                 <div id="slideCaptionContainer" class="absolute top-6 left-6 bg-slate-900/70 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-lg z-30 fade-transition opacity-100 shadow-lg flex items-center gap-2 max-w-[70%]">
@@ -50,7 +79,7 @@
 
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
                 
-                <div class="relative z-20 p-8 lg:p-12 w-full mt-auto">
+                <div class="relative z-20 p-6 lg:p-12 w-full mt-auto">
                     <div class="flex items-center space-x-2 mb-3">
                         <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span></span>
                         <span class="text-xs font-bold text-white tracking-widest uppercase bg-black/50 px-2 py-1 rounded">CCTV Terintegrasi</span>
@@ -66,30 +95,12 @@
                         
                         <div class="grid grid-cols-1 lg:grid-cols-4 gap-3">
                             <div class="col-span-1 lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-3">
-                                <a href="tel:110" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-blue-100 p-2.5 rounded-lg text-blue-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-                                    <span class="text-xs lg:text-sm font-bold">POLRI 110</span>
-                                </a>
-                                <a href="https://www.lapor.go.id/" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-red-100 p-2.5 rounded-lg text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
-                                    <span class="text-xs lg:text-sm font-bold">SP4N LAPOR!</span>
-                                </a>
-                                <a href="https://tabalongkab.go.id/" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-emerald-100 p-2.5 rounded-lg text-emerald-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
-                                    <span class="text-xs lg:text-sm font-bold">Portal Tabalong</span>
-                                </a>
-                                <a href="https://api.whatsapp.com/send?phone=6282210107129" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-orange-100 p-2.5 rounded-lg text-orange-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
-                                    <span class="text-xs lg:text-sm font-bold">BPBD (WA)</span>
-                                </a>
-                                <a href="https://api.whatsapp.com/send?phone=6281228883650" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-amber-100 p-2.5 rounded-lg text-amber-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div>
-                                    <span class="text-xs lg:text-sm font-bold">PolPP & Damkar</span>
-                                </a>
-                                <a href="https://api.whatsapp.com/send?phone=6282148369301" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1">
-                                    <div class="bg-yellow-100 p-2.5 rounded-lg text-yellow-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
-                                    <span class="text-xs lg:text-sm font-bold">PUPR (WA)</span>
-                                </a>
+                                <a href="tel:110" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1"><div class="bg-blue-100 p-2.5 rounded-lg text-blue-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">POLRI 110</span></a>
+                                <a href="https://www.lapor.go.id/" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1"><div class="bg-red-100 p-2.5 rounded-lg text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><span class="text-xs lg:text-sm font-bold">SP4N LAPOR!</span></a>
+                                <a href="https://tabalongkab.go.id/" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1"><div class="bg-emerald-100 p-2.5 rounded-lg text-emerald-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">Portal Tabalong</span></a>
+                                <a href="https://api.whatsapp.com/send?phone=6282210107129" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1"><div class="bg-orange-100 p-2.5 rounded-lg text-orange-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div><span class="text-xs lg:text-sm font-bold">BPBD (WA)</span></a>
+                                <a href="https://api.whatsapp.com/send?phone=6281228883650" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1"><div class="bg-amber-100 p-2.5 rounded-lg text-amber-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div><span class="text-xs lg:text-sm font-bold">PolPP & Damkar</span></a>
+                                <a href="https://api.whatsapp.com/send?phone=6282148369301" target="_blank" class="flex items-center gap-3 bg-white/95 hover:bg-white text-slate-800 p-3 rounded-xl transition-all shadow-md hover:-translate-y-1"><div class="bg-yellow-100 p-2.5 rounded-lg text-yellow-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div><span class="text-xs lg:text-sm font-bold">PUPR (WA)</span></a>
                             </div>
 
                             <div class="col-span-1 bg-slate-900/60 backdrop-blur-lg border border-white/20 p-4 rounded-xl shadow-lg flex flex-col items-center justify-center">
@@ -110,12 +121,12 @@
                 </div>
             </div>
 
-            <div class="md:w-[30%] p-6 lg:p-10 relative flex flex-col justify-center max-h-[95vh] overflow-y-auto bg-white">
+            <div class="md:w-[30%] p-6 lg:p-10 relative flex flex-col justify-center max-h-[85vh] overflow-y-auto bg-white">
                 <div class="text-center mb-6">
                     <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo" class="h-28 mx-auto mb-4 object-contain">
                     <h1 class="text-4xl lg:text-3xl font-black text-blue-900 tracking-tighter uppercase">PANTAU HARUAI</h1>
-                    <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu Kecamatan Haruai)</p>
-                    <p class="text-[10px] font-bold text-black tracking-[0.15em] mt-1 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan Anda.</p>
+                    <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu)</p>
+                    <p class="text-[10px] font-bold text-slate-500 tracking-[0.1em] mt-2 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan Anda.</p>
                 </div>
 
                 <form id="formLaporan" class="space-y-4">
@@ -159,7 +170,16 @@
             </div>
         </div>
 
-        <button onclick="bukaModalLogin()" class="mt-8 text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
+        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-6">
+            <div class="flex items-center justify-between mb-3 px-2">
+                <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-yellow-400 pl-2">Giat Forkopimca Tabalong</h3>
+            </div>
+            
+            <div id="wargaGalleryContainer" class="flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar px-2">
+                </div>
+        </div>
+
+        <button onclick="bukaModalLogin()" class="mt-8 mb-8 text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             Akses Panel Admin
         </button>
@@ -188,7 +208,7 @@
 
             <div class="flex flex-wrap gap-3 mb-8">
                 <button id="btnTabLaporan" onclick="switchAdminTab('laporan')" class="bg-yellow-400 text-blue-900 shadow-lg px-8 py-3.5 rounded-2xl font-bold text-sm">Data Laporan</button>
-                <button id="btnTabSlideshow" onclick="switchAdminTab('slideshow')" class="bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700 px-8 py-3.5 rounded-2xl font-bold text-sm">Slideshow CCTV</button>
+                <button id="btnTabPengaturan" onclick="switchAdminTab('pengaturan')" class="bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700 px-8 py-3.5 rounded-2xl font-bold text-sm">Pengaturan</button>
                 <button id="btnTabPengguna" onclick="switchAdminTab('pengguna')" class="bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700 px-8 py-3.5 rounded-2xl font-bold text-sm">Manajemen Akun</button>
             </div>
 
@@ -213,6 +233,31 @@
                 </div>
             </div>
 
+            <div id="contentPengaturan" class="hidden flex-col gap-8">
+                
+                <div class="admin-panel p-6 rounded-3xl">
+                    <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3 mb-4">1. Pengaturan Running Text</h3>
+                    <p class="text-xs text-slate-400 mb-3">Gunakan tanda garis lurus ( | ) untuk memisahkan antar kalimat berita.</p>
+                    <textarea id="inputRunningText" rows="3" class="w-full px-4 py-3 bg-slate-900 border border-slate-600 text-white rounded-xl text-sm outline-none focus:border-yellow-400 mb-3" placeholder="Masukkan teks pengumuman..."></textarea>
+                    <button onclick="simpanRunningText()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-6 rounded-xl text-xs shadow-lg transition-all tracking-widest uppercase">Simpan Teks</button>
+                </div>
+
+                <div class="admin-panel p-6 rounded-3xl">
+                    <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3 mb-4">2. Pengaturan Slideshow CCTV</h3>
+                    <p class="text-xs text-slate-400 mb-3">Gunakan URL foto berakhiran .jpg/.png. Hindari link Google Drive.</p>
+                    <div id="containerSlideshowAdmin" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        </div>
+                </div>
+
+                <div class="admin-panel p-6 rounded-3xl">
+                    <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3 mb-4">3. Pengaturan Galeri Kegiatan</h3>
+                    <p class="text-xs text-slate-400 mb-3">Gunakan URL foto berakhiran .jpg/.png dari Imgur/Postimages/Github. Hindari link Google Drive.</p>
+                    <div id="containerGalleryAdmin" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        </div>
+                </div>
+
+            </div>
+
             <div id="contentPengguna" class="hidden admin-panel rounded-3xl overflow-hidden shadow-2xl">
                 <div class="p-6 border-b border-slate-700 flex justify-between items-center">
                     <h2 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3">Daftar Akun Petugas</h2>
@@ -226,8 +271,6 @@
                 </table>
             </div>
 
-            <div id="contentSlideshow" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
-                </div>
         </div>
     </div>
 
@@ -300,29 +343,61 @@
             document.getElementById('alertMessage').innerText = pesan;
             document.getElementById('modalAlert').classList.remove('hidden');
         }
-        function tutupModalAlert() {
-            document.getElementById('modalAlert').classList.add('hidden');
-        }
-        function tutupModalConfirm() {
-            document.getElementById('modalConfirm').classList.add('hidden');
-        }
+        function tutupModalAlert() { document.getElementById('modalAlert').classList.add('hidden'); }
+        function tutupModalConfirm() { document.getElementById('modalConfirm').classList.add('hidden'); }
 
-        let targetRowId = null;
-        let targetBtn = null;
+        let targetRowId = null; let targetBtn = null;
 
-        // --- DATA ---
+        // --- DATA PENGGUNA ---
         let dataPengguna = [
             { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" },
             { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" }
         ];
+
+        // --- DATA RUNNING TEXT ---
+        let defaultText = "🚨 PANTAU HARUAI ONLINE 24/7. | Laporkan segera gangguan ketertiban dan infrastruktur di lingkungan Anda. | Patroli gabungan Forkopimca rutin dilaksanakan.";
+        let textData = localStorage.getItem('pantau_running_text') || defaultText;
+
+        // --- DATA SLIDESHOW CCTV ---
         let defaultSlides = [ 
             { url: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=800", caption: "Pantauan Simpang Pasar Haruai" },
             { url: "https://images.unsplash.com/photo-1494522358652-f30e61a60313?q=80&w=800", caption: "Situasi Kantor Camat Haruai" },
             { url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800", caption: "Ruang Kontrol Command Center" }
         ];
         let slides = JSON.parse(localStorage.getItem('pantau_slides')) || defaultSlides;
-        let dataLaporan = [];
-        let editIndex = -1;
+
+        // --- DATA GALERI KEGIATAN ---
+        let defaultGallery = [
+            { url: "https://images.unsplash.com/photo-1541888081622-385a8647c213?q=80&w=600", title: "Patroli Gabungan", desc: "Cipta Kondisi Malam Minggu Jaga Ketertiban Warga Haruai." },
+            { url: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=600", title: "Rapat Koordinasi", desc: "Sinergitas Tiga Pilar Kecamatan Haruai Hadapi Musim Hujan." },
+            { url: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=600", title: "Kerja Bakti", desc: "Pembersihan Saluran Air Bersama Warga Desa Cegah Banjir." },
+            { url: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?q=80&w=600", title: "Sosialisasi Warga", desc: "Pengenalan Inovasi PANTAU HARUAI ke Aparatur Desa." }
+        ];
+        let galleryData = JSON.parse(localStorage.getItem('pantau_gallery')) || defaultGallery;
+
+        let dataLaporan = []; let editIndex = -1;
+
+        // --- INIT TAMPILAN DEPAN ---
+        function renderTampilanWarga() {
+            // Render Running Text
+            let formattedText = textData.split('|').map((t, i) => `<span class="mx-4 ${i%2===0 ? 'text-white' : 'text-slate-300'}">${t.trim()}</span><span class="mx-4 text-yellow-500">|</span>`).join('');
+            document.getElementById('wargaRunningText').innerHTML = formattedText;
+
+            // Render Galeri
+            const galContainer = document.getElementById('wargaGalleryContainer');
+            galContainer.innerHTML = '';
+            galleryData.forEach(g => {
+                galContainer.innerHTML += `
+                <div class="min-w-[260px] max-w-[260px] bg-slate-800/80 backdrop-blur rounded-xl border border-white/10 overflow-hidden snap-start shadow-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <img src="${g.url}" class="w-full h-32 object-cover" alt="${g.title}">
+                    <div class="p-4">
+                        <span class="text-[9px] text-yellow-400 font-bold tracking-widest uppercase">${g.title}</span>
+                        <p class="text-white text-xs font-semibold mt-1 leading-snug line-clamp-2">${g.desc}</p>
+                    </div>
+                </div>`;
+            });
+        }
+        renderTampilanWarga(); // Panggil saat web diload
 
         // --- CHART DOUGHNUT LOGIC ---
         Chart.register(ChartDataLabels);
@@ -330,28 +405,17 @@
         let statsChart = new Chart(ctx, {
             type: 'doughnut',
             data: { labels: ['P', 'S'], datasets: [{ data: [1, 1], backgroundColor: ['#facc15', '#1d4ed8'], borderWidth: 0 }] },
-            options: { 
-                responsive: true, 
-                cutout: '75%', 
-                plugins: { 
-                    legend: { display: false },
-                    datalabels: { display: false } 
-                } 
-            }
+            options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, datalabels: { display: false } } }
         });
 
         function updateChart() {
             let p = dataLaporan.filter(d => d.status === "Menunggu").length;
             let s = dataLaporan.filter(d => d.status === "Selesai").length;
             let total = p + s;
-            
             let percent = total > 0 ? Math.round((s / total) * 100) : 0;
-            
             statsChart.data.datasets[0].data = total > 0 ? [p, s] : [1, 0]; 
             statsChart.update();
-            
-            document.getElementById('txtProses').innerText = p;
-            document.getElementById('txtSelesai').innerText = s;
+            document.getElementById('txtProses').innerText = p; document.getElementById('txtSelesai').innerText = s;
             document.getElementById('chartPercentage').innerText = percent + '%';
         }
 
@@ -360,28 +424,20 @@
             const tbody = document.getElementById('tabelDataLaporan');
             if(!tbody) return;
             tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center font-bold text-yellow-400 animate-pulse">Memuat data dari database...</td></tr>';
-            
             try {
                 const res = await fetch(URL_GAS + '?action=read');
                 const data = await res.json();
-                
-                dataLaporan = data;
-                tbody.innerHTML = '';
-                
-                if(data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-slate-400">Belum ada laporan masuk.</td></tr>';
-                } else {
+                dataLaporan = data; tbody.innerHTML = '';
+                if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-slate-400">Belum ada laporan masuk.</td></tr>'; } 
+                else {
                     const totalData = data.length;
-                    
                     data.reverse().forEach((item, index) => {
                         const isSelesai = item.status === 'Selesai';
                         const badgeClass = isSelesai ? 'border-green-500 text-green-400 bg-green-900/40' : 'border-yellow-500 text-yellow-400 bg-yellow-900/40';
                         const tgl = item.waktu ? new Date(item.waktu).toLocaleDateString('id-ID') : '-';
-                        const noUrut = totalData - index;
-
                         tbody.innerHTML += `
                             <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
-                                <td class="p-4 text-xs font-semibold text-slate-400 text-center">${noUrut}</td>
+                                <td class="p-4 text-xs font-semibold text-slate-400 text-center">${totalData - index}</td>
                                 <td class="p-4 text-xs font-semibold text-slate-300">${tgl}</td>
                                 <td class="p-4 font-bold text-xs text-yellow-400">${item.kategori}</td>
                                 <td class="p-4 text-xs font-semibold text-white">${item.nama}</td>
@@ -396,52 +452,35 @@
                     });
                 }
                 updateChart();
-            } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500 font-bold">Koneksi API Gagal. Pastikan URL Web App sudah benar!</td></tr>';
-            }
+            } catch (e) { tampilkanAlert("Gagal memuat data. Periksa koneksi API Anda."); tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500 font-bold">Koneksi API Gagal. Pastikan URL Web App sudah benar!</td></tr>'; }
         }
 
-        function ubahStatus(rowId, btnElement) {
-            targetRowId = rowId;
-            targetBtn = btnElement;
-            document.getElementById('modalConfirm').classList.remove('hidden');
-        }
-
+        function ubahStatus(rowId, btnElement) { targetRowId = rowId; targetBtn = btnElement; document.getElementById('modalConfirm').classList.remove('hidden'); }
         document.getElementById('btnConfirmOk').addEventListener('click', async () => {
-            tutupModalConfirm();
-            if(!targetRowId || !targetBtn) return;
-
-            const originalText = targetBtn.innerText;
-            targetBtn.innerText = "PROSES..."; 
-            targetBtn.disabled = true;
+            tutupModalConfirm(); if(!targetRowId || !targetBtn) return;
+            const originalText = targetBtn.innerText; targetBtn.innerText = "PROSES..."; targetBtn.disabled = true;
             try {
                 await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', rowId: targetRowId, newStatus: 'Selesai' }) });
                 muatDataGSheet(); 
-            } catch (e) {
-                tampilkanAlert("Gagal mengupdate status."); 
-                targetBtn.innerText = originalText; 
-                targetBtn.disabled = false;
-            }
+            } catch (e) { tampilkanAlert("Gagal mengupdate status. Server tidak merespon."); targetBtn.innerText = originalText; targetBtn.disabled = false; }
         });
 
-        // --- CETAK PDF RESMI KOP SURAT RAPI KIRI ---
+        // --- CETAK PDF RESMI ---
         function cetakLaporanResmi() {
             let htmlContent = `
                 <div style="padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff; width: 1000px;">
-                    
-                    <table style="width: 100%; border-bottom: 4px solid #000; margin-bottom: 30px; padding-bottom: 15px; border-collapse: collapse;">
+                    <table style="width: 100%; border-bottom: 4px solid #000; margin-bottom: 25px; padding-bottom: 15px;">
                         <tr>
-                            <td style="width: 120px; vertical-align: top; text-align: left;">
-                                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" style="width: 120px; height: auto;">
+                            <td style="width: 18%; vertical-align: middle; text-align: left;">
+                                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" style="width: 150px !important; min-width: 150px; height: auto;">
                             </td>
-                            <td style="vertical-align: middle; text-align: left; padding-left: 20px;">
-                                <h2 style="margin: 0; font-size: 24px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
-                                <h1 style="margin: 0; font-size: 34px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
-                                <p style="margin: 10px 0 0; font-size: 16px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p>
+                            <td style="width: 82%; vertical-align: middle; text-align: center; padding-right: 18%;">
+                                <h2 style="margin: 0; font-size: 22px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
+                                <h1 style="margin: 0; font-size: 32px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
+                                <p style="margin: 8px 0 0; font-size: 14px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p>
                             </td>
                         </tr>
                     </table>
-
                     <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px;">
                         <thead>
                             <tr style="background-color: #f0f0f0;">
@@ -455,44 +494,13 @@
                         </thead>
                         <tbody>
             `;
-
-            // Mengisi data ke tabel PDF
             dataLaporan.forEach((item, index) => {
                 const tgl = item.waktu ? new Date(item.waktu).toLocaleDateString('id-ID') : '-';
-                htmlContent += `
-                    <tr>
-                        <td style="border: 1px solid #000; padding: 10px; text-align: center;">${index + 1}</td>
-                        <td style="border: 1px solid #000; padding: 10px;">${tgl}</td>
-                        <td style="border: 1px solid #000; padding: 10px;">${item.kategori}</td>
-                        <td style="border: 1px solid #000; padding: 10px;">${item.nama}</td>
-                        <td style="border: 1px solid #000; padding: 10px;">${item.lokasi}</td>
-                        <td style="border: 1px solid #000; padding: 10px; text-align: center;"><strong>${item.status}</strong></td>
-                    </tr>
-                `;
+                htmlContent += `<tr><td style="border: 1px solid #000; padding: 10px; text-align: center;">${index + 1}</td><td style="border: 1px solid #000; padding: 10px;">${tgl}</td><td style="border: 1px solid #000; padding: 10px;">${item.kategori}</td><td style="border: 1px solid #000; padding: 10px;">${item.nama}</td><td style="border: 1px solid #000; padding: 10px;">${item.lokasi}</td><td style="border: 1px solid #000; padding: 10px; text-align: center;"><strong>${item.status}</strong></td></tr>`;
             });
+            htmlContent += `</tbody></table><div style="width: 100%; display: flex; justify-content: flex-end; font-size: 14px;"><div style="text-align: center; width: 250px;"><p style="margin: 0;">Haruai, ${new Date().toLocaleDateString('id-ID')}</p><p style="margin: 0;">Petugas Command Center,</p><br><br><br><br><p style="margin: 0; text-decoration: underline; font-weight: bold;">( ......................................... )</p></div></div></div>`;
 
-            htmlContent += `
-                        </tbody>
-                    </table>
-                    <div style="width: 100%; display: flex; justify-content: flex-end; font-size: 14px;">
-                        <div style="text-align: center; width: 250px;">
-                            <p style="margin: 0;">Haruai, ${new Date().toLocaleDateString('id-ID')}</p>
-                            <p style="margin: 0;">Petugas Command Center,</p>
-                            <br><br><br><br>
-                            <p style="margin: 0; text-decoration: underline; font-weight: bold;">( ......................................... )</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            const opt = {
-                margin:       0.5,
-                filename:     'Arsip-Resmi-Laporan-Pantau-Haruai.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true }, 
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
-            };
-
+            const opt = { margin: 0.5, filename: 'Arsip-Resmi-Laporan-Pantau-Haruai.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } };
             html2pdf().set(opt).from(htmlContent).save();
         }
 
@@ -500,78 +508,91 @@
         function bukaModalLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
         function tutupModalLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
         function cekLogin() {
-            const u = document.getElementById('inputUsername').value;
-            const p = document.getElementById('inputPassword').value;
+            const u = document.getElementById('inputUsername').value, p = document.getElementById('inputPassword').value;
             const valid = dataPengguna.find(x => x.username === u && x.password === p && x.status === "Aktif");
             if (valid) {
-                tutupModalLogin();
-                document.getElementById('viewWarga').classList.add('hidden');
-                document.getElementById('viewAdmin').classList.remove('hidden');
-                
-                document.getElementById('mainBody').classList.replace('bg-slate-900', 'bg-[#0f172a]');
-                document.getElementById('bgOverlayWarga').classList.add('hidden');
-                document.getElementById('bgCCTVAdmin').classList.remove('hidden');
+                tutupModalLogin(); document.getElementById('viewWarga').classList.add('hidden'); document.getElementById('viewAdmin').classList.remove('hidden');
+                document.getElementById('mainBody').classList.replace('bg-slate-900', 'bg-[#0f172a]'); document.getElementById('bgOverlayWarga').classList.add('hidden'); document.getElementById('bgCCTVAdmin').classList.remove('hidden');
                 switchAdminTab('laporan');
-            } else {
-                document.getElementById('errorLogin').classList.remove('hidden');
-            }
+            } else { document.getElementById('errorLogin').classList.remove('hidden'); }
         }
         function kembaliKeWarga() {
-            document.getElementById('viewAdmin').classList.add('hidden');
-            document.getElementById('viewWarga').classList.remove('hidden');
-            
-            document.getElementById('mainBody').classList.replace('bg-[#0f172a]', 'bg-slate-900');
-            document.getElementById('bgOverlayWarga').classList.remove('hidden');
-            document.getElementById('bgCCTVAdmin').classList.add('hidden');
+            document.getElementById('viewAdmin').classList.add('hidden'); document.getElementById('viewWarga').classList.remove('hidden');
+            document.getElementById('mainBody').classList.replace('bg-[#0f172a]', 'bg-slate-900'); document.getElementById('bgOverlayWarga').classList.remove('hidden'); document.getElementById('bgCCTVAdmin').classList.add('hidden');
         }
 
         function switchAdminTab(tab) {
-            const lap = tab === 'laporan'; const sld = tab === 'slideshow'; const usr = tab === 'pengguna';
+            const lap = tab === 'laporan'; const set = tab === 'pengaturan'; const usr = tab === 'pengguna';
             document.getElementById('contentLaporan').classList.toggle('hidden', !lap); 
-            document.getElementById('contentSlideshow').classList.toggle('hidden', !sld);
+            document.getElementById('contentPengaturan').classList.toggle('hidden', !set); document.getElementById('contentPengaturan').style.display = set ? 'flex' : 'none';
             document.getElementById('contentPengguna').classList.toggle('hidden', !usr);
             
-            const active = "bg-yellow-400 text-blue-900 shadow-lg";
-            const inactive = "bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700";
+            const active = "bg-yellow-400 text-blue-900 shadow-lg"; const inactive = "bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700";
             
             document.getElementById('btnTabLaporan').className = (lap ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
-            document.getElementById('btnTabSlideshow').className = (sld ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
+            document.getElementById('btnTabPengaturan').className = (set ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
             document.getElementById('btnTabPengguna').className = (usr ? active : inactive) + " px-8 py-3.5 rounded-2xl font-bold text-sm transition-all";
             
-            if(usr) renderUsers();
-            if(lap) muatDataGSheet();
-            if(sld) renderSlideshowAdmin(); 
+            if(usr) renderUsers(); if(lap) muatDataGSheet(); if(set) renderPengaturanAdmin(); 
         }
 
-        // --- MANAJEMEN SLIDESHOW ---
-        function renderSlideshowAdmin() {
-            const container = document.getElementById('contentSlideshow');
-            container.innerHTML = '';
+        // --- MANAJEMEN PENGATURAN (TICKER, CCTV, GALERI) ---
+        function renderPengaturanAdmin() {
+            // 1. Text
+            document.getElementById('inputRunningText').value = textData;
+            
+            // 2. CCTV
+            const contCCTV = document.getElementById('containerSlideshowAdmin'); contCCTV.innerHTML = '';
             for(let i=1; i<=3; i++) {
-                let slide = slides[i-1] || {url: '', caption: ''};
-                container.innerHTML += `
-                <div class="admin-panel p-6 rounded-3xl relative">
-                    <h4 class="font-bold mb-4 text-xs uppercase text-yellow-400 tracking-widest">Kamera Slide ${i}</h4>
-                    <img id="prev${i}" src="${slide.url}" class="w-full h-32 object-cover rounded-2xl mb-4 border border-slate-600">
-                    <input type="text" id="inputSlide${i}" value="${slide.url}" class="w-full px-4 py-3 bg-slate-900 border border-slate-600 text-white rounded-xl text-[10px] mb-2 font-medium outline-none focus:border-yellow-400" placeholder="URL Foto">
-                    <input type="text" id="inputCaption${i}" value="${slide.caption}" class="w-full px-4 py-3 bg-slate-900 border border-slate-600 text-white rounded-xl text-xs font-bold mb-4 outline-none focus:border-yellow-400" placeholder="Keterangan Teks">
-                    <button onclick="simpanSlideshow(${i})" class="w-full bg-slate-700 hover:bg-blue-600 text-white font-bold py-2.5 rounded-xl text-xs transition-all tracking-widest uppercase shadow">Simpan Slide</button>
+                let s = slides[i-1] || {url: '', caption: ''};
+                contCCTV.innerHTML += `
+                <div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl">
+                    <h4 class="font-bold mb-2 text-[10px] uppercase text-yellow-400 tracking-widest">Kamera ${i}</h4>
+                    <img id="prevCCTV${i}" src="${s.url}" class="w-full h-24 object-cover rounded-xl mb-3 border border-slate-500">
+                    <input type="text" id="inputUrlCCTV${i}" value="${s.url}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-2 outline-none focus:border-yellow-400" placeholder="URL Foto">
+                    <input type="text" id="inputCapCCTV${i}" value="${s.caption}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] font-bold mb-3 outline-none focus:border-yellow-400" placeholder="Keterangan Teks">
+                    <button onclick="simpanCCTV(${i})" class="w-full bg-slate-700 hover:bg-blue-600 text-white font-bold py-2 rounded-lg text-[10px] transition-all uppercase tracking-widest">Simpan CCTV ${i}</button>
+                </div>`;
+            }
+
+            // 3. Galeri
+            const contGal = document.getElementById('containerGalleryAdmin'); contGal.innerHTML = '';
+            for(let i=1; i<=4; i++) {
+                let g = galleryData[i-1] || {url: '', title: '', desc: ''};
+                contGal.innerHTML += `
+                <div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl">
+                    <h4 class="font-bold mb-2 text-[10px] uppercase text-yellow-400 tracking-widest">Galeri ${i}</h4>
+                    <img id="prevGal${i}" src="${g.url}" class="w-full h-24 object-cover rounded-xl mb-3 border border-slate-500">
+                    <input type="text" id="inputUrlGal${i}" value="${g.url}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-2 outline-none focus:border-yellow-400" placeholder="URL Foto">
+                    <input type="text" id="inputTitleGal${i}" value="${g.title}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-yellow-400 rounded-lg text-[10px] font-bold mb-2 outline-none focus:border-yellow-400" placeholder="Kategori/Judul Singkat">
+                    <textarea id="inputDescGal${i}" rows="2" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-3 outline-none focus:border-yellow-400 resize-none" placeholder="Deskripsi Singkat">${g.desc}</textarea>
+                    <button onclick="simpanGaleri(${i})" class="w-full bg-slate-700 hover:bg-blue-600 text-white font-bold py-2 rounded-lg text-[10px] transition-all uppercase tracking-widest">Simpan Galeri ${i}</button>
                 </div>`;
             }
         }
 
-        function simpanSlideshow(index) {
-            let url = document.getElementById(`inputSlide${index}`).value;
-            let cap = document.getElementById(`inputCaption${index}`).value;
+        function simpanRunningText() {
+            let val = document.getElementById('inputRunningText').value;
+            if(!val) { tampilkanAlert("Teks tidak boleh kosong!"); return; }
+            textData = val; localStorage.setItem('pantau_running_text', textData);
+            renderTampilanWarga(); tampilkanAlert("✅ Running Text berhasil diperbarui!");
+        }
+
+        function simpanCCTV(i) {
+            let url = document.getElementById(`inputUrlCCTV${i}`).value, cap = document.getElementById(`inputCapCCTV${i}`).value;
             if(!url) { tampilkanAlert("URL Foto tidak boleh kosong!"); return; } 
-            slides[index - 1] = { url: url, caption: cap };
-            localStorage.setItem('pantau_slides', JSON.stringify(slides)); 
-            document.getElementById(`prev${index}`).src = url;
-            
-            currentSlide = 0; 
-            document.getElementById('slideImg').src = slides[0].url;
-            document.getElementById('slideCaption').innerText = slides[0].caption;
-            tampilkanAlert(`✅ Slide ${index} berhasil diperbarui!`); 
+            slides[i - 1] = { url: url, caption: cap }; localStorage.setItem('pantau_slides', JSON.stringify(slides)); 
+            document.getElementById(`prevCCTV${i}`).src = url; currentSlide = 0; 
+            document.getElementById('slideImg').src = slides[0].url; document.getElementById('slideCaption').innerText = slides[0].caption;
+            tampilkanAlert(`✅ Slideshow CCTV ${i} berhasil diperbarui!`); 
+        }
+
+        function simpanGaleri(i) {
+            let url = document.getElementById(`inputUrlGal${i}`).value, title = document.getElementById(`inputTitleGal${i}`).value, desc = document.getElementById(`inputDescGal${i}`).value;
+            if(!url) { tampilkanAlert("URL Foto tidak boleh kosong!"); return; } 
+            galleryData[i - 1] = { url: url, title: title, desc: desc }; localStorage.setItem('pantau_gallery', JSON.stringify(galleryData)); 
+            document.getElementById(`prevGal${i}`).src = url; renderTampilanWarga();
+            tampilkanAlert(`✅ Galeri Kegiatan ${i} berhasil diperbarui!`); 
         }
 
         // --- USER MGMT ---
@@ -592,9 +613,7 @@
         function tutupModalUser() { document.getElementById('modalUser').classList.add('hidden'); }
         function editUser(i) {
             editIndex = i; document.getElementById('modalUserTitle').innerText = "EDIT OTORISASI AKUN";
-            document.getElementById('inputNewUser').value = dataPengguna[i].username;
-            document.getElementById('inputNewPass').value = dataPengguna[i].password;
-            document.getElementById('inputNewRole').value = dataPengguna[i].role;
+            document.getElementById('inputNewUser').value = dataPengguna[i].username; document.getElementById('inputNewPass').value = dataPengguna[i].password; document.getElementById('inputNewRole').value = dataPengguna[i].role;
             document.getElementById('modalUser').classList.remove('hidden');
         }
         function simpanPetugas() {
@@ -607,11 +626,6 @@
 
         // --- SLIDESHOW ENGINE ---
         let currentSlide = 0;
-        if(slides.length > 0) {
-            document.getElementById('slideImg').src = slides[0].url;
-            document.getElementById('slideCaption').innerText = slides[0].caption;
-        }
-
         setInterval(() => {
             if(slides.length === 0) return;
             const img = document.getElementById('slideImg'), cap = document.getElementById('slideCaption'), cont = document.getElementById('slideCaptionContainer');
@@ -627,10 +641,7 @@
         // --- FORM SUBMIT TO APPS SCRIPT ---
         document.getElementById('formLaporan').addEventListener('submit', async e => {
             e.preventDefault();
-            const btn = document.getElementById('btnKirim');
-            const originalText = btn.innerText;
-            btn.disabled = true; btn.innerText = "Mengirim...";
-            
+            const btn = document.getElementById('btnKirim'); const originalText = btn.innerText; btn.disabled = true; btn.innerText = "Mengirim...";
             const kategori = document.getElementById('inputKategori').value, nama = document.getElementById('inputNama').value, lokasi = document.getElementById('inputLokasi').value, laporan = document.getElementById('inputLaporan').value;
             const fileFoto = document.getElementById('inputFoto').files[0];
 

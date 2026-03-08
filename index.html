@@ -13,11 +13,7 @@
     <style>
         .fade-transition { transition: opacity 0.8s ease-in-out; }
         .view-enter { animation: fadeIn 0.5s ease-out forwards; }
-        
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .admin-panel { 
             background: rgba(15, 23, 42, 0.85); 
@@ -26,35 +22,13 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
         }
         
-        @keyframes ticker { 
-            0% { transform: translateX(100vw); } 
-            100% { transform: translateX(-100%); } 
-        }
+        @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+        .animate-ticker { display: inline-block; white-space: nowrap; animation: ticker 30s linear infinite; }
+        .ticker-container:hover .animate-ticker { animation-play-state: paused; }
         
-        .animate-ticker { 
-            display: inline-block; 
-            white-space: nowrap; 
-            animation: ticker 30s linear infinite; 
-        }
-        
-        .ticker-container:hover .animate-ticker { 
-            animation-play-state: paused; 
-        }
-        
-        @keyframes scrollGallery { 
-            0% { transform: translateX(0); } 
-            100% { transform: translateX(-50%); } 
-        }
-        
-        .gallery-track { 
-            display: flex; 
-            width: max-content; 
-            animation: scrollGallery 40s linear infinite; 
-        }
-        
-        .gallery-container:hover .gallery-track { 
-            animation-play-state: paused; 
-        }
+        @keyframes scrollGallery { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .gallery-track { display: flex; width: max-content; animation: scrollGallery 40s linear infinite; }
+        .gallery-container:hover .gallery-track { animation-play-state: paused; }
         
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -74,9 +48,7 @@
                 <span class="animate-pulse mr-2">🔴</span> INFO TERKINI
             </div>
             <div class="w-full relative pl-[140px]">
-                <div id="wargaRunningText" class="animate-ticker text-slate-300">
-                    Memuat pengumuman...
-                </div>
+                <div id="wargaRunningText" class="animate-ticker text-slate-300">Memuat pengumuman...</div>
             </div>
         </div>
 
@@ -96,7 +68,7 @@
                         <span class="text-xs font-bold text-white tracking-widest uppercase bg-black/50 px-2 py-1 rounded">CCTV Terintegrasi</span>
                     </div>
                     <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight mb-2 uppercase tracking-tight">PANTAU HARUAI</h2>
-                    <p class="text-slate-300 text-sm lg:text-base mb-6 leading-relaxed max-w-2xl">Pengawasan Terpadu Kecamatan Haruai. Sistem informasi dan pelaporan berbasis digital untuk lingkungan yang kondusif hasil kolaborasi FORKOPIMCA Kecamatan Haruai dan Pemerintah Desa se Kecamatan Haruai guna mendukung Misi TABALONG SMART.</p>
+                    <p class="text-slate-300 text-sm lg:text-base mb-6 leading-relaxed max-w-2xl">Pengawasan Terpadu Kecamatan Haruai. Sistem informasi dan pelaporan berbasis digital untuk lingkungan yang kondusif.</p>
                     
                     <div class="w-full max-w-5xl">
                         <div class="bg-blue-900/80 border-l-4 border-yellow-400 rounded-r-lg px-4 py-2.5 mb-3 shadow-md backdrop-blur-md inline-block">
@@ -214,8 +186,9 @@
                     <table class="w-full text-left text-sm border-collapse text-slate-300">
                         <thead class="text-[10px] uppercase text-yellow-400 font-bold tracking-widest border-b border-slate-700">
                             <tr>
-                                <th class="p-4 text-center">ID</th>
+                                <th class="p-4 text-center">No</th>
                                 <th class="p-4">Tanggal</th>
+                                <th class="p-4">ID Lap</th>
                                 <th class="p-4">Kategori</th>
                                 <th class="p-4">Nama</th>
                                 <th class="p-4">Lokasi</th>
@@ -513,7 +486,7 @@
             const tbody = document.getElementById('tabelDataLaporan'); 
             if(!tbody) return;
             
-            tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center font-bold text-yellow-400 animate-pulse">Memuat data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center font-bold text-yellow-400 animate-pulse">Memuat data...</td></tr>';
             
             try {
                 const res = await fetch(URL_GAS + '?action=read'); 
@@ -522,16 +495,20 @@
                 tbody.innerHTML = '';
                 
                 if(data.length === 0) { 
-                    tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-slate-400">Belum ada laporan.</td></tr>'; 
+                    tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-slate-400">Belum ada laporan.</td></tr>'; 
                 } else {
-                    data.reverse().forEach((item) => {
+                    const totalData = data.length;
+                    
+                    data.reverse().forEach((item, index) => {
                         const isSelesai = item.status === 'Selesai'; 
                         const badgeClass = isSelesai ? 'border-green-500 text-green-400 bg-green-900/40' : 'border-yellow-500 text-yellow-400 bg-yellow-900/40';
+                        const noUrut = totalData - index; // Mengembalikan nomor urut
                         
                         tbody.innerHTML += `
                             <tr class="border-b border-slate-700/50 hover:bg-slate-800/80">
-                                <td class="p-4 text-xs font-semibold text-slate-400 text-center">${item.id_laporan || '-'}</td>
+                                <td class="p-4 text-xs font-semibold text-slate-400 text-center">${noUrut}</td>
                                 <td class="p-4 text-xs font-semibold text-slate-300">${item.waktu || '-'}</td>
+                                <td class="p-4 text-[10px] text-slate-400 font-mono">${item.id_laporan || '-'}</td>
                                 <td class="p-4 font-bold text-xs text-yellow-400">${item.kategori}</td>
                                 <td class="p-4 text-xs font-semibold text-white">${item.nama}</td>
                                 <td class="p-4 text-xs text-slate-400">${item.lokasi}</td>
@@ -548,7 +525,7 @@
                 } 
                 updateChart();
             } catch (e) { 
-                tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500 font-bold">Koneksi Gagal.</td></tr>'; 
+                tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-red-500 font-bold">Koneksi Gagal.</td></tr>'; 
             }
         }
 
@@ -787,8 +764,9 @@
                     <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px;">
                         <thead>
                             <tr style="background-color: #f0f0f0;">
-                                <th style="border: 1px solid #000; padding: 10px;">ID</th>
+                                <th style="border: 1px solid #000; padding: 10px;">No</th>
                                 <th style="border: 1px solid #000; padding: 10px;">Waktu</th>
+                                <th style="border: 1px solid #000; padding: 10px;">ID Lap</th>
                                 <th style="border: 1px solid #000; padding: 10px;">Kategori</th>
                                 <th style="border: 1px solid #000; padding: 10px;">Nama Pelapor</th>
                                 <th style="border: 1px solid #000; padding: 10px;">Lokasi Kejadian</th>
@@ -797,11 +775,13 @@
                         </thead>
                         <tbody>`;
             
+            let no = 1;
             dataLaporan.forEach((item) => { 
                 htmlContent += `
                     <tr>
-                        <td style="border: 1px solid #000; padding: 10px;">${item.id_laporan || '-'}</td>
+                        <td style="border: 1px solid #000; padding: 10px; text-align: center;">${no++}</td>
                         <td style="border: 1px solid #000; padding: 10px;">${item.waktu || '-'}</td>
+                        <td style="border: 1px solid #000; padding: 10px;">${item.id_laporan || '-'}</td>
                         <td style="border: 1px solid #000; padding: 10px;">${item.kategori}</td>
                         <td style="border: 1px solid #000; padding: 10px;">${item.nama}</td>
                         <td style="border: 1px solid #000; padding: 10px;">${item.lokasi}</td>

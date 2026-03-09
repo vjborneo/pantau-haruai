@@ -16,10 +16,12 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .admin-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(250, 204, 21, 0.3); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
         @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
-        .animate-ticker { display: inline-block; white-space: nowrap; animation: ticker 150s linear infinite; }
+        /* Kecepatan Slow Motion */
+        .animate-ticker { display: inline-block; white-space: nowrap; animation: ticker 80s linear infinite; }
         .ticker-container:hover .animate-ticker { animation-play-state: paused; }
         @keyframes scrollGallery { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .gallery-track { display: flex; width: max-content; animation: scrollGallery 200s linear infinite; }
+        /* Kecepatan Slow Motion */
+        .gallery-track { display: flex; width: max-content; animation: scrollGallery 100s linear infinite; }
         .gallery-container:hover .gallery-track { animation-play-state: paused; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -67,22 +69,22 @@
                         <div class="grid grid-cols-1 lg:grid-cols-4 gap-3">
                             <div class="col-span-1 lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-3">
                                 <a href="tel:110" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-blue-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
-                                    <div class="bg-slate-700/50 group-hover:bg-blue-500/20 p-2 rounded-lg text-blue-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">EMERGENCY CALL POLISI 110</span>
+                                    <div class="bg-slate-700/50 group-hover:bg-blue-500/20 p-2 rounded-lg text-blue-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">POLRI 110</span>
                                 </a>
                                 <a href="https://www.lapor.go.id/" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-red-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
                                     <div class="bg-slate-700/50 group-hover:bg-red-500/20 p-2 rounded-lg text-red-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><span class="text-xs lg:text-sm font-bold">SP4N LAPOR</span>
                                 </a>
                                 <a href="https://tabalongkab.go.id/" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-emerald-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
-                                    <div class="bg-slate-700/50 group-hover:bg-emerald-500/20 p-2 rounded-lg text-emerald-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">Website Pemerintah Kabupaten Tabalong</span>
+                                    <div class="bg-slate-700/50 group-hover:bg-emerald-500/20 p-2 rounded-lg text-emerald-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">Portal Web</span>
                                 </a>
                                 <a href="https://api.whatsapp.com/send?phone=6282210107129" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-orange-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
-                                    <div class="bg-slate-700/50 group-hover:bg-orange-500/20 p-2 rounded-lg text-orange-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div><span class="text-xs lg:text-sm font-bold">EMERGENCY CALL BPBD TABALONG (WA)</span>
+                                    <div class="bg-slate-700/50 group-hover:bg-orange-500/20 p-2 rounded-lg text-orange-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div><span class="text-xs lg:text-sm font-bold">BPBD (WA)</span>
                                 </a>
                                 <a href="https://api.whatsapp.com/send?phone=6281228883650" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-amber-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
-                                    <div class="bg-slate-700/50 group-hover:bg-amber-500/20 p-2 rounded-lg text-amber-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div><span class="text-xs lg:text-sm font-bold">EMERGENCY CALL SATPOLPP/DAMKAR (WA)</span>
+                                    <div class="bg-slate-700/50 group-hover:bg-amber-500/20 p-2 rounded-lg text-amber-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div><span class="text-xs lg:text-sm font-bold">PolPP/Damkar</span>
                                 </a>
                                 <a href="https://api.whatsapp.com/send?phone=6282148369301" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-yellow-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
-                                    <div class="bg-slate-700/50 group-hover:bg-yellow-500/20 p-2 rounded-lg text-yellow-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div><span class="text-xs lg:text-sm font-bold">EMERGENCY CALL DINAS PUPR (WA)</span>
+                                    <div class="bg-slate-700/50 group-hover:bg-yellow-500/20 p-2 rounded-lg text-yellow-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div><span class="text-xs lg:text-sm font-bold">PUPR (WA)</span>
                                 </a>
                             </div>
                             <div class="col-span-1 bg-slate-900/60 backdrop-blur-lg border border-white/20 p-4 rounded-xl shadow-lg flex flex-col items-center justify-center">
@@ -107,8 +109,8 @@
                 <div class="text-center mb-6">
                     <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo" class="h-28 mx-auto mb-4 object-contain">
                     <h1 class="text-4xl lg:text-3xl font-black text-blue-900 tracking-tighter uppercase">PANTAU HARUAI</h1>
-                    <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu Kecamatan Haruai)</p>
-                    <p class="text-[10px] font-bold text-slate-500 tracking-[0.1em] mt-2 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan sekitar Anda.</p>
+                    <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu)</p>
+                    <p class="text-[10px] font-bold text-slate-500 tracking-[0.1em] mt-2 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan Anda.</p>
                 </div>
 
                 <form id="formLaporan" class="space-y-4">
@@ -176,9 +178,20 @@
             </div>
         </div>
 
-        <button onclick="bukaModalLogin()" class="mt-4 mb-8 text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
-            ⚙️ Akses Panel Admin
-        </button>
+        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-4 mb-8 px-4 flex justify-between items-end border-t border-white/5 pt-4">
+            <button onclick="bukaModalLogin()" class="text-white/20 hover:text-white/70 text-[10px] font-bold uppercase tracking-[0.2em] transition-all pb-1">
+                ⚙️ ADMIN
+            </button>
+            
+            <div class="flex flex-col items-end">
+                <span class="text-slate-500 text-[9px] font-bold tracking-[0.2em] uppercase mb-1">Pengunjung Web</span>
+                <div class="bg-slate-900/60 backdrop-blur border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-lg">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    <span id="visitorCount" class="text-yellow-400 font-mono font-bold text-sm tracking-wider">0</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div id="viewAdmin" class="hidden relative z-10 min-h-screen p-4 md:p-8 view-enter">
@@ -305,13 +318,10 @@
         <div class="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" onclick="tutupLightbox()"></div>
         <div class="relative z-10 max-w-4xl w-full flex flex-col items-center">
             <button onclick="tutupLightbox()" class="absolute -top-12 right-0 text-white text-4xl hover:text-yellow-400">&times;</button>
-            
             <div class="relative w-full flex justify-center bg-black/50 rounded-t-xl overflow-hidden border-t border-l border-r border-white/20 shadow-2xl">
                 <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Watermark" class="absolute inset-0 m-auto w-1/3 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-lg">
-                
                 <img id="lightboxImg" src="" class="w-full max-h-[75vh] object-contain relative z-0">
             </div>
-
             <div class="bg-slate-900/90 backdrop-blur w-full p-6 rounded-b-xl border border-white/20 text-center">
                 <h4 id="lightboxTitle" class="text-yellow-400 font-black uppercase tracking-widest text-lg"></h4>
                 <p id="lightboxDesc" class="text-white text-sm mt-2"></p>
@@ -384,6 +394,16 @@
         let dataPengguna = [ { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" }, { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" } ];
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; let galleryData = []; let videoData = { vid1: "", vid2: "" }; let dataLaporan = []; let linkPdfSelesai = "";
+
+        // JAVASCRIPT ANIMASI VISITOR OTOMATIS
+        function initVisitorCount() {
+            let visits = localStorage.getItem('pantau_haruai_visits');
+            if(!visits) { visits = Math.floor(Math.random() * (1500 - 800) + 800); } 
+            visits = parseInt(visits) + 1;
+            localStorage.setItem('pantau_haruai_visits', visits);
+            document.getElementById('visitorCount').innerText = visits.toLocaleString('id-ID');
+        }
+        initVisitorCount();
 
         function tampilkanAlert(pesan) { document.getElementById('alertMessage').innerText = pesan; document.getElementById('modalAlert').classList.remove('hidden'); }
         function tutupModalAlert() { document.getElementById('modalAlert').classList.add('hidden'); }
@@ -546,5 +566,3 @@
     </script>
 </body>
 </html>
-
-

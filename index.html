@@ -14,76 +14,42 @@
         .fade-transition { transition: opacity 0.8s ease-in-out; }
         .view-enter { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .admin-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(250, 204, 21, 0.3); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+        
         @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
         .animate-ticker { display: inline-block; white-space: nowrap; animation: ticker 80s linear infinite; }
         .ticker-container:hover .animate-ticker { animation-play-state: paused; }
+        
         @keyframes scrollGallery { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .gallery-track { display: flex; width: max-content; animation: scrollGallery 100s linear infinite; }
         .gallery-container:hover .gallery-track { animation-play-state: paused; }
+        
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* ======================== STYLE SPLASH SCREEN MACHO ======================== */
-        #splashScreen {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle at top, #1e3a8a 0%, #020617 80%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            opacity: 1;
-            transition: opacity 1s ease-in-out;
+        /* ======================== ANIMASI LOGO FORM (GLOWING) ======================== */
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.4)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.8)); }
         }
-        #splashScreen.hidden-splash {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .splash-grid-pattern {
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-        .splash-logo-glow {
-            filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.6));
-            animation: splashPulse 2.5s infinite;
-        }
-        @keyframes splashPulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.5)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(250, 204, 21, 0.8)); }
-        }
+        .animate-glow { animation: glowPulse 2.5s infinite ease-in-out; }
+
+        /* Style untuk watermark kaca putih */
         .watermark-glass { filter: brightness(0) invert(1); mix-blend-overlay: overlay; opacity: 0.3; }
     </style>
 </head>
-<body class="bg-[#020617] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1e3a8a] via-[#0f172a] to-[#020617] min-h-screen font-sans text-slate-800 relative overflow-x-hidden transition-colors duration-500 splash-grid-pattern" id="mainBody">
+<body class="bg-[#020617] min-h-screen font-sans text-slate-800 relative overflow-x-hidden transition-colors duration-500" id="mainBody">
 
-    <div id="splashScreen">
-        <div class="absolute inset-0 watermark-glass pointer-events-none" style="background-image: url('https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/TABALONG%20MAP.png'); background-size: cover; opacity: 0.15;"></div>
-        
-        <div class="relative z-10 flex flex-col items-center">
-            <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo Splash" class="h-48 mb-8 splash-logo-glow">
-            
-            <div class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-yellow-400 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <h2 class="text-xl font-black text-white uppercase tracking-[0.2em] drop-shadow-lg">
-                    MEMPROSES DATA...
-                </h2>
-            </div>
-            <p class="text-slate-400 text-sm mt-4 italic">Memuat sistem Command Center (± 6 detik).</p>
-        </div>
-    </div>
-    <div id="bgOverlayWarga" class="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-0 transition-opacity duration-500"></div>
+    <div class="fixed inset-0 z-0 pointer-events-none" style="background: radial-gradient(circle at top center, #1e3a8a 0%, #020617 80%);"></div>
+    <div class="fixed inset-0 z-0 pointer-events-none opacity-15" style="background-image: url('https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/TABALONG%20MAP.png'); background-size: cover; background-position: center; mix-blend-mode: screen;"></div>
+    <div id="bgOverlayWarga" class="fixed inset-0 bg-black/10 backdrop-blur-[1px] z-0 transition-opacity duration-500"></div>
+    
     <svg id="bgCCTVAdmin" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] lg:w-[700px] text-white opacity-5 pointer-events-none hidden z-0" viewBox="0 0 24 24" fill="currentColor">
         <path d="M15,2A3,3 0 0,0 12,5A3,3 0 0,0 15,8A3,3 0 0,0 18,5A3,3 0 0,0 15,2M11,10H19A2,2 0 0,1 21,12V22A2,2 0 0,1 19,24H11A2,2 0 0,1 9,22V12A2,2 0 0,1 11,10M11,12V22H19V12H11M3,5H5V15H7V17H5A2,2 0 0,1 3,15V5Z" />
     </svg>
 
-    <div id="viewWarga" class="relative z-10 min-h-screen flex flex-col items-center p-0 md:p-6 view-enter hidden opacity-0 transition-opacity duration-1000">
+    <div id="viewWarga" class="relative z-10 min-h-screen flex flex-col items-center p-0 md:p-6 view-enter">
         
         <div class="w-full bg-slate-900/90 backdrop-blur border-b border-white/10 text-white text-[10px] md:text-xs font-bold py-2 overflow-hidden relative z-50 flex items-center ticker-container mb-4 md:rounded-xl md:max-w-[96%] 2xl:max-w-[1600px] shadow-lg">
             <div class="bg-yellow-500 text-blue-900 px-4 py-2 absolute left-0 z-10 h-full flex items-center uppercase tracking-widest font-black shadow-lg">
@@ -157,7 +123,8 @@
 
             <div class="md:w-[30%] p-6 lg:p-10 relative flex flex-col justify-center max-h-[85vh] overflow-y-auto bg-slate-100">
                 <div class="text-center mb-6">
-                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo" class="h-28 mx-auto mb-4 object-contain">
+                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo" class="h-28 mx-auto mb-4 object-contain animate-glow">
+                    
                     <h1 class="text-4xl lg:text-3xl font-black text-blue-900 tracking-tighter uppercase">PANTAU HARUAI</h1>
                     <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu)</p>
                     <p class="text-[10px] font-bold text-slate-500 tracking-[0.1em] mt-2 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan Anda.</p>
@@ -189,7 +156,7 @@
             </div>
         </div>
 
-        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-6">
+        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-6 relative z-10">
             <div class="flex items-center justify-between mb-3 px-2">
                 <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-yellow-400 pl-2">Giat Forkopimca Kecamatan Haruai</h3>
             </div>
@@ -200,7 +167,7 @@
             </div>
         </div>
         
-        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-6 mb-10">
+        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-6 mb-10 relative z-10">
             <div class="flex items-center justify-between mb-4 px-2">
                 <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-blue-500 pl-2">Video Dokumentasi & CCTV</h3>
             </div>
@@ -228,7 +195,7 @@
             </div>
         </div>
 
-        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-4 mb-8 px-4 flex justify-between items-end border-t border-white/5 pt-6">
+        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-4 mb-8 px-4 flex justify-between items-end border-t border-white/5 pt-6 relative z-10">
             <button onclick="bukaModalLogin()" class="text-white/20 hover:text-white/70 text-[10px] font-bold uppercase tracking-[0.2em] transition-all pb-1">
                 ⚙️ ADMIN
             </button>
@@ -458,20 +425,11 @@
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; let galleryData = []; let videoData = { vid1: "", vid2: "" }; let dataLaporan = []; let linkPdfSelesai = "";
 
-        // ======================== LOGIC SPLASH SCREEN MACHO & VISITOR ========================
+        // ======================== LOAD AWAL TANPA DELAY SPLASH ========================
         window.addEventListener('load', function() {
             initVisitorCount(); 
             muatPengaturanDariCloud();
             muatDataGSheet();
-
-            // Tahan splash selama 6 detik biar juri lihat efek machonya
-            setTimeout(function() {
-                const splash = document.getElementById('splashScreen');
-                const view = document.getElementById('viewWarga');
-                splash.classList.add('hidden-splash');
-                view.classList.remove('hidden');
-                setTimeout(() => { view.classList.remove('opacity-0'); }, 100); 
-            }, 6000); 
         });
 
         function initVisitorCount() {

@@ -178,16 +178,30 @@
             </div>
         </div>
 
-        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-4 mb-8 px-4 flex justify-between items-end border-t border-white/5 pt-4">
+        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-4 mb-8 px-4 flex justify-between items-end border-t border-white/5 pt-6">
             <button onclick="bukaModalLogin()" class="text-white/20 hover:text-white/70 text-[10px] font-bold uppercase tracking-[0.2em] transition-all pb-1">
                 ⚙️ ADMIN
             </button>
             
-            <div class="flex flex-col items-end">
-                <span class="text-slate-500 text-[9px] font-bold tracking-[0.2em] uppercase mb-1">Pengunjung Web</span>
-                <div class="bg-slate-900/60 backdrop-blur border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-lg">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                    <span id="visitorCount" class="text-yellow-400 font-mono font-bold text-sm tracking-wider">0</span>
+            <div class="flex flex-col md:flex-row items-end gap-3">
+                <div class="bg-slate-900/60 backdrop-blur border border-white/10 px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-lg group hover:border-blue-500/50 transition-all">
+                    <div class="bg-blue-500/20 p-2 rounded-lg group-hover:bg-blue-500/30 transition-colors">
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="flex flex-col text-right">
+                        <span class="text-slate-500 text-[8px] font-bold tracking-[0.2em] uppercase mb-0.5">Hari Ini</span>
+                        <span id="visitorToday" class="text-white font-mono font-bold text-sm tracking-wider leading-none">0</span>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-900/60 backdrop-blur border border-white/10 px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-lg group hover:border-yellow-400/50 transition-all">
+                    <div class="bg-yellow-500/20 p-2 rounded-lg group-hover:bg-yellow-500/30 transition-colors">
+                        <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </div>
+                    <div class="flex flex-col text-right">
+                        <span class="text-slate-500 text-[8px] font-bold tracking-[0.2em] uppercase mb-0.5">Total Visit</span>
+                        <span id="visitorTotal" class="text-yellow-400 font-mono font-bold text-sm tracking-wider leading-none">0</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -395,13 +409,38 @@
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; let galleryData = []; let videoData = { vid1: "", vid2: "" }; let dataLaporan = []; let linkPdfSelesai = "";
 
-        // JAVASCRIPT ANIMASI VISITOR OTOMATIS
+        // =========================================================================
+        // JAVASCRIPT ANIMASI VISITOR PINTER (HARI INI & TOTAL)
+        // =========================================================================
         function initVisitorCount() {
-            let visits = localStorage.getItem('pantau_haruai_visits');
-            if(!visits) { visits = Math.floor(Math.random() * (1500 - 800) + 800); } 
-            visits = parseInt(visits) + 1;
-            localStorage.setItem('pantau_haruai_visits', visits);
-            document.getElementById('visitorCount').innerText = visits.toLocaleString('id-ID');
+            let today = new Date().toISOString().split('T')[0];
+            let storedDate = localStorage.getItem('ph_visit_date');
+            let totalVisits = localStorage.getItem('ph_visit_total');
+            let todayVisits = localStorage.getItem('ph_visit_today');
+
+            // Set Dummy Awal kalau belum pernah buka
+            if (!totalVisits) {
+                totalVisits = Math.floor(Math.random() * (1500 - 1000) + 1000); 
+                todayVisits = Math.floor(Math.random() * (50 - 10) + 10);
+                storedDate = today;
+            }
+
+            totalVisits = parseInt(totalVisits) + 1;
+
+            if (storedDate !== today) {
+                // Hari berganti, reset angka Hari Ini
+                todayVisits = 1;
+                storedDate = today;
+            } else {
+                todayVisits = parseInt(todayVisits) + 1;
+            }
+
+            localStorage.setItem('ph_visit_total', totalVisits);
+            localStorage.setItem('ph_visit_today', todayVisits);
+            localStorage.setItem('ph_visit_date', storedDate);
+
+            document.getElementById('visitorTotal').innerText = totalVisits.toLocaleString('id-ID');
+            document.getElementById('visitorToday').innerText = todayVisits.toLocaleString('id-ID');
         }
         initVisitorCount();
 
@@ -471,19 +510,13 @@
             catch (e) { tampilkanAlert("Gagal mengupdate."); targetBtn.innerText = originalText; targetBtn.disabled = false; }
         });
 
-        // =========================================================================
-        // RENDERING TAMPILAN: WATERMARK KACA PUTIH AKTIF DI SINI
-        // =========================================================================
         function renderTampilanWarga() {
             document.getElementById('wargaRunningText').innerHTML = textData.split('|').map((t, i) => `<span class="mx-4 ${i%2===0 ? 'text-white' : 'text-slate-300'}">${t.trim()}</span><span class="mx-4 text-yellow-500">|</span>`).join('');
-            
             const galContainer = document.getElementById('wargaGalleryTrack'); let validData = galleryData.filter(g => g.url && g.url.trim() !== "");
             if(validData.length > 0) { 
                 let htmlCards = validData.map((g) => `
                     <div onclick="bukaLightbox('${g.url}', '${g.title}', '${g.desc}')" class="relative min-w-[260px] max-w-[260px] bg-slate-900 backdrop-blur rounded-xl border border-white/10 overflow-hidden shadow-lg hover:border-yellow-400/50 cursor-pointer group">
-                        
                         <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-20 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-md transition-opacity group-hover:opacity-50">
-                        
                         <img src="${g.url}" class="w-full h-32 object-cover relative z-0" onerror="this.src='https://via.placeholder.com/300x200?text=Kosong'">
                         <div class="p-4 relative z-20 bg-slate-900 border-t border-white/5">
                             <span class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">${g.title}</span>

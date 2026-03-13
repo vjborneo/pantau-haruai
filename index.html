@@ -126,7 +126,7 @@
                     <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo" class="h-28 mx-auto mb-4 object-contain animate-glow">
                     
                     <h1 class="text-4xl lg:text-3xl font-black text-blue-900 tracking-tighter uppercase">PANTAU HARUAI</h1>
-                    <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu Kecamatan Haruai)</p>
+                    <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu)</p>
                     <p class="text-[10px] font-bold text-slate-500 tracking-[0.1em] mt-2 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan Anda.</p>
                 </div>
 
@@ -138,10 +138,18 @@
                         <option value="Lingkungan">Bencana & Lingkungan</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
+                    
                     <div class="grid grid-cols-2 gap-3">
                         <input type="text" id="inputNama" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm shadow-sm" placeholder="Nama Anda">
-                        <input type="text" id="inputLokasi" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm shadow-sm" placeholder="Lokasi RT/Desa">
+                        
+                        <div class="relative w-full">
+                            <input type="text" id="inputLokasi" required class="w-full pl-4 pr-10 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm shadow-sm" placeholder="Lokasi RT/Desa">
+                            <button type="button" onclick="getLocationGPS()" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-600 hover:text-blue-800 transition-colors p-1" title="Ambil Koordinat GPS Saat Ini">
+                                <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </button>
+                        </div>
                     </div>
+                    
                     <textarea id="inputLaporan" rows="3" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none text-sm shadow-sm" placeholder="Ceritakan detail kejadian..."></textarea>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Foto Bukti (Opsional)</label>
@@ -149,7 +157,7 @@
                     </div>
                     <button type="submit" id="btnKirim" class="relative w-full bg-gradient-to-r from-red-600 to-red-700 text-white font-black py-4 rounded-xl hover:from-red-500 hover:to-red-600 transition-all shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] flex justify-center items-center gap-2 overflow-hidden group">
                         <span class="absolute inset-0 w-full h-full bg-white/20 scale-x-0 group-hover:scale-x-100 transform origin-left transition-transform duration-500 ease-out"></span>
-                        <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <svg class="w-6 h-6 animate-pulse z-10 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         <span class="relative z-10 tracking-widest uppercase">Kirim Laporan Darurat</span>
                     </button>
                 </form>
@@ -172,7 +180,7 @@
                 <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-blue-500 pl-2">Video Dokumentasi & CCTV</h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
-                <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-3 shadow-xl relative group">
+                <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-3 shadow-xl relative group overflow-hidden">
                     <video id="videoPlayer1" class="w-full aspect-video rounded-xl object-cover bg-black relative z-0" controls preload="metadata" poster="https://via.placeholder.com/800x450/0f172a/facc15?text=PANTAU+HARUAI+VIDEO">
                         <source id="videoSrc1" src="" type="video/mp4">
                     </video>
@@ -182,7 +190,7 @@
                         <h4 class="text-white text-sm font-bold mt-1">Panduan Penggunaan Aplikasi</h4>
                     </div>
                 </div>
-                <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-3 shadow-xl relative group">
+                <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-3 shadow-xl relative group overflow-hidden">
                     <video id="videoPlayer2" class="w-full aspect-video rounded-xl object-cover bg-black relative z-0" controls preload="metadata" poster="https://via.placeholder.com/800x450/0f172a/ef4444?text=CCTV+MONITORING">
                         <source id="videoSrc2" src="" type="video/mp4">
                     </video>
@@ -195,33 +203,31 @@
             </div>
         </div>
 
-        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-4 mb-8 px-4 flex justify-between items-end border-t border-white/5 pt-6 relative z-10">
-            <button onclick="bukaModalLogin()" class="text-white/20 hover:text-white/70 text-[10px] font-bold uppercase tracking-[0.2em] transition-all pb-1">
-                ⚙️ ADMIN
-            </button>
-            
-            <div class="flex flex-col md:flex-row items-end gap-3">
-                <div class="bg-slate-900/60 backdrop-blur border border-white/10 px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-lg group hover:border-blue-500/50 transition-all">
-                    <div class="bg-blue-500/20 p-2 rounded-lg group-hover:bg-blue-500/30 transition-colors">
-                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
+        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-4 mb-8 px-4 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/5 pt-6 relative z-10">
+            <p class="text-[9px] font-black text-slate-600 uppercase tracking-[0.15em] text-center md:text-left">
+                KOLABORASI FORKOPIMCA & PEMERINTAH DESA KECAMATAN HARUAI
+            </p>
+            <div class="flex items-end gap-3">
+                <div class="bg-slate-900/60 backdrop-blur border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-lg hover:border-blue-500/50 transition-all">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <div class="flex flex-col text-right">
                         <span class="text-slate-500 text-[8px] font-bold tracking-[0.2em] uppercase mb-0.5">Hari Ini</span>
                         <span id="visitorToday" class="text-white font-mono font-bold text-sm tracking-wider leading-none">0</span>
                     </div>
                 </div>
-                
-                <div class="bg-slate-900/60 backdrop-blur border border-white/10 px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-lg group hover:border-yellow-400/50 transition-all">
-                    <div class="bg-yellow-500/20 p-2 rounded-lg group-hover:bg-yellow-500/30 transition-colors">
-                        <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                    </div>
+                <div class="bg-slate-900/60 backdrop-blur border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-lg hover:border-yellow-400/50 transition-all">
+                    <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                     <div class="flex flex-col text-right">
                         <span class="text-slate-500 text-[8px] font-bold tracking-[0.2em] uppercase mb-0.5">Total Visit</span>
                         <span id="visitorTotal" class="text-yellow-400 font-mono font-bold text-sm tracking-wider leading-none">0</span>
                     </div>
                 </div>
+                <button onclick="bukaModalLogin()" class="text-white/20 hover:text-white/70 text-[10px] font-bold uppercase tracking-[0.2em] transition-all pb-1 ml-4 self-stretch">
+                    ⚙️ ADMIN
+                </button>
             </div>
         </div>
+
     </div>
 
     <div id="viewAdmin" class="hidden relative z-10 min-h-screen p-4 md:p-8 view-enter">
@@ -349,7 +355,7 @@
         <div class="relative z-10 max-w-4xl w-full flex flex-col items-center">
             <button onclick="tutupLightbox()" class="absolute -top-12 right-0 text-white text-4xl hover:text-yellow-400">&times;</button>
             <div class="relative w-full flex justify-center bg-black/50 rounded-t-xl overflow-hidden border-t border-l border-r border-white/20 shadow-2xl">
-                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Watermark" class="absolute inset-0 m-auto w-1/3 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-lg">
+                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Watermark" class="absolute inset-0 m-auto h-1/2 watermark-glass z-10">
                 <img id="lightboxImg" src="" class="w-full max-h-[75vh] object-contain relative z-0">
             </div>
             <div class="bg-slate-900/90 backdrop-blur w-full p-6 rounded-b-xl border border-white/20 text-center">
@@ -425,12 +431,34 @@
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; let galleryData = []; let videoData = { vid1: "", vid2: "" }; let dataLaporan = []; let linkPdfSelesai = "";
 
-        // ======================== LOAD AWAL TANPA DELAY SPLASH ========================
+        // ======================== LOAD AWAL ========================
         window.addEventListener('load', function() {
             initVisitorCount(); 
             muatPengaturanDariCloud();
             muatDataGSheet();
         });
+
+        // ======================== FITUR GPS (BARU) ========================
+        function getLocationGPS() {
+            const locInput = document.getElementById('inputLokasi');
+            if (navigator.geolocation) {
+                locInput.value = "Mencari kordinat GPS...";
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        let lat = position.coords.latitude;
+                        let lon = position.coords.longitude;
+                        let mapsLink = "https://maps.google.com/?q=" + lat + "," + lon;
+                        locInput.value = mapsLink;
+                    }, 
+                    function(error) {
+                        alert("Gagal mengambil GPS. Pastikan izin lokasi aktif di browser Anda.");
+                        locInput.value = "";
+                    }
+                );
+            } else {
+                alert("Browser HP Anda tidak mendukung fitur GPS.");
+            }
+        }
 
         function initVisitorCount() {
             let today = new Date().toISOString().split('T')[0];
@@ -616,4 +644,3 @@
     </script>
 </body>
 </html>
-

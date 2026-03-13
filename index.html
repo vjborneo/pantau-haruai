@@ -353,9 +353,9 @@
     <div id="modalLightbox" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" onclick="tutupLightbox()"></div>
         <div class="relative z-10 max-w-4xl w-full flex flex-col items-center">
-            <button onclick="tutupLightbox()" class="absolute -top-12 right-0 text-white text-4xl hover:text-yellow-400">&times;</button>
+            <button onclick="tutupLightbox()" class="absolute -top-12 right-0 text-white text-4xl hover:text-yellow-400">×</button>
             <div class="relative w-full flex justify-center bg-black/50 rounded-t-xl overflow-hidden border-t border-l border-r border-white/20 shadow-2xl">
-                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Watermark" class="absolute inset-0 m-auto h-1/2 watermark-glass z-10">
+                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Watermark" class="absolute inset-0 m-auto w-1/3 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-lg">
                 <img id="lightboxImg" src="" class="w-full max-h-[75vh] object-contain relative z-0">
             </div>
             <div class="bg-slate-900/90 backdrop-blur w-full p-6 rounded-b-xl border border-white/20 text-center">
@@ -431,14 +431,13 @@
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; let galleryData = []; let videoData = { vid1: "", vid2: "" }; let dataLaporan = []; let linkPdfSelesai = "";
 
-        // ======================== LOAD AWAL ========================
         window.addEventListener('load', function() {
             initVisitorCount(); 
             muatPengaturanDariCloud();
             muatDataGSheet();
         });
 
-        // ======================== FITUR GPS (BARU) ========================
+        // ======================== FITUR GPS ========================
         function getLocationGPS() {
             const locInput = document.getElementById('inputLokasi');
             if (navigator.geolocation) {
@@ -489,7 +488,6 @@
             document.getElementById('visitorToday').innerText = todayVisits.toLocaleString('id-ID');
         }
 
-        // ======================== FUNGSI-FUNGSI UTAMA ========================
         function tampilkanAlert(pesan) { document.getElementById('alertMessage').innerText = pesan; document.getElementById('modalAlert').classList.remove('hidden'); }
         function tutupModalAlert() { document.getElementById('modalAlert').classList.add('hidden'); }
         function tutupModalConfirm() { document.getElementById('modalConfirm').classList.add('hidden'); }
@@ -541,7 +539,13 @@
                     data.reverse().forEach((item, index) => {
                         const isSelesai = item.status === 'Selesai'; const badgeClass = isSelesai ? 'border-green-500 text-green-400 bg-green-900/40' : 'border-yellow-500 text-yellow-400 bg-yellow-900/40'; const noUrut = totalData - index;
                         let tglFormat = '-'; if(item.waktu) { let d = new Date(item.waktu); if(!isNaN(d)) tglFormat = d.toLocaleString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':'); else tglFormat = item.waktu; }
-                        tbody.innerHTML += `<tr class="border-b border-slate-700/50 hover:bg-slate-800/80"><td class="p-4 text-xs font-semibold text-slate-400 text-center">${noUrut}</td><td class="p-4 text-xs font-semibold text-slate-300">${tglFormat}</td><td class="p-4 text-[10px] text-slate-400 font-mono">${item.id_laporan || '-'}</td><td class="p-4 font-bold text-xs text-yellow-400">${item.kategori}</td><td class="p-4 text-xs font-semibold text-white">${item.nama}</td><td class="p-4 text-xs text-slate-400">${item.lokasi}</td><td class="p-4 text-center"><span class="px-2 py-1 rounded border ${badgeClass} text-[10px] font-bold tracking-wider uppercase">${item.status}</span></td><td class="p-4 text-center flex justify-center items-center gap-2">${!isSelesai ? `<button onclick="ubahStatus(${item.rowId}, this)" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow">Selesaikan</button>` : '<span class="text-green-500 font-bold text-lg">✓</span>'} ${item.pdf && item.pdf !== "Gagal membuat PDF" ? `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600">Arsip</a>` : ''}</td></tr>`;
+                        
+                        let arsipBtn = '';
+                        if (item.pdf && item.pdf.startsWith("http")) {
+                            arsipBtn = `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600">Arsip</a>`;
+                        }
+
+                        tbody.innerHTML += `<tr class="border-b border-slate-700/50 hover:bg-slate-800/80"><td class="p-4 text-xs font-semibold text-slate-400 text-center">${noUrut}</td><td class="p-4 text-xs font-semibold text-slate-300">${tglFormat}</td><td class="p-4 text-[10px] text-slate-400 font-mono">${item.id_laporan || '-'}</td><td class="p-4 font-bold text-xs text-yellow-400">${item.kategori}</td><td class="p-4 text-xs font-semibold text-white">${item.nama}</td><td class="p-4 text-xs text-slate-400">${item.lokasi}</td><td class="p-4 text-center"><span class="px-2 py-1 rounded border ${badgeClass} text-[10px] font-bold tracking-wider uppercase">${item.status}</span></td><td class="p-4 text-center flex justify-center items-center gap-2">${!isSelesai ? `<button onclick="ubahStatus(${item.rowId}, this)" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow">Selesaikan</button>` : '<span class="text-green-500 font-bold text-lg">✓</span>'} ${arsipBtn}</td></tr>`;
                     });
                 } 
                 updateChart();
@@ -562,9 +566,7 @@
             if(validData.length > 0) { 
                 let htmlCards = validData.map((g) => `
                     <div onclick="bukaLightbox('${g.url}', '${g.title}', '${g.desc}')" class="relative min-w-[260px] max-w-[260px] bg-slate-900 backdrop-blur rounded-xl border border-white/10 overflow-hidden shadow-lg hover:border-yellow-400/50 cursor-pointer group">
-                        
                         <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-20 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-md transition-opacity group-hover:opacity-50">
-                        
                         <img src="${g.url}" class="w-full h-32 object-cover relative z-0" onerror="this.src='https://via.placeholder.com/300x200?text=Kosong'">
                         <div class="p-4 relative z-20 bg-slate-900 border-t border-white/5">
                             <span class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">${g.title}</span>
@@ -644,5 +646,3 @@
     </script>
 </body>
 </html>
-
-

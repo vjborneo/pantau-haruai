@@ -28,14 +28,11 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* ======================== ANIMASI LOGO FORM (GLOWING) ======================== */
         @keyframes glowPulse {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.4)); }
             50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.8)); }
         }
         .animate-glow { animation: glowPulse 2.5s infinite ease-in-out; }
-
-        /* Style untuk watermark kaca putih */
         .watermark-glass { filter: brightness(0) invert(1); mix-blend-overlay: overlay; opacity: 0.3; }
     </style>
 </head>
@@ -424,7 +421,7 @@
     </div>
 
     <script>
-        const URL_GAS = 'https://script.google.com/macros/s/AKfycbyMN5Cfv4x1RjnaE0kfshJymXS1FI89HtPey8gena14gZwYE-59vgFl008Xp26sXkyNaQ/exec';
+        const URL_GAS = 'https://script.google.com/macros/s/AKfycbzb461wl-nlo646DiwU04DW8N1LRrz2vxlrp7tY2xG9t-jx3_dePn8zKN3vFCTHzE9AlA/exec';
 
         let targetRowId = null; let targetBtn = null; let editIndex = -1;
         let dataPengguna = [ { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" }, { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" } ];
@@ -437,11 +434,11 @@
             muatDataGSheet();
         });
 
-        // ======================== FITUR GPS ========================
+        // ======================== FITUR GPS (DIPERBAIKI) ========================
         function getLocationGPS() {
             const locInput = document.getElementById('inputLokasi');
             if (navigator.geolocation) {
-                locInput.value = "Mencari kordinat GPS...";
+                locInput.value = "Mencari koordinat GPS (High Accuracy)...";
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
                         let lat = position.coords.latitude;
@@ -450,9 +447,11 @@
                         locInput.value = mapsLink;
                     }, 
                     function(error) {
-                        alert("Gagal mengambil GPS. Pastikan izin lokasi aktif di browser Anda.");
+                        alert("Gagal mengambil GPS. Pastikan izin lokasi aktif di browser/HP Anda.");
                         locInput.value = "";
-                    }
+                    },
+                    // KUNCI AKURASI:
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 } 
                 );
             } else {
                 alert("Browser HP Anda tidak mendukung fitur GPS.");

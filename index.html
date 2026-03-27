@@ -91,7 +91,7 @@
                     <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Logo" class="h-28 mx-auto mb-4 object-contain animate-glow">
                     
                     <h1 class="text-4xl lg:text-3xl font-black text-blue-900 tracking-tighter uppercase">PANTAU HARUAI</h1>
-                    <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu Kecamatan Haruai)</p>
+                    <p class="text-[12px] font-bold text-yellow-600 tracking-[0.15em] mt-1 uppercase">(Pengawasan Terpadu)</p>
                     <p class="text-[10px] font-bold text-slate-500 tracking-[0.1em] mt-2 ">SEGERA LAPORKAN ! bila ada gangguan di Lingkungan Anda.</p>
                 </div>
 
@@ -134,6 +134,13 @@
                 
                 <div class="flex flex-col md:flex-row items-center justify-between mb-5 border-b border-white/10 pb-4 gap-4">
                     <h3 class="text-yellow-400 text-sm md:text-base font-black uppercase tracking-widest border-l-4 border-yellow-400 pl-3">Layanan Terpadu & Statistik Laporan</h3>
+                    
+                    <button onclick="toggleManual()" class="bg-blue-900/50 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/50 hover:border-blue-400 font-bold py-2.5 px-5 rounded-xl shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253" />
+                        </svg>
+                        Buku Panduan
+                    </button>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -212,15 +219,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-8 mb-6 relative z-10 flex justify-center">
-            <button onclick="toggleManual()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)] transition-all flex items-center gap-2 uppercase tracking-widest text-sm border border-blue-400/50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253" />
-                </svg>
-                BACA BUKU PANDUAN APLIKASI
-            </button>
         </div>
 
         <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-4 mb-8 px-4 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/5 pt-6 relative z-10">
@@ -355,11 +353,18 @@
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer" onclick="toggleManual()"></div>
         <div class="bg-slate-900 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.8)] w-full max-w-4xl h-[85vh] flex flex-col relative z-10 overflow-hidden border border-white/20">
             <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center border-b border-blue-500">
-                <h3 class="font-black text-blue-400 tracking-widest uppercase text-sm md:text-base">Panduan PANTAU HARUAI</h3>
-                <button onclick="toggleManual()" class="text-slate-400 hover:text-red-500 font-bold text-3xl leading-none transition duration-200">&times;</button>
+                <div class="flex flex-col">
+                    <h3 class="font-black text-blue-400 tracking-widest uppercase text-sm md:text-base">Panduan PANTAU HARUAI</h3>
+                    <a href="BukuPanduanPANTAUHARUAI.pdf" target="_blank" download class="text-[10px] text-slate-400 hover:text-yellow-400 mt-1 flex items-center gap-1 transition-colors">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Download PDF
+                    </a>
+                </div>
+                <button onclick="toggleManual()" class="text-slate-400 hover:text-red-500 font-bold text-3xl leading-none transition duration-200">×</button>
             </div>
+            
             <div class="flex-grow w-full h-full bg-slate-100 relative">
-                <iframe src="BukuPanduanPANTAUHARUAI.pdf" class="absolute inset-0 w-full h-full border-none" title="Buku Panduan Pelaporan PANTAU HARUAI"></iframe>
+                <iframe src="BukuPanduanPANTAUHARUAI.pdf#toolbar=0&navpanes=0" class="absolute inset-0 w-full h-full border-none" title="Buku Panduan PANTAU HARUAI"></iframe>
             </div>
         </div>
     </div>

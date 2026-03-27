@@ -198,20 +198,29 @@
                 <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-blue-500 pl-2">Video Dokumentasi & CCTV</h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
+                
                 <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-3 shadow-xl relative group overflow-hidden flex flex-col">
-                    <iframe id="videoPlayer1" class="w-full aspect-video rounded-xl bg-black relative z-20 border-none shadow-inner" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                    <div id="videoContainer1" class="w-full aspect-video rounded-xl bg-black relative z-20 shadow-inner overflow-hidden flex items-center justify-center">
+                        <span class="text-xs text-slate-500 animate-pulse">Memuat Video...</span>
+                    </div>
+                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Watermark" class="absolute inset-0 m-auto w-1/4 opacity-25 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-lg transition-opacity group-hover:opacity-40">
                     <div class="mt-3 px-2 flex-grow">
                         <span class="text-blue-400 text-[10px] font-bold uppercase tracking-widest">Sistem Informasi</span>
                         <h4 class="text-white text-sm font-bold mt-1">Panduan Penggunaan Aplikasi</h4>
                     </div>
                 </div>
+
                 <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-3 shadow-xl relative group overflow-hidden flex flex-col">
-                    <iframe id="videoPlayer2" class="w-full aspect-video rounded-xl bg-black relative z-20 border-none shadow-inner" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                    <div id="videoContainer2" class="w-full aspect-video rounded-xl bg-black relative z-20 shadow-inner overflow-hidden flex items-center justify-center">
+                        <span class="text-xs text-slate-500 animate-pulse">Memuat Video...</span>
+                    </div>
+                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" alt="Watermark" class="absolute inset-0 m-auto w-1/4 opacity-25 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-lg transition-opacity group-hover:opacity-40">
                     <div class="mt-3 px-2 flex-grow">
                         <span class="text-red-400 text-[10px] font-bold uppercase tracking-widest">Monitoring</span>
                         <h4 class="text-white text-sm font-bold mt-1">Rekaman CCTV / Bencana</h4>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -300,16 +309,16 @@
                 </div>
                 
                 <div class="admin-panel p-6 rounded-3xl border border-blue-500/50">
-                    <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-blue-500 pl-3 mb-4">3. Video Dokumentasi (Support YouTube)</h3>
-                    <p class="text-[10px] text-slate-400 mb-4 italic">Cukup paste link YouTube biasa (contoh: https://youtu.be/xxx). Sistem akan otomatis mengubahnya ke mode Embed.</p>
+                    <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-blue-500 pl-3 mb-4">3. Video Dokumentasi (Support YouTube & MP4)</h3>
+                    <p class="text-[10px] text-slate-400 mb-4 italic">Paste link YouTube atau link raw MP4 dari Github/Google Drive. Sistem akan otomatis mendeteksi formatnya.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl">
                             <label class="text-[10px] text-yellow-400 font-bold uppercase tracking-widest">Video 1 (Panduan Aplikasi)</label>
-                            <input type="text" id="inputVideo1" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-sm mt-2 outline-none" placeholder="https://youtu.be/...">
+                            <input type="text" id="inputVideo1" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-sm mt-2 outline-none" placeholder="https://youtu.be/... atau .mp4">
                         </div>
                         <div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl">
                             <label class="text-[10px] text-red-400 font-bold uppercase tracking-widest">Video 2 (CCTV / Bencana)</label>
-                            <input type="text" id="inputVideo2" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-sm mt-2 outline-none" placeholder="https://youtu.be/...">
+                            <input type="text" id="inputVideo2" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-sm mt-2 outline-none" placeholder="https://youtu.be/... atau .mp4">
                         </div>
                     </div>
                 </div>
@@ -469,7 +478,6 @@
             muatDataGSheet();
         });
 
-        // FUNGSI BUKA/TUTUP MODAL BUKU PANDUAN BARU
         function toggleManual() {
             document.getElementById('manualModal').classList.toggle('hidden');
         }
@@ -531,22 +539,34 @@
         function bukaLightbox(url, title, desc) { document.getElementById('lightboxImg').src = url; document.getElementById('lightboxTitle').innerText = title; document.getElementById('lightboxDesc').innerText = desc; document.getElementById('modalLightbox').classList.remove('hidden'); }
         function tutupLightbox() { document.getElementById('modalLightbox').classList.add('hidden'); }
         
-        // --- SKRIP PINTAR UNTUK MENGUBAH LINK YOUTUBE MENJADI FORMAT EMBED ---
-        function formatVideoUrl(url) { 
-            if (!url) return ""; 
-            
-            // Cek apakah ini link YouTube
+        // --- MESIN AI PINTAR: DETEKSI JENIS VIDEO (YOUTUBE / MP4) ---
+        function renderSmartVideo(containerId, url) {
+            const container = document.getElementById(containerId);
+            if (!url) {
+                container.innerHTML = `<span class="text-xs text-slate-500">Video belum tersedia</span>`;
+                return;
+            }
+
+            // Cek kalau ini YouTube
             let ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*embed\/))([^&?]*)/);
             if (ytMatch && ytMatch[1]) {
-                return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+                let embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+                container.innerHTML = `<iframe class="w-full h-full border-none absolute inset-0" src="${embedUrl}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+                return;
             }
-            
-            // Cek apakah ini file Raw Github (format lama)
-            if (url.includes("github.com") && url.includes("/blob/")) { 
-                return url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/"); 
-            } 
-            
-            return url; 
+
+            // Cek kalau ini file MP4 raw dari Github / web lain
+            if (url.includes('.mp4') || url.includes('raw.githubusercontent.com')) {
+                let cleanUrl = url;
+                if (url.includes("github.com") && url.includes("/blob/")) {
+                    cleanUrl = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
+                }
+                container.innerHTML = `<video class="w-full h-full object-cover absolute inset-0" controls preload="metadata"><source src="${cleanUrl}" type="video/mp4"></video>`;
+                return;
+            }
+
+            // Fallback (Google Drive Preview, dll)
+            container.innerHTML = `<iframe class="w-full h-full border-none absolute inset-0" src="${url}" allowfullscreen></iframe>`;
         }
 
         async function muatPengaturanDariCloud() {
@@ -565,9 +585,9 @@
             const btn = document.getElementById('btnSaveText'); btn.innerText = "⏳ MENYIMPAN KE CLOUD..."; btn.disabled = true;
             let newText = document.getElementById('inputRunningText').value; let newSlides = []; let newGallery = [];
             
-            // Memanggil fungsi formatVideoUrl di atas agar link otomatis jadi Embed sebelum disave ke database
-            let newVid1 = formatVideoUrl(document.getElementById('inputVideo1').value); 
-            let newVid2 = formatVideoUrl(document.getElementById('inputVideo2').value); 
+            // Simpan input asli biar pas bos mau ngedit, link aslinya keliatan.
+            let newVid1 = document.getElementById('inputVideo1').value.trim(); 
+            let newVid2 = document.getElementById('inputVideo2').value.trim(); 
             let newVideoData = { vid1: newVid1, vid2: newVid2 };
             
             for(let i=1; i<=3; i++) { newSlides.push({ url: document.getElementById(`inputUrlCCTV${i}`).value, caption: document.getElementById(`inputCapCCTV${i}`).value }); }
@@ -635,9 +655,9 @@
                 galContainer.innerHTML = htmlCards + htmlCards; 
             } else { galContainer.innerHTML = `<p class="text-slate-400 text-xs italic px-4">Belum ada foto kegiatan.</p>`; }
 
-            // Pemuatan iframe YouTube
-            if(videoData.vid1) { document.getElementById('videoPlayer1').src = videoData.vid1; }
-            if(videoData.vid2) { document.getElementById('videoPlayer2').src = videoData.vid2; }
+            // Pangil mesin video cerdas di sini
+            renderSmartVideo('videoContainer1', videoData.vid1);
+            renderSmartVideo('videoContainer2', videoData.vid2);
         }
 
         function renderPengaturanAdmin() {
@@ -681,10 +701,36 @@
         function tutupModalBukti() { document.getElementById('modalBuktiLaporan').classList.add('hidden'); document.getElementById('formLaporan').reset(); muatDataGSheet(); }
         
         function cetakLaporanResmi() {
-            let htmlContent = `<div style="padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff; width: 1000px;"><table style="width: 100%; border-bottom: 4px solid #000; margin-bottom: 25px; padding-bottom: 15px;"><tr><td style="width: 150px; vertical-align: middle; text-align: left;"><img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" crossorigin="anonymous" style="width: 130px; height: auto;"></td><td style="vertical-align: middle; text-align: center; padding-right: 150px;"><h2 style="margin: 0; font-size: 22px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2><h1 style="margin: 0; font-size: 32px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1><p style="margin: 8px 0 0; font-size: 14px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p></td></tr></table><table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px;"><thead><tr style="background-color: #f0f0f0;"><th style="border: 1px solid #000; padding: 10px;">No</th><th style="border: 1px solid #000; padding: 10px;">Waktu</th><th style="border: 1px solid #000; padding: 10px;">ID Lap</th><th style="border: 1px solid #000; padding: 10px;">Kategori</th><th style="border: 1px solid #000; padding: 10px;">Nama Pelapor</th><th style="border: 1px solid #000; padding: 10px;">Lokasi Kejadian</th><th style="border: 1px solid #000; padding: 10px;">Status</th></tr></thead><tbody>`;
+            const btn = document.querySelector('button[onclick="cetakLaporanResmi()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "⏳ Sedang Memproses PDF...";
+            btn.disabled = true;
+
+            let htmlContent = `<div style="padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff; width: 1000px;"><table style="width: 100%; border-bottom: 4px solid #000; margin-bottom: 25px; padding-bottom: 15px;"><tr><td style="width: 150px; vertical-align: middle; text-align: left;"><img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" style="width: 130px; height: auto;"></td><td style="vertical-align: middle; text-align: center; padding-right: 150px;"><h2 style="margin: 0; font-size: 22px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2><h1 style="margin: 0; font-size: 32px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1><p style="margin: 8px 0 0; font-size: 14px; font-style: italic;">Data Rekapitulasi Laporan Pengawasan Terpadu (PANTAU HARUAI)</p></td></tr></table><table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px;"><thead><tr style="background-color: #f0f0f0;"><th style="border: 1px solid #000; padding: 10px;">No</th><th style="border: 1px solid #000; padding: 10px;">Waktu</th><th style="border: 1px solid #000; padding: 10px;">ID Lap</th><th style="border: 1px solid #000; padding: 10px;">Kategori</th><th style="border: 1px solid #000; padding: 10px;">Nama Pelapor</th><th style="border: 1px solid #000; padding: 10px;">Lokasi Kejadian</th><th style="border: 1px solid #000; padding: 10px;">Status</th></tr></thead><tbody>`;
             let no = 1; dataLaporan.forEach((item) => { let tglFormat = '-'; if(item.waktu) { let d = new Date(item.waktu); if(!isNaN(d)) tglFormat = d.toLocaleString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':'); else tglFormat = item.waktu; } htmlContent += `<tr><td style="border: 1px solid #000; padding: 10px; text-align: center;">${no++}</td><td style="border: 1px solid #000; padding: 10px;">${tglFormat}</td><td style="border: 1px solid #000; padding: 10px;">${item.id_laporan || '-'}</td><td style="border: 1px solid #000; padding: 10px;">${item.kategori}</td><td style="border: 1px solid #000; padding: 10px;">${item.nama}</td><td style="border: 1px solid #000; padding: 10px;">${item.lokasi}</td><td style="border: 1px solid #000; padding: 10px; text-align: center;"><strong>${item.status}</strong></td></tr>`; });
             htmlContent += `</tbody></table><div style="width: 100%; display: flex; justify-content: flex-end; font-size: 14px;"><div style="text-align: center; width: 250px;"><p style="margin: 0;">Haruai, ${new Date().toLocaleDateString('id-ID')}</p><p style="margin: 0;">Petugas Command Center,</p><br><br><br><br><p style="margin: 0; text-decoration: underline; font-weight: bold;">( ......................................... )</p></div></div></div>`;
-            html2pdf().set({ margin: 0.5, filename: 'Rekap-Pantau-Haruai.pdf', html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } }).from(htmlContent).save();
+            
+            let tempElement = document.createElement('div');
+            tempElement.innerHTML = htmlContent;
+            tempElement.style.position = 'absolute';
+            tempElement.style.left = '-9999px';
+            document.body.appendChild(tempElement);
+
+            html2pdf().set({ 
+                margin: 0.5, 
+                filename: 'Rekap-Pantau-Haruai.pdf', 
+                html2canvas: { scale: 2, useCORS: true, logging: false }, 
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } 
+            }).from(tempElement).save().then(() => {
+                document.body.removeChild(tempElement);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                document.body.removeChild(tempElement);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                tampilkanAlert("Sistem sibuk, gagal mencetak PDF. Silakan coba lagi.");
+            });
         }
 
         function bukaModalLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }

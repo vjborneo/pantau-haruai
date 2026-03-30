@@ -187,12 +187,26 @@
         </div>
         
         <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-6 relative z-10">
-            <div class="flex items-center justify-between mb-3 px-2">
-                <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-yellow-400 pl-2">Profil Forkopimca & Kepala Desa</h3>
-            </div>
-            <div class="w-full overflow-x-auto hide-scrollbar scroll-smooth-x pb-4">
-                <div class="flex gap-4 px-2 w-max" id="containerProfilAparatur">
-                    <p class="text-slate-400 text-xs italic">Memuat profil...</p>
+            <div class="grid grid-cols-1 md:grid-cols-[1fr,2fr] gap-6">
+                
+                <div>
+                    <div class="flex items-center justify-between mb-3 px-2">
+                        <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-yellow-400 pl-2">Forkopimca Haruai</h3>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 px-2" id="containerForkopimca">
+                        <p class="text-slate-400 text-xs italic">Memuat...</p>
+                    </div>
+                </div>
+
+                <div class="overflow-hidden">
+                    <div class="flex items-center justify-between mb-3 px-2">
+                        <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-blue-500 pl-2">Kepala Desa (Geser 👉)</h3>
+                    </div>
+                    <div class="w-full overflow-x-auto hide-scrollbar scroll-smooth-x pb-2">
+                        <div class="flex gap-3 px-2 w-max" id="containerKades">
+                            <p class="text-slate-400 text-xs italic">Memuat...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -511,6 +525,23 @@
         </div>
     </div>
 
+    <div id="modalProfilPopup" class="hidden fixed inset-0 z-[120] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer" onclick="tutupLightboxProfil()"></div>
+        <div class="relative z-10 w-full max-w-sm h-[85vh] max-h-[85vh] border-t-8 border-yellow-400 rounded-3xl overflow-hidden bg-slate-900 shadow-2xl flex flex-col transition-all duration-300 scale-90 opacity-0" id="profilPopupCard">
+            <button onclick="tutupLightboxProfil()" class="absolute top-4 right-4 text-white/50 hover:text-white text-3xl z-30">&times;</button>
+            
+            <div class="relative flex-grow overflow-hidden bg-black flex items-center justify-center">
+                <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-1/3 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-lg">
+                <img id="popupProfilImg" src="" class="w-full h-full object-cover relative z-0" />
+            </div>
+            
+            <div class="p-6 text-center z-20 bg-slate-900 border-t border-white/10 shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+                <h4 id="popupProfilNama" class="text-white font-black uppercase tracking-wider text-lg leading-tight"></h4>
+                <p id="popupProfilJabatan" class="text-yellow-400 font-bold text-sm mt-1 uppercase tracking-widest border-t border-white/5 pt-2 inline-block"></p>
+            </div>
+        </div>
+    </div>
+
     <div id="modalLogin" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="tutupModalLogin()"></div>
         <div class="bg-white rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl">
@@ -622,6 +653,22 @@
         function bukaLightbox(url, title, desc) { document.getElementById('lightboxImg').src = url; document.getElementById('lightboxTitle').innerText = title; document.getElementById('lightboxDesc').innerText = desc; document.getElementById('modalLightbox').classList.remove('hidden'); }
         function tutupLightbox() { document.getElementById('modalLightbox').classList.add('hidden'); }
         
+        // --- POPUP PROFIL BARU ---
+        function bukaLightboxProfil(url, nama, jabatan) {
+            const modal = document.getElementById('modalProfilPopup');
+            const card = document.getElementById('profilPopupCard');
+            document.getElementById('popupProfilImg').src = url;
+            document.getElementById('popupProfilNama').innerText = nama;
+            document.getElementById('popupProfilJabatan').innerText = jabatan;
+            modal.classList.remove('hidden');
+            setTimeout(() => { card.classList.remove('scale-90', 'opacity-0'); }, 10);
+        }
+        function tutupLightboxProfil() {
+            const card = document.getElementById('profilPopupCard');
+            card.classList.add('scale-90', 'opacity-0');
+            setTimeout(() => { document.getElementById('modalProfilPopup').classList.add('hidden'); }, 300);
+        }
+
         function renderSmartVideo(containerId, url) {
             const container = document.getElementById(containerId);
             if (!url) { container.innerHTML = `<span class="text-xs text-slate-500">Video belum tersedia</span>`; return; }
@@ -637,21 +684,46 @@
             container.innerHTML = `<iframe class="w-full h-full border-none absolute inset-0" src="${url}" allowfullscreen></iframe>`;
         }
 
+        // --- RENDER PROFIL WARGA (LAYOUT TERPISAH & VERTICAL FRAME) ---
         function renderProfilAparatur() {
-            const container = document.getElementById('containerProfilAparatur');
-            if (!dataProfilAparatur || dataProfilAparatur.length === 0) {
-                container.innerHTML = `<p class="text-slate-400 text-xs italic px-2">Belum ada data profil.</p>`;
-                return;
-            }
-            container.innerHTML = dataProfilAparatur.map(p => `
-                <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[160px] max-w-[160px] shadow-lg hover:border-yellow-400/50 transition-all group">
-                    <div class="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-blue-600 to-yellow-400 mb-3 group-hover:scale-105 transition-transform shadow-lg">
-                        <img src="${p.foto}" class="w-full h-full object-cover rounded-full border-2 border-slate-900 bg-slate-800" onerror="this.src='https://via.placeholder.com/150'">
+            const contForko = document.getElementById('containerForkopimca');
+            const contKades = document.getElementById('containerKades');
+
+            // Pisahkan data (Asumsi: "Camat/Danramil/Kapolsek" di Forkopimca, sisanya Kades)
+            // Bos bisa ngatur ini di Admin Panel pake kata kunci Jabatan
+            const listForko = dataProfilAparatur.filter(p => p.jabatan.toLowerCase().includes("camat") || p.jabatan.toLowerCase().includes("danramil") || p.jabatan.toLowerCase().includes("kapolsek"));
+            const listKades = dataProfilAparatur.filter(p => !listForko.includes(p)); // Sisanya Kades
+
+            // Template Kartu Vertikal (Smartphone style)
+            const templateKartu = (p) => `
+                <div onclick="bukaLightboxProfil('${p.foto}', '${p.nama}', '${p.jabatan}')" class="relative ${contKades === event?.currentTarget?.parentNode ? 'min-w-[120px] max-w-[120px] h-[190px]' : 'w-full h-[180px]'} rounded-xl overflow-hidden shadow-lg hover:border-yellow-400/50 border border-white/10 group cursor-pointer transition-all duration-300">
+                    
+                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-12 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert transition-opacity group-hover:opacity-50">
+                    
+                    <img src="${p.foto}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://via.placeholder.com/200x300?text=Err'">
+                    
+                    <div class="absolute bottom-0 inset-x-0 p-3 z-20 bg-gradient-to-t from-black via-black/80 to-transparent">
+                        <h4 class="text-white text-[10px] md:text-[11px] font-black leading-tight uppercase line-clamp-2">${p.nama}</h4>
+                        <p class="text-yellow-400 text-[8px] md:text-[9px] font-bold tracking-widest mt-1 uppercase line-clamp-1">${p.jabatan}</p>
                     </div>
-                    <h4 class="text-white text-[11px] font-bold text-center leading-tight uppercase line-clamp-2">${p.nama}</h4>
-                    <p class="text-yellow-400 text-[9px] text-center font-bold tracking-widest mt-1 uppercase">${p.jabatan}</p>
+                    
+                    <div class="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-yellow-400/50 transition-colors z-30"></div>
                 </div>
-            `).join('');
+            `;
+
+            // Render Forkopimca (Fixed 3)
+            if (listForko.length > 0) {
+                contForko.innerHTML = listForko.map(p => templateKartu(p)).join('');
+            } else {
+                contForko.innerHTML = `<p class="text-slate-500 text-[10px] italic px-2 col-span-3 text-center">Belum diatur</p>`;
+            }
+
+            // Render Kades (Scrollable 13)
+            if (listKades.length > 0) {
+                contKades.innerHTML = listKades.map(p => templateKartu(p)).join('');
+            } else {
+                contKades.innerHTML = `<p class="text-slate-500 text-[10px] italic px-2">Belum ada data Kades</p>`;
+            }
         }
 
         async function muatPengaturanDariCloud() {

@@ -35,6 +35,8 @@
         }
         .animate-glow { animation: glowPulse 2.5s infinite ease-in-out; }
         .watermark-glass { filter: brightness(0) invert(1); mix-blend-overlay: overlay; opacity: 0.3; }
+        
+        .scroll-smooth-x { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
     </style>
 </head>
 <body class="bg-[#020617] min-h-screen font-sans text-slate-800 relative overflow-x-hidden transition-colors duration-500" id="mainBody">
@@ -186,7 +188,18 @@
         
         <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-6 relative z-10">
             <div class="flex items-center justify-between mb-3 px-2">
-                <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-yellow-400 pl-2">Giat Forkopimca Kecamatan Haruai</h3>
+                <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-yellow-400 pl-2">Profil Forkopimca & Kepala Desa</h3>
+            </div>
+            <div class="w-full overflow-x-auto hide-scrollbar scroll-smooth-x pb-4">
+                <div class="flex gap-4 px-2 w-max" id="containerProfilAparatur">
+                    <p class="text-slate-400 text-xs italic">Memuat profil...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-2 relative z-10">
+            <div class="flex items-center justify-between mb-3 px-2">
+                <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-blue-500 pl-2">Giat Forkopimca Kecamatan Haruai</h3>
             </div>
             <div class="overflow-hidden w-full gallery-container">
                 <div id="wargaGalleryTrack" class="gallery-track gap-4 px-2 pb-4">
@@ -197,7 +210,7 @@
         
         <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-6 relative z-10">
             <div class="flex items-center justify-between mb-4 px-2">
-                <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-blue-500 pl-2">Video Dokumentasi & CCTV</h3>
+                <h3 class="text-white text-xs font-bold uppercase tracking-widest border-l-4 border-yellow-400 pl-2">Video Dokumentasi & CCTV</h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
                 <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-3 shadow-xl relative group overflow-hidden flex flex-col">
@@ -300,7 +313,7 @@
             <div id="contentPengaturan" class="hidden flex-col gap-8">
                 <div class="admin-panel p-6 rounded-3xl text-center bg-blue-900/30 border-blue-500 flex justify-between items-center">
                     <h3 class="font-black text-yellow-400 tracking-widest uppercase text-lg">⚙️ CLOUD SETTINGS AKTIF</h3>
-                    <button onclick="simpanKeCloud()" id="btnSaveText" class="bg-yellow-500 hover:bg-yellow-400 text-blue-900 font-black py-2.5 px-6 rounded-xl text-sm shadow-lg uppercase tracking-widest transition-all">Simpan Perubahan Data</button>
+                    <button onclick="simpanKeCloud()" id="btnSaveText" class="bg-yellow-500 hover:bg-yellow-400 text-blue-900 font-black py-2.5 px-6 rounded-xl text-sm shadow-lg uppercase tracking-widest transition-all">Simpan Teks & CCTV</button>
                 </div>
                 
                 <div class="admin-panel p-6 rounded-3xl">
@@ -330,7 +343,10 @@
 
                 <div class="admin-panel p-6 rounded-3xl relative overflow-hidden">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3">4. Publikasi Kegiatan (Galeri Feed)</h3>
+                        <div>
+                            <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3">4. Publikasi Kegiatan (Galeri Feed)</h3>
+                            <p class="text-[10px] text-slate-400 mt-1 pl-4 italic">*Otomatis tersimpan ke Cloud saat ditambah/dihapus</p>
+                        </div>
                         <button onclick="bukaModalGaleri()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-lg">+ Tambah Giat Baru</button>
                     </div>
                     
@@ -344,8 +360,31 @@
                                     <th class="p-4 text-center w-24">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabelGaleriAdmin" class="divide-y divide-slate-700/50">
-                                </tbody>
+                            <tbody id="tabelGaleriAdmin" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-panel p-6 rounded-3xl relative overflow-hidden mt-2">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="font-bold text-white tracking-widest uppercase border-l-4 border-yellow-400 pl-3">5. Profil Forkopimca & Kades</h3>
+                            <p class="text-[10px] text-slate-400 mt-1 pl-4 italic">*Otomatis tersimpan ke Cloud saat ditambah/dihapus</p>
+                        </div>
+                        <button onclick="bukaModalProfil()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-lg">+ Tambah Profil</button>
+                    </div>
+                    
+                    <div class="overflow-x-auto bg-slate-900/50 rounded-xl border border-slate-700">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="text-[10px] uppercase font-bold text-yellow-400 border-b border-slate-600 bg-slate-800/50">
+                                <tr>
+                                    <th class="p-4 w-12 text-center">No</th>
+                                    <th class="p-4 w-20 text-center">Foto</th>
+                                    <th class="p-4">Nama & Jabatan</th>
+                                    <th class="p-4 text-center w-24">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelProfilAdmin" class="divide-y divide-slate-700/50"></tbody>
                         </table>
                     </div>
                 </div>
@@ -412,6 +451,31 @@
             <div class="flex gap-3 mt-8">
                 <button onclick="tutupModalGaleri()" class="w-1/3 bg-transparent border border-slate-600 text-slate-300 font-bold py-3 rounded-xl hover:text-white hover:bg-slate-700 transition-all">Batal</button>
                 <button onclick="simpanItemGaleri()" class="w-2/3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all">Simpan Posting</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalFormProfil" class="hidden fixed inset-0 z-[95] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="tutupModalProfil()"></div>
+        <div class="bg-slate-800 border border-yellow-400/50 rounded-3xl p-8 max-w-md w-full relative z-10 shadow-2xl">
+            <h3 id="judulModalProfil" class="text-xl font-bold text-white mb-6 uppercase tracking-widest border-b border-slate-700 pb-3">Profil Pejabat Baru</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] text-yellow-400 font-bold uppercase tracking-widest">URL Link Foto Wajah</label>
+                    <input type="text" id="inputUrlProfil" class="w-full px-4 py-3 mt-1 bg-slate-900 border border-slate-600 text-white rounded-xl text-sm outline-none focus:border-yellow-400" placeholder="https://...">
+                </div>
+                <div>
+                    <label class="text-[10px] text-yellow-400 font-bold uppercase tracking-widest">Nama Lengkap & Gelar</label>
+                    <input type="text" id="inputNamaProfil" class="w-full px-4 py-3 mt-1 bg-slate-900 border border-slate-600 text-white font-bold rounded-xl text-sm outline-none focus:border-yellow-400" placeholder="Contoh: H. Mulyadi, S.Sos">
+                </div>
+                <div>
+                    <label class="text-[10px] text-yellow-400 font-bold uppercase tracking-widest">Jabatan</label>
+                    <input type="text" id="inputJabatanProfil" class="w-full px-4 py-3 mt-1 bg-slate-900 border border-slate-600 text-yellow-400 rounded-xl text-sm outline-none focus:border-yellow-400" placeholder="Contoh: Camat Haruai">
+                </div>
+            </div>
+            <div class="flex gap-3 mt-8">
+                <button onclick="tutupModalProfil()" class="w-1/3 bg-transparent border border-slate-600 text-slate-300 font-bold py-3 rounded-xl hover:text-white hover:bg-slate-700 transition-all">Batal</button>
+                <button onclick="simpanItemProfil()" class="w-2/3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all">Simpan Profil</button>
             </div>
         </div>
     </div>
@@ -506,11 +570,12 @@
     <script>
         const URL_GAS = 'https://script.google.com/macros/s/AKfycbzb461wl-nlo646DiwU04DW8N1LRrz2vxlrp7tY2xG9t-jx3_dePn8zKN3vFCTHzE9AlA/exec';
 
-        let targetRowId = null; let targetBtn = null; let editIndex = -1; let editGaleriIndex = -1; let targetStatus = '';
+        let targetRowId = null; let targetBtn = null; let editIndex = -1; let editGaleriIndex = -1; let editProfilIndex = -1; let targetStatus = '';
         let dataPengguna = [ { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" }, { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" } ];
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; 
         let galleryData = []; 
+        let dataProfilAparatur = []; // Sekarang dari cloud
         let videoData = { vid1: "", vid2: "" }; let dataLaporan = []; let linkPdfSelesai = "";
 
         window.addEventListener('load', function() {
@@ -572,26 +637,44 @@
             container.innerHTML = `<iframe class="w-full h-full border-none absolute inset-0" src="${url}" allowfullscreen></iframe>`;
         }
 
+        function renderProfilAparatur() {
+            const container = document.getElementById('containerProfilAparatur');
+            if (!dataProfilAparatur || dataProfilAparatur.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-xs italic px-2">Belum ada data profil.</p>`;
+                return;
+            }
+            container.innerHTML = dataProfilAparatur.map(p => `
+                <div class="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[160px] max-w-[160px] shadow-lg hover:border-yellow-400/50 transition-all group">
+                    <div class="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-blue-600 to-yellow-400 mb-3 group-hover:scale-105 transition-transform shadow-lg">
+                        <img src="${p.foto}" class="w-full h-full object-cover rounded-full border-2 border-slate-900 bg-slate-800" onerror="this.src='https://via.placeholder.com/150'">
+                    </div>
+                    <h4 class="text-white text-[11px] font-bold text-center leading-tight uppercase line-clamp-2">${p.nama}</h4>
+                    <p class="text-yellow-400 text-[9px] text-center font-bold tracking-widest mt-1 uppercase">${p.jabatan}</p>
+                </div>
+            `).join('');
+        }
+
         async function muatPengaturanDariCloud() {
             try {
                 const res = await fetch(URL_GAS + '?action=read_pengaturan'); const cloudData = await res.json();
                 if(Object.keys(cloudData).length > 0 && cloudData.running_text) { 
-                    textData = cloudData.running_text; slides = cloudData.cctv; galleryData = cloudData.galeri || []; if(cloudData.video) videoData = cloudData.video;
+                    textData = cloudData.running_text; slides = cloudData.cctv; 
+                    galleryData = cloudData.galeri || []; dataProfilAparatur = cloudData.profil || [];
+                    if(cloudData.video) videoData = cloudData.video;
                 } else { 
                     textData = "PANTAU HARUAI | Silakan update pengaturan di Panel Admin"; slides = [{url: "https://raw.githubusercontent.com/vjborneo/pantau-haruai/main/sample1.jpg", caption: "Haruai"}]; 
                 }
-                renderTampilanWarga(); renderGaleriAdmin();
-            } catch(e) { renderTampilanWarga(); renderGaleriAdmin(); }
+                renderTampilanWarga(); renderProfilAparatur(); renderPengaturanAdmin();
+            } catch(e) { renderTampilanWarga(); renderProfilAparatur(); renderPengaturanAdmin(); }
         }
 
-        // Fungsi simpan otomatis di background untuk Galeri
         async function simpanPengaturanSilent() {
             let newText = document.getElementById('inputRunningText').value; let newSlides = [];
             let newVid1 = document.getElementById('inputVideo1').value.trim(); let newVid2 = document.getElementById('inputVideo2').value.trim(); 
             let newVideoData = { vid1: newVid1, vid2: newVid2 };
             for(let i=1; i<=3; i++) { newSlides.push({ url: document.getElementById(`inputUrlCCTV${i}`).value, caption: document.getElementById(`inputCapCCTV${i}`).value }); }
             try { 
-                await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'save_pengaturan', payload: { running_text: newText, cctv: newSlides, galeri: galleryData, video: newVideoData } }) });
+                await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'save_pengaturan', payload: { running_text: newText, cctv: newSlides, galeri: galleryData, profil: dataProfilAparatur, video: newVideoData } }) });
             } catch (e) { console.error("Auto-save gagal:", e); }
         }
 
@@ -603,14 +686,13 @@
             for(let i=1; i<=3; i++) { newSlides.push({ url: document.getElementById(`inputUrlCCTV${i}`).value, caption: document.getElementById(`inputCapCCTV${i}`).value }); }
             
             try { 
-                await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'save_pengaturan', payload: { running_text: newText, cctv: newSlides, galeri: galleryData, video: newVideoData } }) });
+                await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'save_pengaturan', payload: { running_text: newText, cctv: newSlides, galeri: galleryData, profil: dataProfilAparatur, video: newVideoData } }) });
                 textData = newText; slides = newSlides; videoData = newVideoData; renderTampilanWarga(); tampilkanAlert("✅ SUCCESS! Pengaturan tersimpan.");
-            } catch (e) { tampilkanAlert("❌ Gagal menyimpan ke server."); } finally { btn.innerText = "Simpan Perubahan Data"; btn.disabled = false; }
+            } catch (e) { tampilkanAlert("❌ Gagal menyimpan ke server."); } finally { btn.innerText = "Simpan Teks & CCTV"; btn.disabled = false; }
         }
 
         Chart.register(ChartDataLabels);
         const ctx = document.getElementById('statsChart').getContext('2d');
-        // Chart sekarang punya 3 Warna: Kuning, Biru, Merah
         let statsChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Proses', 'Selesai', 'Ditolak'], datasets: [{ data: [1, 0, 0], backgroundColor: ['#facc15', '#1d4ed8', '#ef4444'], borderWidth: 0 }] }, options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, datalabels: { display: false } }, animation: { duration: 500 } } });
 
         function updateChart() {
@@ -618,7 +700,7 @@
             let s = dataLaporan.filter(d => d.status === "Selesai").length; 
             let t = dataLaporan.filter(d => d.status === "Ditolak").length; 
             let total = p + s + t; 
-            let tindakLanjut = s + t; // Selesai + Ditolak dihitung sebagai sudah ditindaklanjuti
+            let tindakLanjut = s + t; 
             let percent = total > 0 ? Math.round((tindakLanjut / total) * 100) : 0;
             
             statsChart.data.datasets[0].data = total > 0 ? [p, s, t] : [1, 0, 0]; 
@@ -648,7 +730,7 @@
                         
                         const noUrut = totalData - index;
                         let tglFormat = '-'; if(item.waktu) { let d = new Date(item.waktu); if(!isNaN(d)) tglFormat = d.toLocaleString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':'); else tglFormat = item.waktu; }
-                        let arsipBtn = item.pdf && item.pdf.startsWith("http") ? `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600 w-full text-center">Arsip PDF</a>` : '';
+                        let arsipBtn = item.pdf && item.pdf.startsWith("http") ? `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600 w-full text-center mt-1">Arsip PDF</a>` : '';
                         
                         let aksiHTML = '';
                         if(isMenunggu) {
@@ -708,40 +790,34 @@
             renderSmartVideo('videoContainer2', videoData.vid2);
         }
 
+        // --- MANAJEMEN GALERI ---
         function renderGaleriAdmin() {
             const tbody = document.getElementById('tabelGaleriAdmin'); tbody.innerHTML = '';
             if(galleryData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-slate-500 italic">Belum ada postingan kegiatan. Klik "+ Tambah Giat Baru" untuk membuat berita.</td></tr>';
-                return;
+            } else {
+                [...galleryData].reverse().forEach((g, reverseIndex) => {
+                    let realIndex = galleryData.length - 1 - reverseIndex;
+                    let no = reverseIndex + 1;
+                    let shortDesc = g.desc.length > 50 ? g.desc.substring(0, 50) + "..." : g.desc;
+                    
+                    tbody.innerHTML += `
+                    <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
+                        <td class="p-4 text-center font-bold text-slate-400">${no}</td>
+                        <td class="p-4"><img src="${g.url}" class="w-16 h-12 object-cover rounded border border-slate-600" onerror="this.src='https://via.placeholder.com/100?text=Err'"></td>
+                        <td class="p-4"><h4 class="text-yellow-400 font-bold text-xs uppercase tracking-wider mb-1">${g.title}</h4><p class="text-slate-400 text-[10px] leading-tight">${shortDesc}</p></td>
+                        <td class="p-4 text-center">
+                            <button onclick="editGaleri(${realIndex})" class="text-blue-400 hover:text-white font-bold text-xs uppercase mr-2">Edit</button>
+                            <button onclick="hapusGaleri(${realIndex})" class="text-red-500 hover:text-white font-bold text-xs uppercase">Hapus</button>
+                        </td>
+                    </tr>`;
+                });
             }
-            [...galleryData].reverse().forEach((g, reverseIndex) => {
-                let realIndex = galleryData.length - 1 - reverseIndex;
-                let no = reverseIndex + 1;
-                let shortDesc = g.desc.length > 50 ? g.desc.substring(0, 50) + "..." : g.desc;
-                
-                tbody.innerHTML += `
-                <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
-                    <td class="p-4 text-center font-bold text-slate-400">${no}</td>
-                    <td class="p-4"><img src="${g.url}" class="w-16 h-12 object-cover rounded border border-slate-600" onerror="this.src='https://via.placeholder.com/100?text=Err'"></td>
-                    <td class="p-4"><h4 class="text-yellow-400 font-bold text-xs uppercase tracking-wider mb-1">${g.title}</h4><p class="text-slate-400 text-[10px] leading-tight">${shortDesc}</p></td>
-                    <td class="p-4 text-center">
-                        <button onclick="editGaleri(${realIndex})" class="text-blue-400 hover:text-white font-bold text-xs uppercase mr-2">Edit</button>
-                        <button onclick="hapusGaleri(${realIndex})" class="text-red-500 hover:text-white font-bold text-xs uppercase">Hapus</button>
-                    </td>
-                </tr>`;
-            });
         }
-
         function bukaModalGaleri() { editGaleriIndex = -1; document.getElementById('judulModalGaleri').innerText = "Posting Giat Baru"; document.getElementById('inputUrlGal').value = ''; document.getElementById('inputTitleGal').value = ''; document.getElementById('inputDescGal').value = ''; document.getElementById('modalFormGaleri').classList.remove('hidden'); }
         function tutupModalGaleri() { document.getElementById('modalFormGaleri').classList.add('hidden'); }
         function editGaleri(index) { editGaleriIndex = index; document.getElementById('judulModalGaleri').innerText = "Edit Postingan"; document.getElementById('inputUrlGal').value = galleryData[index].url; document.getElementById('inputTitleGal').value = galleryData[index].title; document.getElementById('inputDescGal').value = galleryData[index].desc; document.getElementById('modalFormGaleri').classList.remove('hidden'); }
-        function hapusGaleri(index) { 
-            if(confirm("Hapus postingan kegiatan ini?")) { 
-                galleryData.splice(index, 1); 
-                renderGaleriAdmin(); renderTampilanWarga(); simpanPengaturanSilent();
-                tampilkanAlert("Data kegiatan berhasil dihapus."); 
-            } 
-        }
+        function hapusGaleri(index) { if(confirm("Hapus postingan kegiatan ini?")) { galleryData.splice(index, 1); renderGaleriAdmin(); renderTampilanWarga(); simpanPengaturanSilent(); } }
         function simpanItemGaleri() {
             let u = document.getElementById('inputUrlGal').value.trim(); let t = document.getElementById('inputTitleGal').value.trim(); let d = document.getElementById('inputDescGal').value.trim();
             if(!u || !t) { alert("URL Foto dan Judul harus diisi!"); return; }
@@ -749,11 +825,44 @@
             tutupModalGaleri(); renderGaleriAdmin(); renderTampilanWarga(); simpanPengaturanSilent();
         }
 
+        // --- MANAJEMEN PROFIL ---
+        function renderProfilAdmin() {
+            const tbody = document.getElementById('tabelProfilAdmin'); tbody.innerHTML = '';
+            if(dataProfilAparatur.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-slate-500 italic">Belum ada profil pejabat. Klik "+ Tambah Profil".</td></tr>';
+            } else {
+                dataProfilAparatur.forEach((p, index) => {
+                    let no = index + 1;
+                    tbody.innerHTML += `
+                    <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
+                        <td class="p-4 text-center font-bold text-slate-400">${no}</td>
+                        <td class="p-4 text-center"><img src="${p.foto}" class="w-10 h-10 object-cover rounded-full border border-slate-600 mx-auto" onerror="this.src='https://via.placeholder.com/100?text=Err'"></td>
+                        <td class="p-4"><h4 class="text-white font-bold text-xs uppercase tracking-wider mb-1">${p.nama}</h4><p class="text-yellow-400 font-bold text-[10px] uppercase">${p.jabatan}</p></td>
+                        <td class="p-4 text-center">
+                            <button onclick="editProfil(${index})" class="text-blue-400 hover:text-white font-bold text-xs uppercase mr-2">Edit</button>
+                            <button onclick="hapusProfil(${index})" class="text-red-500 hover:text-white font-bold text-xs uppercase">Hapus</button>
+                        </td>
+                    </tr>`;
+                });
+            }
+        }
+        function bukaModalProfil() { editProfilIndex = -1; document.getElementById('judulModalProfil').innerText = "Profil Pejabat Baru"; document.getElementById('inputUrlProfil').value = ''; document.getElementById('inputNamaProfil').value = ''; document.getElementById('inputJabatanProfil').value = ''; document.getElementById('modalFormProfil').classList.remove('hidden'); }
+        function tutupModalProfil() { document.getElementById('modalFormProfil').classList.add('hidden'); }
+        function editProfil(index) { editProfilIndex = index; document.getElementById('judulModalProfil').innerText = "Edit Profil"; document.getElementById('inputUrlProfil').value = dataProfilAparatur[index].foto; document.getElementById('inputNamaProfil').value = dataProfilAparatur[index].nama; document.getElementById('inputJabatanProfil').value = dataProfilAparatur[index].jabatan; document.getElementById('modalFormProfil').classList.remove('hidden'); }
+        function hapusProfil(index) { if(confirm("Hapus profil pejabat ini?")) { dataProfilAparatur.splice(index, 1); renderProfilAdmin(); renderProfilAparatur(); simpanPengaturanSilent(); } }
+        function simpanItemProfil() {
+            let u = document.getElementById('inputUrlProfil').value.trim(); let n = document.getElementById('inputNamaProfil').value.trim(); let j = document.getElementById('inputJabatanProfil').value.trim();
+            if(!u || !n || !j) { alert("Semua kolom harus diisi!"); return; }
+            if(editProfilIndex === -1) { dataProfilAparatur.push({ foto: u, nama: n, jabatan: j }); } else { dataProfilAparatur[editProfilIndex] = { foto: u, nama: n, jabatan: j }; }
+            tutupModalProfil(); renderProfilAdmin(); renderProfilAparatur(); simpanPengaturanSilent();
+        }
+
         function renderPengaturanAdmin() {
             document.getElementById('inputRunningText').value = textData; document.getElementById('inputVideo1').value = videoData.vid1 || ""; document.getElementById('inputVideo2').value = videoData.vid2 || "";
             const contCCTV = document.getElementById('containerSlideshowAdmin'); contCCTV.innerHTML = '';
             for(let i=1; i<=3; i++) { let s = slides[i-1] || {url: '', caption: ''}; contCCTV.innerHTML += `<div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl"><h4 class="font-bold mb-2 text-[10px] text-yellow-400">Kamera ${i}</h4><input type="text" id="inputUrlCCTV${i}" value="${s.url}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-2 outline-none" placeholder="URL Foto"><input type="text" id="inputCapCCTV${i}" value="${s.caption}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] font-bold outline-none" placeholder="Keterangan"></div>`; }
             renderGaleriAdmin();
+            renderProfilAdmin();
         }
 
         function renderUsers() { const tbody = document.getElementById('tabelPengguna'); tbody.innerHTML = ''; dataPengguna.forEach((u, i) => { const isSuper = u.username === 'superadmin'; const statClass = u.status === 'Aktif' ? 'text-green-400 bg-green-900/40 border-green-500' : 'text-red-400 bg-red-900/40 border-red-500'; const action = isSuper ? '<span class="text-xs italic text-slate-500">ROOT</span>' : `<button onclick="editUser(${i})" class="text-blue-400 hover:text-white font-bold mr-3 text-xs uppercase tracking-widest">Edit</button><button onclick="toggleUser(${i})" class="${u.status === 'Aktif' ? 'text-red-500' : 'text-green-500'} hover:text-white font-bold text-xs uppercase tracking-widest">${u.status === 'Aktif' ? 'Blokir' : 'Aktifkan'}</button>`; tbody.innerHTML += `<tr class="border-b border-slate-700/50"><td class="p-6 font-bold text-white">${u.username}</td><td class="p-6 text-slate-300">${u.role}</td><td class="p-6"><span class="px-3 py-1 rounded tracking-widest uppercase text-[10px] font-bold border ${statClass}">${u.status}</span></td><td class="p-6 text-center">${action}</td></tr>`; }); }

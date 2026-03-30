@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANTAU HARUAI (PENGAWASAN TERPADU KECAMATAN HARUAI)</title>
+    <title>PANTAU HARUAI (PENGAWASAN Terpadu Kecamatan Haruai)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -528,7 +528,7 @@
     <div id="modalProfilPopup" class="hidden fixed inset-0 z-[120] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer" onclick="tutupLightboxProfil()"></div>
         <div class="relative z-10 w-full max-w-sm h-[85vh] max-h-[85vh] border-t-8 border-yellow-400 rounded-3xl overflow-hidden bg-slate-900 shadow-2xl flex flex-col transition-all duration-300 scale-90 opacity-0" id="profilPopupCard">
-            <button onclick="tutupLightboxProfil()" class="absolute top-4 right-4 text-white/50 hover:text-white text-3xl z-30">&times;</button>
+            <button onclick="tutupLightboxProfil()" class="absolute top-4 right-4 text-white/50 hover:text-white text-3xl z-30 drop-shadow-lg">×</button>
             
             <div class="relative flex-grow overflow-hidden bg-black flex items-center justify-center">
                 <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-1/3 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-lg">
@@ -606,7 +606,7 @@
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; 
         let galleryData = []; 
-        let dataProfilAparatur = []; // Sekarang dari cloud
+        let dataProfilAparatur = []; 
         let videoData = { vid1: "", vid2: "" }; let dataLaporan = []; let linkPdfSelesai = "";
 
         window.addEventListener('load', function() {
@@ -653,7 +653,6 @@
         function bukaLightbox(url, title, desc) { document.getElementById('lightboxImg').src = url; document.getElementById('lightboxTitle').innerText = title; document.getElementById('lightboxDesc').innerText = desc; document.getElementById('modalLightbox').classList.remove('hidden'); }
         function tutupLightbox() { document.getElementById('modalLightbox').classList.add('hidden'); }
         
-        // --- POPUP PROFIL BARU ---
         function bukaLightboxProfil(url, nama, jabatan) {
             const modal = document.getElementById('modalProfilPopup');
             const card = document.getElementById('profilPopupCard');
@@ -684,43 +683,44 @@
             container.innerHTML = `<iframe class="w-full h-full border-none absolute inset-0" src="${url}" allowfullscreen></iframe>`;
         }
 
-        // --- RENDER PROFIL WARGA (LAYOUT TERPISAH & VERTICAL FRAME) ---
         function renderProfilAparatur() {
             const contForko = document.getElementById('containerForkopimca');
             const contKades = document.getElementById('containerKades');
 
-            // Pisahkan data (Asumsi: "Camat/Danramil/Kapolsek" di Forkopimca, sisanya Kades)
-            // Bos bisa ngatur ini di Admin Panel pake kata kunci Jabatan
-            const listForko = dataProfilAparatur.filter(p => p.jabatan.toLowerCase().includes("camat") || p.jabatan.toLowerCase().includes("danramil") || p.jabatan.toLowerCase().includes("kapolsek"));
-            const listKades = dataProfilAparatur.filter(p => !listForko.includes(p)); // Sisanya Kades
+            if (!dataProfilAparatur || dataProfilAparatur.length === 0) {
+                contForko.innerHTML = `<p class="text-slate-500 text-[10px] italic px-2 col-span-3 text-center">Belum ada data</p>`;
+                contKades.innerHTML = `<p class="text-slate-500 text-[10px] italic px-2">Belum ada data</p>`;
+                return;
+            }
 
-            // Template Kartu Vertikal (Smartphone style)
-            const templateKartu = (p) => `
-                <div onclick="bukaLightboxProfil('${p.foto}', '${p.nama}', '${p.jabatan}')" class="relative ${contKades === event?.currentTarget?.parentNode ? 'min-w-[120px] max-w-[120px] h-[190px]' : 'w-full h-[180px]'} rounded-xl overflow-hidden shadow-lg hover:border-yellow-400/50 border border-white/10 group cursor-pointer transition-all duration-300">
-                    
+            // FILTER AMAN: Kalau jabatannya mengandung kata "kades", "kepala desa", "pembakal" -> Masuk Kanan (Kades). Sisanya Kiri (Forkopimca).
+            const listKades = dataProfilAparatur.filter(p => {
+                const j = p.jabatan.toLowerCase();
+                return j.includes("kades") || j.includes("kepala desa") || j.includes("kepala") || j.includes("pembakal");
+            });
+            const listForko = dataProfilAparatur.filter(p => !listKades.includes(p));
+
+            // Template Kartu (Smartphone Size)
+            const templateKartu = (p, isKades) => `
+                <div onclick="bukaLightboxProfil('${p.foto}', '${p.nama}', '${p.jabatan}')" class="relative ${isKades ? 'min-w-[130px] max-w-[130px] h-[220px] md:h-[260px]' : 'w-full h-[250px] md:h-[320px]'} rounded-xl overflow-hidden shadow-lg hover:border-yellow-400/50 border border-white/10 group cursor-pointer transition-all duration-300">
                     <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-12 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert transition-opacity group-hover:opacity-50">
-                    
                     <img src="${p.foto}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://via.placeholder.com/200x300?text=Err'">
-                    
                     <div class="absolute bottom-0 inset-x-0 p-3 z-20 bg-gradient-to-t from-black via-black/80 to-transparent">
-                        <h4 class="text-white text-[10px] md:text-[11px] font-black leading-tight uppercase line-clamp-2">${p.nama}</h4>
-                        <p class="text-yellow-400 text-[8px] md:text-[9px] font-bold tracking-widest mt-1 uppercase line-clamp-1">${p.jabatan}</p>
+                        <h4 class="text-white text-[11px] md:text-[13px] font-black leading-tight uppercase line-clamp-2">${p.nama}</h4>
+                        <p class="text-yellow-400 text-[9px] md:text-[10px] font-bold tracking-widest mt-1 uppercase line-clamp-1">${p.jabatan}</p>
                     </div>
-                    
                     <div class="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-yellow-400/50 transition-colors z-30"></div>
                 </div>
             `;
 
-            // Render Forkopimca (Fixed 3)
             if (listForko.length > 0) {
-                contForko.innerHTML = listForko.map(p => templateKartu(p)).join('');
+                contForko.innerHTML = listForko.map(p => templateKartu(p, false)).join('');
             } else {
                 contForko.innerHTML = `<p class="text-slate-500 text-[10px] italic px-2 col-span-3 text-center">Belum diatur</p>`;
             }
 
-            // Render Kades (Scrollable 13)
             if (listKades.length > 0) {
-                contKades.innerHTML = listKades.map(p => templateKartu(p)).join('');
+                contKades.innerHTML = listKades.map(p => templateKartu(p, true)).join('');
             } else {
                 contKades.innerHTML = `<p class="text-slate-500 text-[10px] italic px-2">Belum ada data Kades</p>`;
             }
@@ -862,7 +862,6 @@
             renderSmartVideo('videoContainer2', videoData.vid2);
         }
 
-        // --- MANAJEMEN GALERI ---
         function renderGaleriAdmin() {
             const tbody = document.getElementById('tabelGaleriAdmin'); tbody.innerHTML = '';
             if(galleryData.length === 0) {
@@ -897,7 +896,6 @@
             tutupModalGaleri(); renderGaleriAdmin(); renderTampilanWarga(); simpanPengaturanSilent();
         }
 
-        // --- MANAJEMEN PROFIL ---
         function renderProfilAdmin() {
             const tbody = document.getElementById('tabelProfilAdmin'); tbody.innerHTML = '';
             if(dataProfilAparatur.length === 0) {

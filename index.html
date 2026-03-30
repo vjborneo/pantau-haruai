@@ -136,11 +136,10 @@
                 <div class="flex flex-col md:flex-row items-center justify-between mb-5 border-b border-white/10 pb-4 gap-4">
                     <h3 class="text-yellow-400 text-sm md:text-base font-black uppercase tracking-widest border-l-4 border-yellow-400 pl-3">Layanan Terpadu & Statistik Laporan</h3>
                     
-                    <button onclick="toggleManual()" class="bg-blue-900/50 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/50 hover:border-blue-400 font-bold py-2.5 px-5 rounded-xl shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-widest">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253" />
-                        </svg>
-                        Buku Panduan
+                    <button onclick="toggleManual()" class="relative w-full md:w-auto bg-gradient-to-r from-blue-600 to-blue-800 text-white font-black py-3.5 px-8 rounded-xl hover:from-blue-500 hover:to-blue-700 transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex justify-center items-center gap-2 uppercase tracking-widest group">
+                        <span class="absolute inset-0 w-full h-full bg-white/20 scale-x-0 group-hover:scale-x-100 transform origin-left transition-transform duration-500 ease-out rounded-xl"></span>
+                        <svg class="w-6 h-6 z-10 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253" /></svg>
+                        <span class="relative z-10">Buku Panduan</span>
                     </button>
                 </div>
 
@@ -175,9 +174,10 @@
                                 <span id="chartPercentage" class="text-2xl font-black text-white drop-shadow-md">0%</span>
                             </div>
                         </div>
-                        <div class="w-full flex justify-between px-3 mt-2 text-xs font-bold border-t border-white/10 pt-3">
+                        <div class="w-full flex justify-between px-3 mt-2 text-[10px] font-bold border-t border-white/10 pt-3">
                             <span class="text-yellow-400">Proses: <span id="txtProses">0</span></span>
                             <span class="text-blue-400">Selesai: <span id="txtSelesai">0</span></span>
+                            <span class="text-red-400">Tolak: <span id="txtDitolak">0</span></span>
                         </div>
                     </div>
                 </div>
@@ -262,7 +262,6 @@
                     </div>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="cetakLaporanResmi()" class="bg-yellow-500 hover:bg-yellow-400 text-blue-900 px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all">📄 Cetak Rekap PDF</button>
                     <button onclick="kembaliKeWarga()" class="bg-red-600 hover:bg-red-500 px-6 py-2.5 rounded-xl transition-all font-bold text-white shadow-lg">Logout</button>
                 </div>
             </div>
@@ -274,7 +273,11 @@
             </div>
 
             <div id="contentLaporan" class="admin-panel rounded-3xl p-8 min-h-[400px]">
-                <h2 class="text-xl font-bold text-white mb-6 border-l-4 border-yellow-400 pl-3 uppercase tracking-widest">Daftar Laporan Masuk</h2>
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b border-slate-700 pb-4 gap-4">
+                    <h2 class="text-xl font-bold text-white border-l-4 border-yellow-400 pl-3 uppercase tracking-widest">Daftar Laporan Masuk</h2>
+                    <button onclick="cetakLaporanResmi()" class="bg-yellow-500 hover:bg-yellow-400 text-blue-900 px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2">📄 Cetak Rekap PDF</button>
+                </div>
+                
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse text-slate-300">
                         <thead class="text-[10px] uppercase text-yellow-400 font-bold tracking-widest border-b border-slate-700">
@@ -286,7 +289,7 @@
                                 <th class="p-4">Nama</th>
                                 <th class="p-4">Lokasi</th>
                                 <th class="p-4 text-center">Status</th>
-                                <th class="p-4 text-center">Aksi</th>
+                                <th class="p-4 text-center w-24">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="tabelDataLaporan" class="divide-y divide-slate-700/50"></tbody>
@@ -342,7 +345,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tabelGaleriAdmin" class="divide-y divide-slate-700/50">
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -408,7 +411,7 @@
             </div>
             <div class="flex gap-3 mt-8">
                 <button onclick="tutupModalGaleri()" class="w-1/3 bg-transparent border border-slate-600 text-slate-300 font-bold py-3 rounded-xl hover:text-white hover:bg-slate-700 transition-all">Batal</button>
-                <button onclick="simpanItemGaleri()" class="w-2/3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all">Simpan ke Daftar</button>
+                <button onclick="simpanItemGaleri()" class="w-2/3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all">Simpan Posting</button>
             </div>
         </div>
     </div>
@@ -464,10 +467,10 @@
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="tutupModalConfirm()"></div>
         <div class="bg-slate-800 border border-yellow-400/50 rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl text-center">
             <h3 class="text-xl font-bold text-yellow-400 mb-2 uppercase tracking-widest">PANTAU HARUAI</h3>
-            <p class="text-white mb-8">Tandai laporan ini SELESAI?</p>
+            <p id="teksConfirmStatus" class="text-white mb-8">Tandai laporan ini SELESAI?</p>
             <div class="flex gap-3">
                 <button onclick="tutupModalConfirm()" class="w-1/2 bg-transparent border border-slate-600 text-slate-300 font-bold py-3 rounded-xl hover:text-white">Batal</button>
-                <button id="btnConfirmOk" class="w-1/2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg">Ya, Selesai</button>
+                <button id="btnConfirmOk" class="w-1/2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all">Ya, Selesai</button>
             </div>
         </div>
     </div>
@@ -503,7 +506,7 @@
     <script>
         const URL_GAS = 'https://script.google.com/macros/s/AKfycbzb461wl-nlo646DiwU04DW8N1LRrz2vxlrp7tY2xG9t-jx3_dePn8zKN3vFCTHzE9AlA/exec';
 
-        let targetRowId = null; let targetBtn = null; let editIndex = -1; let editGaleriIndex = -1;
+        let targetRowId = null; let targetBtn = null; let editIndex = -1; let editGaleriIndex = -1; let targetStatus = '';
         let dataPengguna = [ { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" }, { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" } ];
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; 
@@ -581,8 +584,19 @@
             } catch(e) { renderTampilanWarga(); renderGaleriAdmin(); }
         }
 
+        // Fungsi simpan otomatis di background untuk Galeri
+        async function simpanPengaturanSilent() {
+            let newText = document.getElementById('inputRunningText').value; let newSlides = [];
+            let newVid1 = document.getElementById('inputVideo1').value.trim(); let newVid2 = document.getElementById('inputVideo2').value.trim(); 
+            let newVideoData = { vid1: newVid1, vid2: newVid2 };
+            for(let i=1; i<=3; i++) { newSlides.push({ url: document.getElementById(`inputUrlCCTV${i}`).value, caption: document.getElementById(`inputCapCCTV${i}`).value }); }
+            try { 
+                await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'save_pengaturan', payload: { running_text: newText, cctv: newSlides, galeri: galleryData, video: newVideoData } }) });
+            } catch (e) { console.error("Auto-save gagal:", e); }
+        }
+
         async function simpanKeCloud() {
-            const btn = document.getElementById('btnSaveText'); btn.innerText = "⏳ MENYIMPAN KE CLOUD..."; btn.disabled = true;
+            const btn = document.getElementById('btnSaveText'); btn.innerText = "⏳ MENYIMPAN..."; btn.disabled = true;
             let newText = document.getElementById('inputRunningText').value; let newSlides = [];
             let newVid1 = document.getElementById('inputVideo1').value.trim(); let newVid2 = document.getElementById('inputVideo2').value.trim(); 
             let newVideoData = { vid1: newVid1, vid2: newVid2 };
@@ -596,12 +610,24 @@
 
         Chart.register(ChartDataLabels);
         const ctx = document.getElementById('statsChart').getContext('2d');
-        let statsChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['P', 'S'], datasets: [{ data: [1, 1], backgroundColor: ['#facc15', '#1d4ed8'], borderWidth: 0 }] }, options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, datalabels: { display: false } }, animation: { duration: 500 } } });
+        // Chart sekarang punya 3 Warna: Kuning, Biru, Merah
+        let statsChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Proses', 'Selesai', 'Ditolak'], datasets: [{ data: [1, 0, 0], backgroundColor: ['#facc15', '#1d4ed8', '#ef4444'], borderWidth: 0 }] }, options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, datalabels: { display: false } }, animation: { duration: 500 } } });
 
         function updateChart() {
-            let p = dataLaporan.filter(d => d.status === "Menunggu").length; let s = dataLaporan.filter(d => d.status === "Selesai").length; let total = p + s; let percent = total > 0 ? Math.round((s / total) * 100) : 0;
-            statsChart.data.datasets[0].data = total > 0 ? [p, s] : [1, 0]; statsChart.update();
-            document.getElementById('txtProses').innerText = p; document.getElementById('txtSelesai').innerText = s; document.getElementById('chartPercentage').innerText = percent + '%';
+            let p = dataLaporan.filter(d => d.status === "Menunggu").length; 
+            let s = dataLaporan.filter(d => d.status === "Selesai").length; 
+            let t = dataLaporan.filter(d => d.status === "Ditolak").length; 
+            let total = p + s + t; 
+            let tindakLanjut = s + t; // Selesai + Ditolak dihitung sebagai sudah ditindaklanjuti
+            let percent = total > 0 ? Math.round((tindakLanjut / total) * 100) : 0;
+            
+            statsChart.data.datasets[0].data = total > 0 ? [p, s, t] : [1, 0, 0]; 
+            statsChart.update();
+            
+            document.getElementById('txtProses').innerText = p; 
+            document.getElementById('txtSelesai').innerText = s; 
+            document.getElementById('txtDitolak').innerText = t; 
+            document.getElementById('chartPercentage').innerText = percent + '%';
         }
 
         async function muatDataGSheet() {
@@ -612,19 +638,52 @@
                 if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-slate-400">Belum ada laporan.</td></tr>'; } else {
                     const totalData = data.length;
                     data.reverse().forEach((item, index) => {
-                        const isSelesai = item.status === 'Selesai'; const badgeClass = isSelesai ? 'border-green-500 text-green-400 bg-green-900/40' : 'border-yellow-500 text-yellow-400 bg-yellow-900/40'; const noUrut = totalData - index;
+                        const isSelesai = item.status === 'Selesai'; 
+                        const isDitolak = item.status === 'Ditolak';
+                        const isMenunggu = item.status === 'Menunggu' || (!isSelesai && !isDitolak);
+                        
+                        let badgeClass = 'border-yellow-500 text-yellow-400 bg-yellow-900/40';
+                        if(isSelesai) badgeClass = 'border-green-500 text-green-400 bg-green-900/40';
+                        if(isDitolak) badgeClass = 'border-red-500 text-red-400 bg-red-900/40';
+                        
+                        const noUrut = totalData - index;
                         let tglFormat = '-'; if(item.waktu) { let d = new Date(item.waktu); if(!isNaN(d)) tglFormat = d.toLocaleString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':'); else tglFormat = item.waktu; }
-                        let arsipBtn = item.pdf && item.pdf.startsWith("http") ? `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600">Arsip</a>` : '';
-                        tbody.innerHTML += `<tr class="border-b border-slate-700/50 hover:bg-slate-800/80"><td class="p-4 text-xs font-semibold text-slate-400 text-center">${noUrut}</td><td class="p-4 text-xs font-semibold text-slate-300">${tglFormat}</td><td class="p-4 text-[10px] text-slate-400 font-mono">${item.id_laporan || '-'}</td><td class="p-4 font-bold text-xs text-yellow-400">${item.kategori}</td><td class="p-4 text-xs font-semibold text-white">${item.nama}</td><td class="p-4 text-xs text-slate-400">${item.lokasi}</td><td class="p-4 text-center"><span class="px-2 py-1 rounded border ${badgeClass} text-[10px] font-bold tracking-wider uppercase">${item.status}</span></td><td class="p-4 text-center flex justify-center items-center gap-2">${!isSelesai ? `<button onclick="ubahStatus(${item.rowId}, this)" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow">Selesaikan</button>` : '<span class="text-green-500 font-bold text-lg">✓</span>'} ${arsipBtn}</td></tr>`;
+                        let arsipBtn = item.pdf && item.pdf.startsWith("http") ? `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600 w-full text-center">Arsip PDF</a>` : '';
+                        
+                        let aksiHTML = '';
+                        if(isMenunggu) {
+                            aksiHTML = `
+                                <button onclick="ubahStatus(${item.rowId}, this, 'Selesai')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow w-full mb-1">Selesai</button>
+                                <button onclick="ubahStatus(${item.rowId}, this, 'Ditolak')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow w-full">Tolak</button>
+                            `;
+                        } else if (isSelesai) {
+                            aksiHTML = '<span class="text-green-500 font-bold text-lg mb-1">✓</span>';
+                        } else if (isDitolak) {
+                            aksiHTML = '<span class="text-red-500 font-bold text-lg mb-1">✗</span>';
+                        }
+
+                        tbody.innerHTML += `<tr class="border-b border-slate-700/50 hover:bg-slate-800/80"><td class="p-4 text-xs font-semibold text-slate-400 text-center">${noUrut}</td><td class="p-4 text-xs font-semibold text-slate-300">${tglFormat}</td><td class="p-4 text-[10px] text-slate-400 font-mono">${item.id_laporan || '-'}</td><td class="p-4 font-bold text-xs text-yellow-400">${item.kategori}</td><td class="p-4 text-xs font-semibold text-white">${item.nama}</td><td class="p-4 text-xs text-slate-400">${item.lokasi}</td><td class="p-4 text-center"><span class="px-2 py-1 rounded border ${badgeClass} text-[10px] font-bold tracking-wider uppercase">${item.status}</span></td><td class="p-2 align-middle"><div class="flex flex-col items-center justify-center">${aksiHTML}${arsipBtn}</div></td></tr>`;
                     });
                 } updateChart();
             } catch (e) { tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-red-500 font-bold">Koneksi Gagal.</td></tr>'; }
         }
 
-        function ubahStatus(rowId, btnElement) { targetRowId = rowId; targetBtn = btnElement; document.getElementById('modalConfirm').classList.remove('hidden'); }
+        function ubahStatus(rowId, btnElement, statusToSet) { 
+            targetRowId = rowId; 
+            targetBtn = btnElement; 
+            targetStatus = statusToSet;
+            
+            document.getElementById('teksConfirmStatus').innerText = statusToSet === 'Selesai' ? 'Tandai laporan ini SELESAI?' : 'TOLAK laporan ini (Spam/Tidak Valid)?';
+            const btnOk = document.getElementById('btnConfirmOk');
+            btnOk.innerText = statusToSet === 'Selesai' ? 'Ya, Selesai' : 'Ya, Tolak';
+            btnOk.className = statusToSet === 'Selesai' ? 'w-1/2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all' : 'w-1/2 bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all';
+            
+            document.getElementById('modalConfirm').classList.remove('hidden'); 
+        }
+
         document.getElementById('btnConfirmOk').addEventListener('click', async () => {
             tutupModalConfirm(); if(!targetRowId || !targetBtn) return; const originalText = targetBtn.innerText; targetBtn.innerText = "PROSES..."; targetBtn.disabled = true;
-            try { await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', rowId: targetRowId, newStatus: 'Selesai' }) }); muatDataGSheet(); } 
+            try { await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', rowId: targetRowId, newStatus: targetStatus }) }); muatDataGSheet(); } 
             catch (e) { tampilkanAlert("Gagal mengupdate."); targetBtn.innerText = originalText; targetBtn.disabled = false; }
         });
 
@@ -676,12 +735,18 @@
         function bukaModalGaleri() { editGaleriIndex = -1; document.getElementById('judulModalGaleri').innerText = "Posting Giat Baru"; document.getElementById('inputUrlGal').value = ''; document.getElementById('inputTitleGal').value = ''; document.getElementById('inputDescGal').value = ''; document.getElementById('modalFormGaleri').classList.remove('hidden'); }
         function tutupModalGaleri() { document.getElementById('modalFormGaleri').classList.add('hidden'); }
         function editGaleri(index) { editGaleriIndex = index; document.getElementById('judulModalGaleri').innerText = "Edit Postingan"; document.getElementById('inputUrlGal').value = galleryData[index].url; document.getElementById('inputTitleGal').value = galleryData[index].title; document.getElementById('inputDescGal').value = galleryData[index].desc; document.getElementById('modalFormGaleri').classList.remove('hidden'); }
-        function hapusGaleri(index) { if(confirm("Hapus postingan kegiatan ini?")) { galleryData.splice(index, 1); renderGaleriAdmin(); tampilkanAlert("Data dihapus sementara. Klik 'Simpan Perubahan Data' untuk simpan ke Cloud."); } }
+        function hapusGaleri(index) { 
+            if(confirm("Hapus postingan kegiatan ini?")) { 
+                galleryData.splice(index, 1); 
+                renderGaleriAdmin(); renderTampilanWarga(); simpanPengaturanSilent();
+                tampilkanAlert("Data kegiatan berhasil dihapus."); 
+            } 
+        }
         function simpanItemGaleri() {
             let u = document.getElementById('inputUrlGal').value.trim(); let t = document.getElementById('inputTitleGal').value.trim(); let d = document.getElementById('inputDescGal').value.trim();
             if(!u || !t) { alert("URL Foto dan Judul harus diisi!"); return; }
             if(editGaleriIndex === -1) { galleryData.push({ url: u, title: t, desc: d }); } else { galleryData[editGaleriIndex] = { url: u, title: t, desc: d }; }
-            tutupModalGaleri(); renderGaleriAdmin(); tampilkanAlert("Draft galeri disimpan. JANGAN LUPA klik 'Simpan Perubahan Data' di bagian atas agar tersimpan ke Cloud.");
+            tutupModalGaleri(); renderGaleriAdmin(); renderTampilanWarga(); simpanPengaturanSilent();
         }
 
         function renderPengaturanAdmin() {

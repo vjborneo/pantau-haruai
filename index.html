@@ -62,12 +62,12 @@
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-700 to-yellow-400 z-20"></div>
 
             <div class="md:w-[70%] relative min-h-[500px] md:min-h-full flex flex-col bg-slate-950/50 overflow-hidden">
-                <img id="slideImg" src="" class="absolute inset-0 w-full h-full object-cover fade-transition opacity-100 z-0 mix-blend-overlay">
+                <img id="slideImg" src="" class="absolute inset-0 w-full h-full object-cover fade-transition opacity-100 z-0 brightness-110">
                 <div id="slideCaptionContainer" class="absolute top-6 left-6 bg-slate-900/80 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-lg z-30 fade-transition opacity-100 shadow-lg flex items-center gap-2 max-w-[70%]">
                     <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                     <span id="slideCaption" class="text-sm font-bold text-white leading-tight uppercase tracking-wider">Loading CCTV...</span>
                 </div>
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent z-10"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent z-10"></div>
                 <div class="relative z-20 p-6 lg:p-12 w-full mt-auto">
                     <div class="flex items-center space-x-2 mb-3">
                         <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span></span>
@@ -342,7 +342,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tabelGaleriAdmin" class="divide-y divide-slate-700/50">
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -507,7 +507,7 @@
         let dataPengguna = [ { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" }, { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" } ];
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; 
-        let galleryData = []; // Sekarang bisa lebih dari 10
+        let galleryData = []; 
         let videoData = { vid1: "", vid2: "" }; let dataLaporan = []; let linkPdfSelesai = "";
 
         window.addEventListener('load', function() {
@@ -587,7 +587,7 @@
             let newVid1 = document.getElementById('inputVideo1').value.trim(); let newVid2 = document.getElementById('inputVideo2').value.trim(); 
             let newVideoData = { vid1: newVid1, vid2: newVid2 };
             for(let i=1; i<=3; i++) { newSlides.push({ url: document.getElementById(`inputUrlCCTV${i}`).value, caption: document.getElementById(`inputCapCCTV${i}`).value }); }
-            // Gallery data sudah otomatis tersimpan di array `galleryData` lewat fitur modal baru
+            
             try { 
                 await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'save_pengaturan', payload: { running_text: newText, cctv: newSlides, galeri: galleryData, video: newVideoData } }) });
                 textData = newText; slides = newSlides; videoData = newVideoData; renderTampilanWarga(); tampilkanAlert("✅ SUCCESS! Pengaturan tersimpan.");
@@ -633,7 +633,6 @@
             
             const galContainer = document.getElementById('wargaGalleryTrack'); let validData = galleryData.filter(g => g.url && g.url.trim() !== "");
             if(validData.length > 0) { 
-                // Karena ini array, foto paling baru (index terakhir) kita taruh paling depan pake reverse() buat tampilan.
                 let htmlCards = [...validData].reverse().map((g) => `
                     <div onclick="bukaLightbox('${g.url}', '${g.title}', '${g.desc}')" class="relative min-w-[260px] max-w-[260px] bg-slate-900 backdrop-blur rounded-xl border border-white/10 overflow-hidden shadow-lg hover:border-yellow-400/50 cursor-pointer group">
                         <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-20 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-md transition-opacity group-hover:opacity-50">
@@ -643,14 +642,13 @@
                             <p class="text-slate-300 text-xs mt-1 leading-snug line-clamp-2">${g.desc}</p>
                         </div>
                     </div>`).join(''); 
-                galContainer.innerHTML = htmlCards + htmlCards; // didouble buat efek scroll infinite
+                galContainer.innerHTML = htmlCards + htmlCards; 
             } else { galContainer.innerHTML = `<p class="text-slate-400 text-xs italic px-4">Belum ada foto kegiatan.</p>`; }
 
             renderSmartVideo('videoContainer1', videoData.vid1);
             renderSmartVideo('videoContainer2', videoData.vid2);
         }
 
-        // --- MANAJEMEN GALERI (FEED PORTAL BERITA) ---
         function renderGaleriAdmin() {
             const tbody = document.getElementById('tabelGaleriAdmin'); tbody.innerHTML = '';
             if(galleryData.length === 0) {
@@ -658,7 +656,6 @@
                 return;
             }
             [...galleryData].reverse().forEach((g, reverseIndex) => {
-                // Kita harus track index aslinya buat proses Edit/Hapus
                 let realIndex = galleryData.length - 1 - reverseIndex;
                 let no = reverseIndex + 1;
                 let shortDesc = g.desc.length > 50 ? g.desc.substring(0, 50) + "..." : g.desc;
@@ -726,7 +723,6 @@
         function prosesDownloadBukti() { if (linkPdfSelesai && linkPdfSelesai !== "Gagal membuat PDF") { window.open(linkPdfSelesai, '_blank'); } else { tampilkanAlert("Maaf, file PDF gagal di-generate oleh server."); } tutupModalBukti(); }
         function tutupModalBukti() { document.getElementById('modalBuktiLaporan').classList.add('hidden'); document.getElementById('formLaporan').reset(); muatDataGSheet(); }
         
-        // --- MESIN CETAK PDF ANTI-BLANK ---
         function cetakLaporanResmi() {
             const btn = document.querySelector('button[onclick="cetakLaporanResmi()"]');
             const originalText = btn.innerHTML;
@@ -785,14 +781,12 @@
             let tempElement = document.createElement('div');
             tempElement.innerHTML = htmlContent;
             tempElement.style.position = 'absolute';
-            // Biar ga blank, kita taruh di atas tapi opacity 0 (jangan -9999px)
             tempElement.style.top = '0';
             tempElement.style.left = '0';
             tempElement.style.opacity = '0';
             tempElement.style.pointerEvents = 'none';
             document.body.appendChild(tempElement);
 
-            // Kita kasih jeda 1 detik buat browser ngerender logonya sebelum difoto
             setTimeout(() => {
                 html2pdf().set({ 
                     margin: 0.5, 

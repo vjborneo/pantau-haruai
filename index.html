@@ -110,9 +110,9 @@
                 <form id="formLaporan" class="space-y-4">
                     <select id="inputKategori" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold shadow-sm">
                         <option value="" disabled selected>Pilih Kategori Laporan</option>
-                        <option value="Trantibum">Trantibum (Ketertiban)</option>
-                        <option value="Infrastruktur">Infrastruktur & Fasum</option>
-                        <option value="Lingkungan">Bencana & Lingkungan</option>
+                        <option value="Trantibumlinmas & Kebakaran">Trantibumlinmas & Kebakaran</option>
+                        <option value="Bencana Alam & Lingkungan">Bencana Alam & Lingkungan</option>
+                        <option value="Gangguan CCTV PANTAU HARUAI">Gangguan CCTV PANTAU HARUAI</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
                     
@@ -194,7 +194,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-8 relative z-10">
             <div id="containerBupati" class="flex flex-wrap justify-center gap-4 md:gap-6 mb-6 px-2"></div>
             
@@ -877,6 +877,7 @@
             kadesPage = 0;
             renderKadesPage(); 
             if(listKades.length > 7) {
+                // FIXED: Animasi lambat 8 detik
                 kadesInterval = setInterval(renderKadesPage, 8000);
             }
         }
@@ -1053,36 +1054,52 @@
 
         const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"];
 
+        // FUNGSI UTAMA PARSING TANGGAL (PEMOTONG MANUAL ANTI-BULE)
         function parseTanggalAman(rawDate) {
             if (!rawDate) return { m: "", y: "", tampil: "-" };
             let str = rawDate.toString().trim();
             let d = "", m = "", y = "", timeStr = "";
             let tampil = str;
             
-            // Cek format angka/angka/angka atau angka-angka-angka (Kita paksa baca DD MM YYYY)
-            let regexDDMMYYYY = /^(\d{2})[\/\-](\d{2})[\/\-](\d{4})/;
-            let matchDDMM = str.match(regexDDMMYYYY);
-            
-            if (matchDDMM) {
-                d = matchDDMM[1].padStart(2, '0');
-                m = matchDDMM[2].padStart(2, '0');
-                y = matchDDMM[3];
-                let timeMatch = str.match(/\b(\d{1,2}:\d{2}(:\d{2})?)\b/);
-                timeStr = timeMatch ? timeMatch[1].substring(0,5) : "";
-                let mName = MONTH_NAMES[parseInt(m) - 1] || m;
-                tampil = `${d}-${mName}-${y} ${timeStr}`.trim();
+            if (str.includes('/')) {
+                let parts = str.split(' '); 
+                let dateParts = parts[0].split('/'); 
+                
+                // Murni potong dari teks G-Sheet: 06/04/2026 -> [0] Hari, [1] Bulan, [2] Tahun
+                if (dateParts.length === 3) {
+                    d = dateParts[0].padStart(2, '0');
+                    m = dateParts[1].padStart(2, '0');
+                    y = dateParts[2].length === 2 ? "20" + dateParts[2] : dateParts[2];
+                    
+                    timeStr = parts[1] ? parts[1].substring(0,5) : ""; 
+                    let monthText = MONTH_NAMES[parseInt(m) - 1] || m;
+                    tampil = `${d}-${monthText}-${y} ${timeStr}`.trim();
+                }
+            } else if (str.includes('-') && !str.includes('T')) {
+                let parts = str.split(' '); 
+                let dateParts = parts[0].split('-'); 
+                
+                if (dateParts.length === 3) {
+                    d = dateParts[0].padStart(2, '0');
+                    m = dateParts[1].padStart(2, '0');
+                    y = dateParts[2].length === 2 ? "20" + dateParts[2] : dateParts[2];
+                    
+                    timeStr = parts[1] ? parts[1].substring(0,5) : ""; 
+                    let monthText = MONTH_NAMES[parseInt(m) - 1] || m;
+                    tampil = `${d}-${monthText}-${y} ${timeStr}`.trim();
+                }
             } else {
-                // Fallback kalau masuknya ISO dari Google Server (2026-04-06T...)
                 let dateObj = new Date(str);
                 if (!isNaN(dateObj)) {
                     d = dateObj.getDate().toString().padStart(2, '0');
                     m = (dateObj.getMonth() + 1).toString().padStart(2, '0');
                     y = dateObj.getFullYear().toString();
                     timeStr = dateObj.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':');
-                    let mName = MONTH_NAMES[parseInt(m) - 1] || m;
-                    tampil = `${d}-${mName}-${y} ${timeStr}`.trim();
+                    let monthText = MONTH_NAMES[parseInt(m) - 1] || m;
+                    tampil = `${d}-${monthText}-${y} ${timeStr}`.trim();
                 }
             }
+            
             return { m: m, y: y, tampil: tampil };
         }
 
@@ -1171,7 +1188,7 @@
         });
 
         // ----------------------------------------------------
-        // CETAK PDF (SUPER STABIL TANPA GAMBAR LOGO)
+        // CETAK PDF (html2pdf murni tanpa gambar, tidak dilempar keluar layar)
         // ----------------------------------------------------
         function cetakLaporanResmi() {
             if(dataLaporanTerfilter.length === 0) {
@@ -1188,31 +1205,30 @@
             const thn = document.getElementById('filterTahunLaporan').value;
             const periodeTeks = (bln === "Semua Bulan" && thn === "Semua Tahun") ? "Keseluruhan" : `Periode: ${bln} ${thn}`;
 
-            // HTML PDF Tanpa Gambar. Murni Teks biar 1 detik langsung generate
             let htmlContent = `
-            <div style="padding: 30px; font-family: Arial, sans-serif; color: #000; background: #fff;">
+            <div id="pdfContentWrapper" style="padding: 40px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000; background: #fff; width: 100%; max-width: 1050px; margin: 0 auto;">
                 
-                <div style="text-align: center; border-bottom: 3px solid #1e3a8a; margin-bottom: 20px; padding-bottom: 10px;">
+                <div style="text-align: center; border-bottom: 4px solid #1e3a8a; margin-bottom: 25px; padding-bottom: 15px;">
                     <h2 style="margin: 0; font-size: 20px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
-                    <h1 style="margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
+                    <h1 style="margin: 0; font-size: 28px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
                     <p style="margin: 5px 0 0; font-size: 12px;">Jl. Parsil Desa Nawin Kode Pos 71572</p>
                 </div>
                 
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <h3 style="margin: 0; font-size: 16px; text-decoration: underline;">REKAPITULASI LAPORAN PENGAWASAN TERPADU</h3>
-                    <p style="margin: 5px 0 0; font-size: 12px; font-weight: bold;">(PANTAU HARUAI)</p>
+                    <h3 style="margin: 0; font-size: 18px; text-decoration: underline;">REKAPITULASI LAPORAN PENGAWASAN TERPADU</h3>
+                    <p style="margin: 5px 0 0; font-size: 14px; font-weight: bold;">(PANTAU HARUAI)</p>
                     <p style="margin: 5px 0 0; font-size: 12px; font-style: italic;">${periodeTeks}</p>
                 </div>
 
-                <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 30px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 40px;">
                     <thead>
                         <tr style="background-color: #f1f5f9;">
-                            <th style="border: 1px solid #333; padding: 6px; text-align: center; width: 5%;">No</th>
-                            <th style="border: 1px solid #333; padding: 6px; width: 15%;">Waktu</th>
-                            <th style="border: 1px solid #333; padding: 6px; width: 15%;">Kategori</th>
-                            <th style="border: 1px solid #333; padding: 6px; width: 20%;">Nama Pelapor</th>
-                            <th style="border: 1px solid #333; padding: 6px; width: 35%;">Lokasi & Detail</th>
-                            <th style="border: 1px solid #333; padding: 6px; text-align: center; width: 10%;">Status</th>
+                            <th style="border: 1px solid #333; padding: 8px; text-align: center; width: 5%;">No</th>
+                            <th style="border: 1px solid #333; padding: 8px; width: 15%;">Waktu</th>
+                            <th style="border: 1px solid #333; padding: 8px; width: 15%;">Kategori</th>
+                            <th style="border: 1px solid #333; padding: 8px; width: 20%;">Nama Pelapor</th>
+                            <th style="border: 1px solid #333; padding: 8px; width: 35%;">Lokasi & Detail</th>
+                            <th style="border: 1px solid #333; padding: 8px; text-align: center; width: 10%;">Status</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -1220,23 +1236,23 @@
             let no = 1; 
             dataLaporanTerfilter.forEach((item) => { 
                 let tglFormat = item.waktu_tampil || item.waktu; 
-                let statusColor = item.status === 'Selesai' ? '#166534' : (item.status === 'Ditolak' ? '#991b1b' : '#854d0e');
+                let statusStyle = item.status === 'Selesai' ? 'color: #166534; font-weight: bold;' : (item.status === 'Ditolak' ? 'color: #991b1b; font-weight: bold;' : 'color: #854d0e; font-weight: bold;');
 
                 htmlContent += `
                     <tr>
-                        <td style="border: 1px solid #333; padding: 6px; text-align: center;">${no++}</td>
-                        <td style="border: 1px solid #333; padding: 6px;">
+                        <td style="border: 1px solid #333; padding: 8px; text-align: center;">${no++}</td>
+                        <td style="border: 1px solid #333; padding: 8px;">
                             ${tglFormat}<br>
-                            <span style="font-size: 8px; color: #666;">ID: ${item.id_laporan || '-'}</span>
+                            <span style="font-size: 9px; color: #666; font-family: monospace;">ID: ${item.id_laporan || '-'}</span>
                         </td>
-                        <td style="border: 1px solid #333; padding: 6px; font-weight: bold;">${item.kategori}</td>
-                        <td style="border: 1px solid #333; padding: 6px;">${item.nama}</td>
-                        <td style="border: 1px solid #333; padding: 6px;">
+                        <td style="border: 1px solid #333; padding: 8px; font-weight: bold;">${item.kategori}</td>
+                        <td style="border: 1px solid #333; padding: 8px;">${item.nama}</td>
+                        <td style="border: 1px solid #333; padding: 8px;">
                             <strong>Lokasi:</strong> ${item.lokasi}<br>
-                            <span style="color: #444; font-size: 10px;">"${item.laporan ? (item.laporan.length > 100 ? item.laporan.substring(0, 100) + '...' : item.laporan) : '-'}"</span>
+                            <span style="color: #444; font-size: 11px;">"${item.laporan ? (item.laporan.length > 100 ? item.laporan.substring(0, 100) + '...' : item.laporan) : '-'}"</span>
                         </td>
-                        <td style="border: 1px solid #333; padding: 6px; text-align: center; color: ${statusColor}; font-weight: bold;">
-                            ${item.status}
+                        <td style="border: 1px solid #333; padding: 8px; text-align: center;">
+                            <span style="${statusStyle}">${item.status}</span>
                         </td>
                     </tr>`; 
             });
@@ -1246,8 +1262,8 @@
             htmlContent += `
                     </tbody>
                 </table>
-                <div style="width: 100%; text-align: right; font-size: 12px; padding-right: 20px;">
-                    <div style="display: inline-block; text-align: center;">
+                <div style="width: 100%; display: flex; justify-content: flex-end; font-size: 14px;">
+                    <div style="text-align: center; width: 250px;">
                         <p style="margin: 0;">Haruai, ${tglCetak}</p>
                         <p style="margin: 0;">Mengetahui,</p>
                         <p style="margin: 0; font-weight: bold;">Petugas Command Center</p>
@@ -1257,24 +1273,35 @@
                 </div>
             </div>`;
             
-            // Render langsung pakai HTML string, ga pake temporary element ribet
-            let opt = {
-                margin:       0.5,
-                filename:     `Rekap-Pantau-Haruai-${thn}-${bln}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
-            };
+            let tempElement = document.createElement('div');
+            tempElement.innerHTML = htmlContent;
+            
+            // Cara standar html2pdf: Tampilkan sebentar, proses, lalu hapus.
+            // Ditumpuk di belakang biar gak kelihatan nyala.
+            tempElement.style.position = 'absolute';
+            tempElement.style.zIndex = '-1000';
+            tempElement.style.opacity = '0.01';
+            document.body.appendChild(tempElement);
 
-            html2pdf().set(opt).from(htmlContent).save().then(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }).catch(err => {
-                console.error(err);
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                tampilkanAlert("Terjadi kesalahan saat memproses PDF.");
-            });
+            setTimeout(() => {
+                html2pdf().set({ 
+                    margin: [0.5, 0.5, 0.5, 0.5], 
+                    filename: `Rekap-Pantau-Haruai-${thn}-${bln}.pdf`, 
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 }, 
+                    jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } 
+                }).from(tempElement).save().then(() => {
+                    document.body.removeChild(tempElement);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }).catch(err => {
+                    console.error(err);
+                    document.body.removeChild(tempElement);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    tampilkanAlert("Terjadi kesalahan saat memproses PDF.");
+                });
+            }, 500);
         }
 
         // ----------------------------------------------------
@@ -1392,7 +1419,7 @@
                     tbody.innerHTML += `
                     <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
                         <td class="p-4 text-center font-bold text-slate-400">${no}</td>
-                        <td class="p-4 text-center"><img src="${fotoSrc}" class="w-10 h-10 object-cover rounded-full border border-slate-600 mx-auto" onerror="this.src='${defaultFoto}'"></td>
+                        <td class="p-4 text-center"><img src="${fotoSrc}" class="w-10 h-10 object-cover rounded-full border border-slate-600 mx-auto" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'"></td>
                         <td class="p-4"><h4 class="text-white font-bold text-xs tracking-wider mb-1">${p.nama}</h4><p class="text-yellow-400 font-bold text-[10px]">${p.jabatan}</p></td>
                         <td class="p-4 text-center">
                             <button onclick="editProfil(${index})" class="text-blue-400 hover:text-white font-bold text-xs uppercase mr-2">Edit</button>

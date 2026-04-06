@@ -164,7 +164,7 @@
                                 <div class="bg-slate-700/50 group-hover:bg-red-500/20 p-2 rounded-lg text-red-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><span class="text-xs lg:text-sm font-bold">SP4N LAPOR</span>
                             </a>
                             <a href="https://tabalongkab.go.id/" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-emerald-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
-                                <div class="bg-slate-700/50 group-hover:bg-emerald-500/20 p-2 rounded-lg text-emerald-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">Portal Kab. Tabalong</span>
+                                <div class="bg-slate-700/50 group-hover:bg-emerald-500/20 p-2 rounded-lg text-emerald-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">Portal Kab. Tabalong</span>
                             </a>
                             <a href="https://api.whatsapp.com/send?phone=6282210107129" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-orange-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
                                 <div class="bg-slate-700/50 group-hover:bg-orange-500/20 p-2 rounded-lg text-orange-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div><span class="text-[10px] lg:text-xs font-bold leading-tight">Emergency Call BPBD (WA)</span>
@@ -311,6 +311,7 @@
             <div id="contentLaporan" class="admin-panel rounded-3xl p-8 min-h-[400px]">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b border-slate-700 pb-4 gap-4">
                     <h2 class="text-xl font-bold text-white border-l-4 border-yellow-400 pl-3 uppercase tracking-widest">Daftar Laporan Masuk</h2>
+                    
                     <div class="flex items-center gap-3">
                         <select id="filterBulanLaporan" onchange="renderTabelLaporanTerfilter()" class="bg-slate-800 border border-slate-600 text-white text-sm rounded-xl px-4 py-2.5 outline-none focus:border-yellow-400">
                             <option value="semua">Semua Bulan</option>
@@ -820,7 +821,7 @@
             kadesPage = 0;
             renderKadesPage(); 
             if(listKades.length > 7) {
-                // FIXED: Animasi sekarang lambat jadi 8 detik
+                // FIXED: Animasi lambat 8 detik
                 kadesInterval = setInterval(renderKadesPage, 8000);
             }
         }
@@ -894,13 +895,13 @@
                 const res = await fetch(URL_GAS + '?action=read'); 
                 let data = await res.json(); 
                 dataLaporan = data.reverse(); 
-                renderTabelLaporanTerfilter(); // FIXED: Panggil fungsi filter tabel
+                renderTabelLaporanTerfilter(); 
             } catch (e) { 
                 tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-red-500 font-bold">Koneksi Gagal. Periksa Jaringan.</td></tr>'; 
             }
         }
 
-        // FUNGSI BARU: Filter Tabel Laporan
+        // FIXED: Logika Parsing Tanggal Biar Gak Kebalik
         function renderTabelLaporanTerfilter() {
             const tbody = document.getElementById('tabelDataLaporan');
             const bln = document.getElementById('filterBulanLaporan').value;
@@ -908,11 +909,18 @@
 
             dataLaporanTerfilter = dataLaporan.filter(item => {
                 if (!item.waktu) return false;
+                
                 let dateObj = new Date(item.waktu);
                 if (isNaN(dateObj)) {
-                    let parts = item.waktu.split(' ')[0].split('/');
-                    if (parts.length === 3) dateObj = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                    // Kalau format dari Google Script DD/MM/YYYY HH:mm:ss
+                    let parts = item.waktu.toString().split(' ');
+                    let dateParts = parts[0].split('/'); 
+                    if (dateParts.length === 3) {
+                        // dateParts[0] = DD, dateParts[1] = MM, dateParts[2] = YYYY
+                        dateObj = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T${parts[1] || '00:00:00'}`);
+                    }
                 }
+                
                 if (isNaN(dateObj)) return true; 
 
                 let m = (dateObj.getMonth() + 1).toString().padStart(2, '0');
@@ -939,11 +947,19 @@
                     if(isDitolak) badgeClass = 'border-red-500 text-red-400 bg-red-900/40';
                     
                     const noUrut = totalData - index; 
-                    let tglFormat = '-'; 
-                    if(item.waktu) { 
-                        let d = new Date(item.waktu); 
-                        if(!isNaN(d)) tglFormat = d.toLocaleString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':'); 
-                        else tglFormat = item.waktu; 
+                    
+                    // Format tampilan tabel
+                    let tglFormat = item.waktu; 
+                    let dateObjFormat = new Date(item.waktu);
+                    if (isNaN(dateObjFormat)) {
+                        let parts = item.waktu.toString().split(' ');
+                        let dateParts = parts[0].split('/'); 
+                        if (dateParts.length === 3) {
+                            dateObjFormat = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T${parts[1] || '00:00:00'}`);
+                        }
+                    }
+                    if(!isNaN(dateObjFormat)) {
+                        tglFormat = dateObjFormat.toLocaleString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':'); 
                     }
                     
                     let arsipBtn = item.pdf && item.pdf.startsWith("http") ? `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600 w-full text-center mt-1">Arsip PDF</a>` : '';
@@ -1116,7 +1132,7 @@
         function prosesDownloadBukti() { if (linkPdfSelesai && linkPdfSelesai !== "Gagal membuat PDF") { window.open(linkPdfSelesai, '_blank'); } else { tampilkanAlert("Maaf, file PDF gagal di-generate oleh server."); } tutupModalBukti(); }
         function tutupModalBukti() { document.getElementById('modalBuktiLaporan').classList.add('hidden'); document.getElementById('formLaporan').reset(); muatDataGSheet(); }
         
-        // FIXED: FUNGSI CETAK PDF (Anti Blank & Sesuai Filter)
+        // FIXED: FUNGSI CETAK PDF (Anti Blank & Sesuai Filter & Tanggal Benar)
         function cetakLaporanResmi() {
             if(dataLaporanTerfilter.length === 0) {
                 tampilkanAlert("Tidak ada data untuk dicetak pada periode ini.");
@@ -1137,7 +1153,7 @@
                 <table style="width: 100%; border-bottom: 4px solid #1e3a8a; margin-bottom: 25px; padding-bottom: 15px;">
                     <tr>
                         <td style="width: 120px; vertical-align: top; text-align: left;">
-                            <img src="https://images.weserv.io/?url=https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png&output=png" crossorigin="anonymous" style="width: 100px; height: auto;">
+                            <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" crossorigin="anonymous" style="width: 100px; height: auto;">
                         </td>
                         <td style="vertical-align: middle; text-align: center; padding-right: 120px;">
                             <h2 style="margin: 0; font-size: 20px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
@@ -1168,12 +1184,18 @@
             
             let no = 1; 
             dataLaporanTerfilter.forEach((item) => { 
-                let tglFormat = '-'; 
-                if(item.waktu) { 
-                    let d = new Date(item.waktu); 
-                    if(!isNaN(d)) tglFormat = d.toLocaleString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':'); 
-                    else tglFormat = item.waktu; 
-                } 
+                let tglFormat = item.waktu; 
+                let dateObjFormat = new Date(item.waktu);
+                if (isNaN(dateObjFormat)) {
+                    let parts = item.waktu.toString().split(' ');
+                    let dateParts = parts[0].split('/'); 
+                    if (dateParts.length === 3) {
+                        dateObjFormat = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T${parts[1] || '00:00:00'}`);
+                    }
+                }
+                if(!isNaN(dateObjFormat)) {
+                    tglFormat = dateObjFormat.toLocaleString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':'); 
+                }
                 
                 let statusStyle = item.status === 'Selesai' ? 'color: #166534; font-weight: bold;' : (item.status === 'Ditolak' ? 'color: #991b1b; font-weight: bold;' : 'color: #854d0e; font-weight: bold;');
 
@@ -1213,6 +1235,7 @@
             let tempElement = document.createElement('div');
             tempElement.innerHTML = htmlContent;
             
+            // FIXED: Lempar ke luar layar supaya nggak opacity 0 tapi tetep kerender sempurna
             tempElement.style.position = 'fixed';
             tempElement.style.left = '-9999px';
             tempElement.style.top = '0';

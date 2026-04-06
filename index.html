@@ -164,7 +164,7 @@
                                 <div class="bg-slate-700/50 group-hover:bg-red-500/20 p-2 rounded-lg text-red-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><span class="text-xs lg:text-sm font-bold">SP4N LAPOR</span>
                             </a>
                             <a href="https://tabalongkab.go.id/" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-emerald-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
-                                <div class="bg-slate-700/50 group-hover:bg-emerald-500/20 p-2 rounded-lg text-emerald-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">Portal Kab. Tabalong</span>
+                                <div class="bg-slate-700/50 group-hover:bg-emerald-500/20 p-2 rounded-lg text-emerald-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><span class="text-xs lg:text-sm font-bold">Portal Kab. Tabalong</span>
                             </a>
                             <a href="https://api.whatsapp.com/send?phone=6282210107129" target="_blank" class="group flex items-center gap-3 bg-slate-800/50 backdrop-blur border border-white/10 hover:border-orange-500 hover:bg-slate-800 text-slate-300 hover:text-white p-3 rounded-xl transition-all shadow-lg hover:-translate-y-1">
                                 <div class="bg-slate-700/50 group-hover:bg-orange-500/20 p-2 rounded-lg text-orange-400 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div><span class="text-[10px] lg:text-xs font-bold leading-tight">Emergency Call BPBD (WA)</span>
@@ -196,7 +196,9 @@
         </div>
         
         <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-8 relative z-10">
+            
             <div id="containerBupati" class="flex flex-wrap justify-center gap-4 md:gap-6 mb-6 px-2"></div>
+            
             <div class="grid grid-cols-1 md:grid-cols-[3fr,7fr] gap-6">
                 <div>
                     <div class="flex items-center justify-between mb-3 px-2">
@@ -625,21 +627,34 @@
         </div>
     </div>
 
-<script>
+    <script>
         const URL_GAS = 'https://script.google.com/macros/s/AKfycbzb461wl-nlo646DiwU04DW8N1LRrz2vxlrp7tY2xG9t-jx3_dePn8zKN3vFCTHzE9AlA/exec';
 
-        let targetRowId = null; let targetBtn = null; let targetStatus = '';
-        let editIndex = -1; let editGaleriIndex = -1; let editProfilIndex = -1; 
+        // Variabel Global
+        let targetRowId = null; 
+        let targetBtn = null; 
+        let targetStatus = '';
+        let editIndex = -1; 
+        let editGaleriIndex = -1; 
+        let editProfilIndex = -1; 
+
+        let dataPengguna = [ 
+            { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" }, 
+            { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" } 
+        ];
         
-        let dataPengguna = [ { username: "superadmin", password: "P@ntauH4ruai!26", role: "Super Admin", status: "Aktif" }, { username: "petugas1", password: "Petugas123!", role: "Petugas Piket", status: "Aktif" } ];
         let textData = "🚨 PANTAU HARUAI ONLINE | Sedang memuat data dari Cloud Database...";
         let slides = [{url: "", caption: "Memuat dari Cloud..."}]; 
         let galleryData = []; 
-        let dataProfilAparatur = [ { nama: "H. Fani", jabatan: "Bupati Tabalong", foto: "" }, { nama: "H. Habib", jabatan: "Wakil Bupati Tabalong", foto: "" } ]; 
+        let dataProfilAparatur = [
+            { nama: "H. Fani", jabatan: "Bupati Tabalong", foto: "" },
+            { nama: "H. Habib", jabatan: "Wakil Bupati Tabalong", foto: "" }
+        ]; 
         let videoData = { vid1: "", vid2: "" }; 
         let dataLaporan = []; 
         let dataLaporanTerfilter = [];
         let linkPdfSelesai = "";
+        
         let kadesListGlobal = [];
         let kadesPage = 0;
         let kadesInterval = null;
@@ -650,7 +665,12 @@
             muatDataGSheet();
         });
 
-        function toggleManual() { document.getElementById('manualModal').classList.toggle('hidden'); }
+        // ----------------------------------------------------
+        // UTILITIES & GENERIC UI
+        // ----------------------------------------------------
+        function toggleManual() { 
+            document.getElementById('manualModal').classList.toggle('hidden'); 
+        }
 
         function getLocationGPS() {
             const locInput = document.getElementById('inputLokasi');
@@ -661,10 +681,15 @@
                         let mapsLink = "https://maps.google.com/?q=" + position.coords.latitude + "," + position.coords.longitude;
                         locInput.value = mapsLink;
                     }, 
-                    function() { alert("Gagal mengambil GPS. Pastikan izin lokasi aktif."); locInput.value = ""; },
+                    function() { 
+                        alert("Gagal mengambil GPS. Pastikan izin lokasi aktif."); 
+                        locInput.value = ""; 
+                    },
                     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 } 
                 );
-            } else { alert("Browser HP Anda tidak mendukung fitur GPS."); }
+            } else { 
+                alert("Browser HP Anda tidak mendukung fitur GPS."); 
+            }
         }
 
         function initVisitorCount() {
@@ -676,8 +701,12 @@
             if (!localStorage.getItem('ph_visit_total')) storedDate = today;
 
             totalVisits = parseInt(totalVisits) + 1;
-            if (storedDate !== today) { todayVisits = 1; storedDate = today; } 
-            else { todayVisits = parseInt(todayVisits) + 1; }
+            if (storedDate !== today) { 
+                todayVisits = 1; 
+                storedDate = today; 
+            } else { 
+                todayVisits = parseInt(todayVisits) + 1; 
+            }
 
             localStorage.setItem('ph_visit_total', totalVisits); 
             localStorage.setItem('ph_visit_today', todayVisits); 
@@ -687,11 +716,25 @@
             document.getElementById('visitorToday').innerText = todayVisits.toLocaleString('id-ID');
         }
 
-        function tampilkanAlert(pesan) { document.getElementById('alertMessage').innerText = pesan; document.getElementById('modalAlert').classList.remove('hidden'); }
-        function tutupModalAlert() { document.getElementById('modalAlert').classList.add('hidden'); }
-        function tutupModalConfirm() { document.getElementById('modalConfirm').classList.add('hidden'); }
-        function bukaLightbox(url, title, desc) { document.getElementById('lightboxImg').src = url; document.getElementById('lightboxTitle').innerText = title; document.getElementById('lightboxDesc').innerText = desc; document.getElementById('modalLightbox').classList.remove('hidden'); }
-        function tutupLightbox() { document.getElementById('modalLightbox').classList.add('hidden'); }
+        function tampilkanAlert(pesan) { 
+            document.getElementById('alertMessage').innerText = pesan; 
+            document.getElementById('modalAlert').classList.remove('hidden'); 
+        }
+        function tutupModalAlert() { 
+            document.getElementById('modalAlert').classList.add('hidden'); 
+        }
+        function tutupModalConfirm() { 
+            document.getElementById('modalConfirm').classList.add('hidden'); 
+        }
+        function bukaLightbox(url, title, desc) { 
+            document.getElementById('lightboxImg').src = url; 
+            document.getElementById('lightboxTitle').innerText = title; 
+            document.getElementById('lightboxDesc').innerText = desc; 
+            document.getElementById('modalLightbox').classList.remove('hidden'); 
+        }
+        function tutupLightbox() { 
+            document.getElementById('modalLightbox').classList.add('hidden'); 
+        }
         
         function bukaLightboxProfil(url, nama, jabatan) {
             const modal = document.getElementById('modalProfilPopup');
@@ -708,20 +751,29 @@
             setTimeout(() => { document.getElementById('modalProfilPopup').classList.add('hidden'); }, 300);
         }
 
+        // ----------------------------------------------------
+        // MEDIA RENDERERS
+        // ----------------------------------------------------
         function renderSmartVideo(containerId, url) {
             const container = document.getElementById(containerId);
-            if (!url) { container.innerHTML = `<span class="text-xs text-slate-500">Video belum tersedia</span>`; return; }
+            if (!url) { 
+                container.innerHTML = `<span class="text-xs text-slate-500">Video belum tersedia</span>`; 
+                return; 
+            }
+            
             let ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*embed\/))([^&?]*)/);
             if (ytMatch && ytMatch[1]) {
                 container.innerHTML = `<iframe class="w-full h-full border-none absolute inset-0" src="https://www.youtube.com/embed/${ytMatch[1]}?rel=0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
                 return;
             }
+            
             if (url.includes('.mp4') || url.includes('raw.githubusercontent.com')) {
                 let cleanUrl = url; 
                 if (url.includes("github.com") && url.includes("/blob/")) {
                     cleanUrl = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
                 }
-                container.innerHTML = `<video class="w-full h-full object-cover absolute inset-0" controls preload="metadata"><source src="${cleanUrl}" type="video/mp4"></video>`; return;
+                container.innerHTML = `<video class="w-full h-full object-cover absolute inset-0" controls preload="metadata"><source src="${cleanUrl}" type="video/mp4"></video>`; 
+                return;
             }
             container.innerHTML = `<iframe class="w-full h-full border-none absolute inset-0" src="${url}" allowfullscreen></iframe>`;
         }
@@ -795,7 +847,9 @@
                         <div class="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-yellow-400/50 transition-colors z-30"></div>
                     </div>`;
                 }).join('');
-            } else { contBupati.innerHTML = ''; }
+            } else {
+                contBupati.innerHTML = '';
+            }
 
             if (listForko.length > 0) {
                 contForko.innerHTML = listForko.map(p => {
@@ -813,32 +867,49 @@
                     </div>
                     `;
                 }).join('');
-            } else { contForko.innerHTML = `<p class="text-slate-500 text-[10px] italic px-2 col-span-3 text-center mt-10">Belum diatur</p>`; }
+            } else {
+                contForko.innerHTML = `<p class="text-slate-500 text-[10px] italic px-2 col-span-3 text-center mt-10">Belum diatur</p>`;
+            }
 
             kadesListGlobal = listKades;
             if(kadesInterval) clearInterval(kadesInterval);
             kadesPage = 0;
             renderKadesPage(); 
             if(listKades.length > 7) {
+                // Interval render kades lambat 8 detik biar elegan
                 kadesInterval = setInterval(renderKadesPage, 8000);
             }
         }
 
+        // ----------------------------------------------------
+        // CLOUD SYNC & FETCH DATA
+        // ----------------------------------------------------
         async function muatPengaturanDariCloud() {
             try {
                 const res = await fetch(URL_GAS + '?action=read_pengaturan'); 
                 const cloudData = await res.json();
+                
                 if(Object.keys(cloudData).length > 0 && cloudData.running_text) { 
-                    textData = cloudData.running_text; slides = cloudData.cctv; 
+                    textData = cloudData.running_text; 
+                    slides = cloudData.cctv; 
                     galleryData = cloudData.galeri || []; 
-                    if (cloudData.profil && cloudData.profil.length > 0) { dataProfilAparatur = cloudData.profil; }
+                    if (cloudData.profil && cloudData.profil.length > 0) {
+                        dataProfilAparatur = cloudData.profil;
+                    }
                     if(cloudData.video) videoData = cloudData.video;
                 } else { 
                     textData = "PANTAU HARUAI | Silakan update pengaturan di Panel Admin"; 
                     slides = [{url: "https://raw.githubusercontent.com/vjborneo/pantau-haruai/main/sample1.jpg", caption: "Haruai"}]; 
                 }
-                renderTampilanWarga(); renderProfilAparatur(); renderPengaturanAdmin();
-            } catch(e) { renderTampilanWarga(); renderProfilAparatur(); renderPengaturanAdmin(); }
+                
+                renderTampilanWarga(); 
+                renderProfilAparatur(); 
+                renderPengaturanAdmin();
+            } catch(e) { 
+                renderTampilanWarga(); 
+                renderProfilAparatur(); 
+                renderPengaturanAdmin(); 
+            }
         }
 
         async function simpanPengaturanSilent() {
@@ -847,32 +918,104 @@
             let newVid1 = document.getElementById('inputVideo1').value.trim(); 
             let newVid2 = document.getElementById('inputVideo2').value.trim(); 
             let newVideoData = { vid1: newVid1, vid2: newVid2 };
-            for(let i=1; i<=3; i++) { newSlides.push({ url: document.getElementById(`inputUrlCCTV${i}`).value, caption: document.getElementById(`inputCapCCTV${i}`).value }); }
-            try { await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'save_pengaturan', payload: { running_text: newText, cctv: newSlides, galeri: galleryData, profil: dataProfilAparatur, video: newVideoData } }) }); } 
-            catch (e) { console.error("Auto-save gagal:", e); }
+            
+            for(let i=1; i<=3; i++) { 
+                newSlides.push({ 
+                    url: document.getElementById(`inputUrlCCTV${i}`).value, 
+                    caption: document.getElementById(`inputCapCCTV${i}`).value 
+                }); 
+            }
+            
+            try { 
+                await fetch(URL_GAS, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ 
+                        action: 'save_pengaturan', 
+                        payload: { 
+                            running_text: newText, 
+                            cctv: newSlides, 
+                            galeri: galleryData, 
+                            profil: dataProfilAparatur, 
+                            video: newVideoData 
+                        } 
+                    }) 
+                });
+            } catch (e) { 
+                console.error("Auto-save gagal:", e); 
+            }
         }
 
         async function simpanKeCloud() {
             const btn = document.getElementById('btnSaveText'); 
             btn.innerText = "⏳ MENYIMPAN..."; 
             btn.disabled = true;
-            let newText = document.getElementById('inputRunningText').value; let newSlides = [];
-            let newVid1 = document.getElementById('inputVideo1').value.trim(); let newVid2 = document.getElementById('inputVideo2').value.trim(); 
+            
+            let newText = document.getElementById('inputRunningText').value; 
+            let newSlides = [];
+            let newVid1 = document.getElementById('inputVideo1').value.trim(); 
+            let newVid2 = document.getElementById('inputVideo2').value.trim(); 
             let newVideoData = { vid1: newVid1, vid2: newVid2 };
-            for(let i=1; i<=3; i++) { newSlides.push({ url: document.getElementById(`inputUrlCCTV${i}`).value, caption: document.getElementById(`inputCapCCTV${i}`).value }); }
+            
+            for(let i=1; i<=3; i++) { 
+                newSlides.push({ 
+                    url: document.getElementById(`inputUrlCCTV${i}`).value, 
+                    caption: document.getElementById(`inputCapCCTV${i}`).value 
+                }); 
+            }
+            
             try { 
-                await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'save_pengaturan', payload: { running_text: newText, cctv: newSlides, galeri: galleryData, profil: dataProfilAparatur, video: newVideoData } }) });
-                textData = newText; slides = newSlides; videoData = newVideoData; renderTampilanWarga(); tampilkanAlert("✅ SUCCESS! Pengaturan tersimpan.");
-            } catch (e) { tampilkanAlert("❌ Gagal menyimpan ke server."); } 
-            finally { btn.innerText = "Simpan Teks & CCTV"; btn.disabled = false; }
+                await fetch(URL_GAS, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ 
+                        action: 'save_pengaturan', 
+                        payload: { 
+                            running_text: newText, 
+                            cctv: newSlides, 
+                            galeri: galleryData, 
+                            profil: dataProfilAparatur, 
+                            video: newVideoData 
+                        } 
+                    }) 
+                });
+                
+                textData = newText; 
+                slides = newSlides; 
+                videoData = newVideoData; 
+                
+                renderTampilanWarga(); 
+                tampilkanAlert("✅ SUCCESS! Pengaturan tersimpan.");
+            } catch (e) { 
+                tampilkanAlert("❌ Gagal menyimpan ke server."); 
+            } finally { 
+                btn.innerText = "Simpan Teks & CCTV"; 
+                btn.disabled = false; 
+            }
         }
 
+        // ----------------------------------------------------
+        // CHARTS & STATS
+        // ----------------------------------------------------
         Chart.register(ChartDataLabels);
         const ctx = document.getElementById('statsChart').getContext('2d');
         let statsChart = new Chart(ctx, { 
             type: 'doughnut', 
-            data: { labels: ['Proses', 'Selesai', 'Ditolak'], datasets: [{ data: [1, 0, 0], backgroundColor: ['#facc15', '#1d4ed8', '#ef4444'], borderWidth: 0 }] }, 
-            options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, datalabels: { display: false } }, animation: { duration: 500 } } 
+            data: { 
+                labels: ['Proses', 'Selesai', 'Ditolak'], 
+                datasets: [{ 
+                    data: [1, 0, 0], 
+                    backgroundColor: ['#facc15', '#1d4ed8', '#ef4444'], 
+                    borderWidth: 0 
+                }] 
+            }, 
+            options: { 
+                responsive: true, 
+                cutout: '75%', 
+                plugins: { 
+                    legend: { display: false }, 
+                    datalabels: { display: false } 
+                }, 
+                animation: { duration: 500 } 
+            } 
         });
 
         function updateChart() {
@@ -882,10 +1025,19 @@
             let total = p + s + t; 
             let tindakLanjut = s + t; 
             let percent = total > 0 ? Math.round((tindakLanjut / total) * 100) : 0;
-            statsChart.data.datasets[0].data = total > 0 ? [p, s, t] : [1, 0, 0]; statsChart.update();
-            document.getElementById('txtProses').innerText = p; document.getElementById('txtSelesai').innerText = s; document.getElementById('txtDitolak').innerText = t; document.getElementById('chartPercentage').innerText = percent + '%';
+            
+            statsChart.data.datasets[0].data = total > 0 ? [p, s, t] : [1, 0, 0]; 
+            statsChart.update();
+            
+            document.getElementById('txtProses').innerText = p; 
+            document.getElementById('txtSelesai').innerText = s; 
+            document.getElementById('txtDitolak').innerText = t; 
+            document.getElementById('chartPercentage').innerText = percent + '%';
         }
 
+        // ----------------------------------------------------
+        // LOGIKA TABEL LAPORAN & FILTER TANGGAL
+        // ----------------------------------------------------
         async function muatDataGSheet() {
             const tbody = document.getElementById('tabelDataLaporan'); if(!tbody) return;
             tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center font-bold text-yellow-400 animate-pulse">Memuat data...</td></tr>';
@@ -899,9 +1051,6 @@
             }
         }
 
-        // ========================================================
-        // 1. FIX: LOGIKA PARSING TANGGAL ANTI KEBALIK
-        // ========================================================
         const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"];
 
         function renderTabelLaporanTerfilter() {
@@ -912,55 +1061,45 @@
             dataLaporanTerfilter = dataLaporan.filter(item => {
                 if (!item.waktu) return false;
                 
-                let m = ""; let y = ""; let d = ""; let timeStr = "";
-                let rawDate = item.waktu.toString().trim();
-                let tglFormatTampil = rawDate; 
+                let m = "";
+                let y = "";
+                let d = "";
+                let timeStr = "";
+                let tglFormatTampil = item.waktu; 
 
-                // Kita paksa deteksi slash (/) biar nggak disetir Javascript
-                if (rawDate.includes('/')) {
-                    let parts = rawDate.split(' '); 
+                let parts = item.waktu.toString().split(' ');
+                if (parts[0].includes('/')) {
                     let dateParts = parts[0].split('/'); 
-                    
                     if (dateParts.length === 3) {
-                        // Paksa: angka pertama itu Hari (DD), angka kedua itu Bulan (MM)
                         d = dateParts[0].padStart(2, '0');
                         m = dateParts[1].padStart(2, '0');
                         y = dateParts[2];
                         timeStr = parts[1] ? parts[1].substring(0,5) : ""; 
+                        
+                        let monthText = MONTH_NAMES[parseInt(m) - 1] || m;
+                        tglFormatTampil = `${d}-${monthText}-${y} ${timeStr}`;
                     }
-                } 
-                // Deteksi format ISO dari server
-                else if (rawDate.includes('-') && rawDate.includes('T')) {
-                    let dateObj = new Date(rawDate);
+                } else {
+                    let dateObj = new Date(item.waktu);
                     if (!isNaN(dateObj)) {
                         d = dateObj.getDate().toString().padStart(2, '0');
                         m = (dateObj.getMonth() + 1).toString().padStart(2, '0');
                         y = dateObj.getFullYear().toString();
                         timeStr = dateObj.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':');
-                    }
-                }
-                // Fallback terakhir
-                else {
-                    let dateObj = new Date(rawDate);
-                    if (!isNaN(dateObj)) {
-                        d = dateObj.getDate().toString().padStart(2, '0');
-                        m = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-                        y = dateObj.getFullYear().toString();
-                        timeStr = dateObj.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':');
+                        
+                        let monthText = MONTH_NAMES[parseInt(m) - 1] || m;
+                        tglFormatTampil = `${d}-${monthText}-${y} ${timeStr}`;
                     }
                 }
 
-                // Ubah angka bulan jadi Text (04 -> Apr)
-                let monthText = MONTH_NAMES[parseInt(m) - 1] || m;
-                item.waktu_tampil = `${d}-${monthText}-${y} ${timeStr}`;
+                item.waktu_tampil = tglFormatTampil;
 
-                // Logic pencocokan Filter
                 let matchBln = (bln === 'semua') || (m === bln);
                 let matchThn = (thn === 'semua') || (y === thn);
+
                 return matchBln && matchThn;
             });
 
-            // Tampilkan ke UI
             tbody.innerHTML = '';
             if(dataLaporanTerfilter.length === 0) { 
                 tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-slate-400">Tidak ada laporan pada periode ini.</td></tr>'; 
@@ -976,11 +1115,15 @@
                     if(isDitolak) badgeClass = 'border-red-500 text-red-400 bg-red-900/40';
                     
                     const noUrut = totalData - index; 
+                    
                     let arsipBtn = item.pdf && item.pdf.startsWith("http") ? `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600 w-full text-center mt-1">Arsip PDF</a>` : '';
                     
                     let aksiHTML = '';
                     if(isMenunggu) {
-                        aksiHTML = `<button onclick="ubahStatus(${item.rowId}, this, 'Selesai')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow w-full mb-1">Selesai</button><button onclick="ubahStatus(${item.rowId}, this, 'Ditolak')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow w-full">Tolak</button>`;
+                        aksiHTML = `
+                            <button onclick="ubahStatus(${item.rowId}, this, 'Selesai')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow w-full mb-1">Selesai</button>
+                            <button onclick="ubahStatus(${item.rowId}, this, 'Ditolak')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow w-full">Tolak</button>
+                        `;
                     } else if (isSelesai) {
                         aksiHTML = '<span class="text-green-500 font-bold text-lg mb-1">✓</span>';
                     } else if (isDitolak) {
@@ -994,23 +1137,42 @@
         }
 
         function ubahStatus(rowId, btnElement, statusToSet) { 
-            targetRowId = rowId; targetBtn = btnElement; targetStatus = statusToSet;
+            targetRowId = rowId; 
+            targetBtn = btnElement; 
+            targetStatus = statusToSet;
+            
             document.getElementById('teksConfirmStatus').innerText = statusToSet === 'Selesai' ? 'Tandai laporan ini SELESAI?' : 'TOLAK laporan ini (Spam/Tidak Valid)?';
             const btnOk = document.getElementById('btnConfirmOk');
             btnOk.innerText = statusToSet === 'Selesai' ? 'Ya, Selesai' : 'Ya, Tolak';
-            btnOk.className = statusToSet === 'Selesai' ? 'w-1/2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all' : 'w-1/2 bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all';
+            
+            if(statusToSet === 'Selesai') {
+                btnOk.className = 'w-1/2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all';
+            } else {
+                btnOk.className = 'w-1/2 bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all';
+            }
+            
             document.getElementById('modalConfirm').classList.remove('hidden'); 
         }
 
         document.getElementById('btnConfirmOk').addEventListener('click', async () => {
-            tutupModalConfirm(); if(!targetRowId || !targetBtn) return; const originalText = targetBtn.innerText; targetBtn.innerText = "PROSES..."; targetBtn.disabled = true;
-            try { await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', rowId: targetRowId, newStatus: targetStatus }) }); muatDataGSheet(); } 
-            catch (e) { tampilkanAlert("Gagal mengupdate."); targetBtn.innerText = originalText; targetBtn.disabled = false; }
+            tutupModalConfirm(); 
+            if(!targetRowId || !targetBtn) return; 
+            const originalText = targetBtn.innerText; 
+            targetBtn.innerText = "PROSES..."; 
+            targetBtn.disabled = true;
+            try { 
+                await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', rowId: targetRowId, newStatus: targetStatus }) }); 
+                muatDataGSheet(); 
+            } catch (e) { 
+                tampilkanAlert("Gagal mengupdate."); 
+                targetBtn.innerText = originalText; 
+                targetBtn.disabled = false; 
+            }
         });
 
-        // ========================================================
-        // 2. FIX: CETAK PDF ANTI BLANK (TANPA GAMBAR LOGO)
-        // ========================================================
+        // ----------------------------------------------------
+        // CETAK PDF (TANPA LOGO, ANTI-BLANK)
+        // ----------------------------------------------------
         function cetakLaporanResmi() {
             if(dataLaporanTerfilter.length === 0) {
                 tampilkanAlert("Tidak ada data untuk dicetak pada periode ini.");
@@ -1026,7 +1188,7 @@
             const thn = document.getElementById('filterTahunLaporan').value;
             const periodeTeks = (bln === "Semua Bulan" && thn === "Semua Tahun") ? "Keseluruhan" : `Periode: ${bln} ${thn}`;
 
-            // KOP SURAT FULL TEKS TANPA GAMBAR
+            // KOP SURAT FULL TEKS TANPA GAMBAR LOGO
             let htmlContent = `
             <div id="pdfContentWrapper" style="padding: 40px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000; background: #fff; width: 100%; max-width: 1050px; margin: 0 auto;">
                 
@@ -1096,7 +1258,7 @@
             let tempElement = document.createElement('div');
             tempElement.innerHTML = htmlContent;
             
-            // Lempar ke luar layar biar PDF gak blank
+            // Lempar ke luar layar biar PDF gak blank dan tetep ke-render
             tempElement.style.position = 'fixed';
             tempElement.style.left = '-9999px';
             tempElement.style.top = '0';
@@ -1124,11 +1286,13 @@
         }
 
         // ----------------------------------------------------
-        // RENDER UI Warga & Admin
+        // RENDER UI LAINNYA & EVENT LISTENERS
         // ----------------------------------------------------
         function renderTampilanWarga() {
             document.getElementById('wargaRunningText').innerHTML = textData.split('|').map((t, i) => `<span class="mx-4 ${i%2===0 ? 'text-white' : 'text-slate-300'}">${t.trim()}</span><span class="mx-4 text-yellow-500">|</span>`).join('');
-            const galContainer = document.getElementById('wargaGalleryTrack'); let validData = galleryData.filter(g => g.url && g.url.trim() !== "");
+            
+            const galContainer = document.getElementById('wargaGalleryTrack'); 
+            let validData = galleryData.filter(g => g.url && g.url.trim() !== "");
             if(validData.length > 0) { 
                 let htmlCards = [...validData].reverse().map((g) => `
                     <div onclick="bukaLightbox('${g.url}', '${g.title}', '${g.desc}')" class="relative min-w-[260px] max-w-[260px] bg-slate-900 backdrop-blur rounded-xl border border-white/10 overflow-hidden shadow-lg hover:border-yellow-400/50 cursor-pointer group">
@@ -1140,7 +1304,9 @@
                         </div>
                     </div>`).join(''); 
                 galContainer.innerHTML = htmlCards + htmlCards; 
-            } else { galContainer.innerHTML = `<p class="text-slate-400 text-xs italic px-4">Belum ada foto kegiatan.</p>`; }
+            } else { 
+                galContainer.innerHTML = `<p class="text-slate-400 text-xs italic px-4">Belum ada foto kegiatan.</p>`; 
+            }
 
             renderSmartVideo('videoContainer1', videoData.vid1);
             renderSmartVideo('videoContainer2', videoData.vid2);
@@ -1155,6 +1321,7 @@
                     let realIndex = galleryData.length - 1 - reverseIndex;
                     let no = reverseIndex + 1;
                     let shortDesc = g.desc.length > 50 ? g.desc.substring(0, 50) + "..." : g.desc;
+                    
                     tbody.innerHTML += `
                     <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
                         <td class="p-4 text-center font-bold text-slate-400">${no}</td>
@@ -1188,6 +1355,7 @@
                     let no = index + 1;
                     const defaultFoto = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.nama)}&background=1e293b&color=facc15&size=400`;
                     const fotoSrc = (p.foto && p.foto.trim() !== "") ? p.foto : defaultFoto;
+
                     tbody.innerHTML += `
                     <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
                         <td class="p-4 text-center font-bold text-slate-400">${no}</td>
@@ -1216,7 +1384,8 @@
             document.getElementById('inputRunningText').value = textData; document.getElementById('inputVideo1').value = videoData.vid1 || ""; document.getElementById('inputVideo2').value = videoData.vid2 || "";
             const contCCTV = document.getElementById('containerSlideshowAdmin'); contCCTV.innerHTML = '';
             for(let i=1; i<=3; i++) { let s = slides[i-1] || {url: '', caption: ''}; contCCTV.innerHTML += `<div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl"><h4 class="font-bold mb-2 text-[10px] text-yellow-400">Kamera ${i}</h4><input type="text" id="inputUrlCCTV${i}" value="${s.url}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-2 outline-none" placeholder="URL Foto"><input type="text" id="inputCapCCTV${i}" value="${s.caption}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] font-bold outline-none" placeholder="Keterangan"></div>`; }
-            renderGaleriAdmin(); renderProfilAdmin();
+            renderGaleriAdmin();
+            renderProfilAdmin();
         }
 
         function renderUsers() { const tbody = document.getElementById('tabelPengguna'); tbody.innerHTML = ''; dataPengguna.forEach((u, i) => { const isSuper = u.username === 'superadmin'; const statClass = u.status === 'Aktif' ? 'text-green-400 bg-green-900/40 border-green-500' : 'text-red-400 bg-red-900/40 border-red-500'; const action = isSuper ? '<span class="text-xs italic text-slate-500">ROOT</span>' : `<button onclick="editUser(${i})" class="text-blue-400 hover:text-white font-bold mr-3 text-xs uppercase tracking-widest">Edit</button><button onclick="toggleUser(${i})" class="${u.status === 'Aktif' ? 'text-red-500' : 'text-green-500'} hover:text-white font-bold text-xs uppercase tracking-widest">${u.status === 'Aktif' ? 'Blokir' : 'Aktifkan'}</button>`; tbody.innerHTML += `<tr class="border-b border-slate-700/50"><td class="p-6 font-bold text-white">${u.username}</td><td class="p-6 text-slate-300">${u.role}</td><td class="p-6"><span class="px-3 py-1 rounded tracking-widest uppercase text-[10px] font-bold border ${statClass}">${u.status}</span></td><td class="p-6 text-center">${action}</td></tr>`; }); }
@@ -1228,9 +1397,42 @@
 
         function bukaModalLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
         function tutupModalLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
-        function cekLogin() { const u = document.getElementById('inputUsername').value; const p = document.getElementById('inputPassword').value; const valid = dataPengguna.find(x => x.username === u && x.password === p && x.status === "Aktif"); if (valid) { tutupModalLogin(); document.getElementById('viewWarga').classList.add('hidden'); document.getElementById('viewAdmin').classList.remove('hidden'); document.getElementById('mainBody').classList.replace('bg-[#020617]', 'bg-[#0f172a]'); document.getElementById('bgOverlayWarga').classList.add('hidden'); document.getElementById('bgCCTVAdmin').classList.remove('hidden'); switchAdminTab('laporan'); } else { document.getElementById('errorLogin').classList.remove('hidden'); } }
-        function kembaliKeWarga() { document.getElementById('viewAdmin').classList.add('hidden'); document.getElementById('viewWarga').classList.remove('hidden'); document.getElementById('mainBody').classList.replace('bg-[#0f172a]', 'bg-[#020617]'); document.getElementById('bgOverlayWarga').classList.remove('hidden'); document.getElementById('bgCCTVAdmin').classList.add('hidden'); }
-        function switchAdminTab(tab) { document.getElementById('contentLaporan').classList.toggle('hidden', tab !== 'laporan'); document.getElementById('contentPengaturan').style.display = tab === 'pengaturan' ? 'flex' : 'none'; document.getElementById('contentPengguna').classList.toggle('hidden', tab !== 'pengguna'); const a = "bg-yellow-400 text-blue-900 shadow-lg"; const i = "bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700"; document.getElementById('btnTabLaporan').className = `${tab === 'laporan' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; document.getElementById('btnTabPengaturan').className = `${tab === 'pengaturan' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; document.getElementById('btnTabPengguna').className = `${tab === 'pengguna' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; if(tab === 'pengaturan') renderPengaturanAdmin(); if(tab === 'pengguna') renderUsers(); if(tab === 'laporan') muatDataGSheet(); }
+        function cekLogin() { 
+            const u = document.getElementById('inputUsername').value; 
+            const p = document.getElementById('inputPassword').value; 
+            const valid = dataPengguna.find(x => x.username === u && x.password === p && x.status === "Aktif"); 
+            if (valid) { 
+                tutupModalLogin(); 
+                document.getElementById('viewWarga').classList.add('hidden'); 
+                document.getElementById('viewAdmin').classList.remove('hidden'); 
+                document.getElementById('mainBody').classList.replace('bg-[#020617]', 'bg-[#0f172a]'); 
+                document.getElementById('bgOverlayWarga').classList.add('hidden'); 
+                document.getElementById('bgCCTVAdmin').classList.remove('hidden'); 
+                switchAdminTab('laporan'); 
+            } else { 
+                document.getElementById('errorLogin').classList.remove('hidden'); 
+            } 
+        }
+        function kembaliKeWarga() { 
+            document.getElementById('viewAdmin').classList.add('hidden'); 
+            document.getElementById('viewWarga').classList.remove('hidden'); 
+            document.getElementById('mainBody').classList.replace('bg-[#0f172a]', 'bg-[#020617]'); 
+            document.getElementById('bgOverlayWarga').classList.remove('hidden'); 
+            document.getElementById('bgCCTVAdmin').classList.add('hidden'); 
+        }
+        function switchAdminTab(tab) { 
+            document.getElementById('contentLaporan').classList.toggle('hidden', tab !== 'laporan'); 
+            document.getElementById('contentPengaturan').style.display = tab === 'pengaturan' ? 'flex' : 'none'; 
+            document.getElementById('contentPengguna').classList.toggle('hidden', tab !== 'pengguna'); 
+            const a = "bg-yellow-400 text-blue-900 shadow-lg"; 
+            const i = "bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700"; 
+            document.getElementById('btnTabLaporan').className = `${tab === 'laporan' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; 
+            document.getElementById('btnTabPengaturan').className = `${tab === 'pengaturan' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; 
+            document.getElementById('btnTabPengguna').className = `${tab === 'pengguna' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; 
+            if(tab === 'pengaturan') renderPengaturanAdmin(); 
+            if(tab === 'pengguna') renderUsers(); 
+            if(tab === 'laporan') muatDataGSheet(); 
+        }
 
         document.getElementById('formLaporan').addEventListener('submit', async e => {
             e.preventDefault(); const btn = document.getElementById('btnKirim'); const originalText = btn.innerHTML; const originalClass = btn.className;

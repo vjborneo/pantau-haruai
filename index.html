@@ -431,7 +431,6 @@
                         </table>
                     </div>
                 </div>
-
             </div>
 
             <div id="contentPengguna" class="hidden admin-panel rounded-3xl overflow-hidden shadow-2xl">
@@ -1060,10 +1059,7 @@
             
             // Cek jika formatnya ISO dari G-Sheet (Tahun-Bulan-HariT...)
             if (str.includes('T') && str.includes('-')) {
-                // Contoh: 2026-06-04T02:23:32.000Z
-                // Karena kita tahu di G-Sheet ditulis 04/06/2026, maka format ISO ini mengartikan bulan dan tanggal kebalik
-                // Kita ambil manual dari ISO string:
-                let datePart = str.split('T')[0]; // "2026-06-04"
+                let datePart = str.split('T')[0]; 
                 let parts = datePart.split('-');
                 
                 if (parts.length === 3) {
@@ -1147,6 +1143,7 @@
                     if(isDitolak) badgeClass = 'border-red-500 text-red-400 bg-red-900/40';
                     
                     const noUrut = totalData - index; 
+                    
                     let arsipBtn = item.pdf && item.pdf.startsWith("http") ? `<a href="${item.pdf}" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-yellow-400 px-3 py-1.5 rounded-lg text-[10px] font-bold shadow border border-slate-600 w-full text-center mt-1">Arsip PDF</a>` : '';
                     
                     let aksiHTML = '';
@@ -1201,8 +1198,8 @@
             }
         });
 
-// ========================================================
-        // 2. FIX: CETAK PDF (PAKAI LOGO DYNAMIC FETCH & ANTI FREEZE)
+        // ========================================================
+        // 2. FIX: CETAK PDF (PAKAI WINDOW.PRINT ANTI FREEZE + LOGO)
         // ========================================================
         async function cetakLaporanResmiCepat() {
             if(dataLaporanTerfilter.length === 0) {
@@ -1213,11 +1210,9 @@
             const btn = document.querySelector('button[onclick="cetakLaporanResmiCepat()"]');
             const originalText = btn.innerHTML;
             
-            // Ubah teks tombol biar lu tau prosesnya lagi jalan
-            btn.innerHTML = "⏳ Menyiapkan Logo...";
+            btn.innerHTML = "⏳ Menyiapkan PDF...";
             btn.disabled = true;
 
-            // Trik ambil logo langsung dari Github dan ubah jadi Base64 di background
             let logoBase64 = "";
             try {
                 const logoUrl = "https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png";
@@ -1232,13 +1227,10 @@
                 console.log("Gagal meload logo, lanjut cetak tanpa logo.");
             }
 
-            btn.innerHTML = "⏳ Menyusun PDF...";
-
             const bln = document.getElementById('filterBulanLaporan').options[document.getElementById('filterBulanLaporan').selectedIndex].text;
             const thn = document.getElementById('filterTahunLaporan').value;
             const periodeTeks = (bln === "Semua Bulan" && thn === "Semua Tahun") ? "Keseluruhan" : `Periode: ${bln} ${thn}`;
 
-            // Susun HTML Kop Surat pakai Tabel biar rapi
             let htmlContent = `
             <html>
             <head>
@@ -1334,7 +1326,7 @@
                 <script>
                     setTimeout(function() {
                         window.print();
-                    }, 800); // Kasih nafas dikit biar logo ke-render sempurna sebelum print
+                    }, 500);
                 <\/script>
             </body>
             </html>`;
@@ -1347,7 +1339,6 @@
                 printWindow.focus();
             }
 
-            // Balikin tombol ke kondisi semula
             btn.innerHTML = originalText;
             btn.disabled = false;
         }

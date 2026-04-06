@@ -9,7 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         .fade-transition { transition: opacity 0.8s ease-in-out; }
@@ -36,7 +35,6 @@
             50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.8)); }
         }
         .animate-glow { animation: glowPulse 2.5s infinite ease-in-out; }
-        .watermark-glass { filter: brightness(0) invert(1); mix-blend-overlay: overlay; opacity: 0.3; }
         
         @keyframes flipInY {
             0% { transform: perspective(600px) rotateY(90deg); opacity: 0; }
@@ -194,9 +192,8 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="w-full max-w-[100%] md:max-w-[96%] 2xl:max-w-[1600px] mt-8 relative z-10">
-            
             <div id="containerBupati" class="flex flex-wrap justify-center gap-4 md:gap-6 mb-6 px-2"></div>
             
             <div class="grid grid-cols-1 md:grid-cols-[3fr,7fr] gap-6">
@@ -283,6 +280,7 @@
                 </button>
             </div>
         </div>
+
     </div>
 
     <div id="viewAdmin" class="hidden relative z-10 min-h-screen p-4 md:p-8 view-enter">
@@ -290,7 +288,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 admin-panel p-6 rounded-3xl text-white relative overflow-hidden">
                 <div class="absolute w-2 h-full bg-yellow-400 left-0 top-0"></div>
                 <div class="flex items-center gap-4">
-                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="h-12 bg-white p-1 rounded-lg shadow">
+                    <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="h-12 bg-white p-1 rounded-lg shadow" onerror="this.style.display='none'">
                     <div>
                         <h1 class="text-2xl font-bold leading-none text-white tracking-widest uppercase">Command Center</h1>
                         <p class="text-yellow-400 text-[10px] font-bold tracking-[0.3em] uppercase mt-1">Status: <span class="text-green-400">ONLINE</span></p>
@@ -434,6 +432,7 @@
                         </table>
                     </div>
                 </div>
+
             </div>
 
             <div id="contentPengguna" class="hidden admin-panel rounded-3xl overflow-hidden shadow-2xl">
@@ -797,7 +796,7 @@
                 return `
                 <div onclick="bukaLightboxProfil('${fotoSrc}', '${p.nama}', '${p.jabatan}')" class="animate-flip relative w-full h-[250px] md:h-[320px] rounded-xl overflow-hidden shadow-lg hover:border-yellow-400/50 border border-white/10 group cursor-pointer transition-all duration-300">
                     <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-12 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert transition-opacity group-hover:opacity-50">
-                    <img src="${fotoSrc}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='${defaultFoto}'">
+                    <img src="${fotoSrc}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
                     <div class="absolute bottom-0 inset-x-0 p-3 z-20 bg-gradient-to-t from-black via-black/80 to-transparent">
                         <h4 class="text-white text-[10px] md:text-[11px] font-black leading-tight line-clamp-2">${p.nama}</h4>
                         <p class="text-yellow-400 text-[8px] md:text-[9px] font-bold tracking-widest mt-1 line-clamp-1">${p.jabatan}</p>
@@ -839,7 +838,7 @@
                     return `
                     <div onclick="bukaLightboxProfil('${fotoSrc}', '${p.nama}', '${p.jabatan}')" class="relative w-[140px] md:w-[200px] h-[250px] md:h-[320px] rounded-xl overflow-hidden shadow-lg hover:border-yellow-400/50 border border-white/10 group cursor-pointer transition-all duration-300">
                         <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-12 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert transition-opacity group-hover:opacity-50">
-                        <img src="${fotoSrc}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='${defaultFoto}'">
+                        <img src="${fotoSrc}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
                         <div class="absolute bottom-0 inset-x-0 p-3 z-20 bg-gradient-to-t from-black via-black/80 to-transparent text-center">
                             <h4 class="text-white text-[11px] md:text-[13px] font-black leading-tight line-clamp-2">${p.nama}</h4>
                             <p class="text-yellow-400 text-[9px] md:text-[10px] font-bold tracking-widest mt-1 line-clamp-2">${p.jabatan}</p>
@@ -858,7 +857,7 @@
                     return `
                     <div onclick="bukaLightboxProfil('${fotoSrc}', '${p.nama}', '${p.jabatan}')" class="relative w-full h-[250px] md:h-[320px] rounded-xl overflow-hidden shadow-lg hover:border-yellow-400/50 border border-white/10 group cursor-pointer transition-all duration-300">
                         <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-12 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert transition-opacity group-hover:opacity-50">
-                        <img src="${fotoSrc}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='${defaultFoto}'">
+                        <img src="${fotoSrc}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
                         <div class="absolute bottom-0 inset-x-0 p-3 z-20 bg-gradient-to-t from-black via-black/80 to-transparent">
                             <h4 class="text-white text-[11px] md:text-[13px] font-black leading-tight line-clamp-2">${p.nama}</h4>
                             <p class="text-yellow-400 text-[9px] md:text-[10px] font-bold tracking-widest mt-1 line-clamp-2">${p.jabatan}</p>
@@ -876,7 +875,7 @@
             kadesPage = 0;
             renderKadesPage(); 
             if(listKades.length > 7) {
-                // Interval render kades lambat 8 detik biar elegan
+                // FIXED: Animasi lambat 8 detik
                 kadesInterval = setInterval(renderKadesPage, 8000);
             }
         }
@@ -1051,7 +1050,41 @@
             }
         }
 
+        // FUNGSI UTAMA PARSING TANGGAL ANTI ERROR
         const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"];
+
+        function parseTanggalAman(waktuStr) {
+            let str = waktuStr ? waktuStr.toString().trim() : "";
+            if(!str) return { m: "", y: "", tampil: "-" };
+
+            // Format 1: Biasanya dari Google Script DD/MM/YYYY HH:mm:ss
+            if (str.includes('/')) {
+                let p = str.split(' ');
+                let dp = p[0].split('/');
+                if (dp.length === 3) {
+                    let d = dp[0].padStart(2, '0');
+                    let m = dp[1].padStart(2, '0');
+                    let y = dp[2];
+                    let t = p[1] ? p[1].substring(0, 5) : "";
+                    let mName = MONTH_NAMES[parseInt(m) - 1] || m;
+                    return { m: m, y: y, tampil: `${d}-${mName}-${y} ${t}`.trim() };
+                }
+            }
+            
+            // Format 2: Fallback ke standar browser (ISO dsb)
+            let dObj = new Date(str);
+            if (!isNaN(dObj)) {
+                let d = dObj.getDate().toString().padStart(2, '0');
+                let m = (dObj.getMonth() + 1).toString().padStart(2, '0');
+                let y = dObj.getFullYear().toString();
+                let t = dObj.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':');
+                let mName = MONTH_NAMES[parseInt(m) - 1] || m;
+                return { m: m, y: y, tampil: `${d}-${mName}-${y} ${t}`.trim() };
+            }
+            
+            // Kalau formatnya aneh banget
+            return { m: "", y: "", tampil: str };
+        }
 
         function renderTabelLaporanTerfilter() {
             const tbody = document.getElementById('tabelDataLaporan');
@@ -1059,44 +1092,11 @@
             const thn = document.getElementById('filterTahunLaporan').value;
 
             dataLaporanTerfilter = dataLaporan.filter(item => {
-                if (!item.waktu) return false;
+                let parsed = parseTanggalAman(item.waktu);
+                item.waktu_tampil = parsed.tampil; // Simpan untuk dirender tabel & PDF nanti
                 
-                let m = "";
-                let y = "";
-                let d = "";
-                let timeStr = "";
-                let tglFormatTampil = item.waktu; 
-
-                let parts = item.waktu.toString().split(' ');
-                if (parts[0].includes('/')) {
-                    let dateParts = parts[0].split('/'); 
-                    if (dateParts.length === 3) {
-                        d = dateParts[0].padStart(2, '0');
-                        m = dateParts[1].padStart(2, '0');
-                        y = dateParts[2];
-                        timeStr = parts[1] ? parts[1].substring(0,5) : ""; 
-                        
-                        let monthText = MONTH_NAMES[parseInt(m) - 1] || m;
-                        tglFormatTampil = `${d}-${monthText}-${y} ${timeStr}`;
-                    }
-                } else {
-                    let dateObj = new Date(item.waktu);
-                    if (!isNaN(dateObj)) {
-                        d = dateObj.getDate().toString().padStart(2, '0');
-                        m = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-                        y = dateObj.getFullYear().toString();
-                        timeStr = dateObj.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }).replace(/\./g, ':');
-                        
-                        let monthText = MONTH_NAMES[parseInt(m) - 1] || m;
-                        tglFormatTampil = `${d}-${monthText}-${y} ${timeStr}`;
-                    }
-                }
-
-                item.waktu_tampil = tglFormatTampil;
-
-                let matchBln = (bln === 'semua') || (m === bln);
-                let matchThn = (thn === 'semua') || (y === thn);
-
+                let matchBln = (bln === 'semua') || (parsed.m === bln);
+                let matchThn = (thn === 'semua') || (parsed.y === thn);
                 return matchBln && matchThn;
             });
 
@@ -1171,7 +1171,7 @@
         });
 
         // ----------------------------------------------------
-        // CETAK PDF (TANPA LOGO, ANTI-BLANK)
+        // CETAK PDF (SUPER STABIL, TANPA GAMBAR LOGO EKSTERNAL)
         // ----------------------------------------------------
         function cetakLaporanResmi() {
             if(dataLaporanTerfilter.length === 0) {
@@ -1190,29 +1190,28 @@
 
             // KOP SURAT FULL TEKS TANPA GAMBAR LOGO
             let htmlContent = `
-            <div id="pdfContentWrapper" style="padding: 40px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000; background: #fff; width: 100%; max-width: 1050px; margin: 0 auto;">
-                
-                <div style="text-align: center; border-bottom: 4px solid #1e3a8a; margin-bottom: 25px; padding-bottom: 15px;">
-                    <h2 style="margin: 0; font-size: 22px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
-                    <h1 style="margin: 0; font-size: 32px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
-                    <p style="margin: 5px 0 0; font-size: 14px;">Jl. Parsil Desa Nawin Kode Pos 71572</p>
+            <div style="padding: 30px; font-family: Arial, sans-serif; color: #000; background: #fff;">
+                <div style="text-align: center; border-bottom: 3px solid #1e3a8a; margin-bottom: 20px; padding-bottom: 10px;">
+                    <h2 style="margin: 0; font-size: 20px; font-weight: normal; letter-spacing: 1px;">PEMERINTAH KABUPATEN TABALONG</h2>
+                    <h1 style="margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 2px;">KECAMATAN HARUAI</h1>
+                    <p style="margin: 5px 0 0; font-size: 12px;">Jl. Parsil Desa Nawin Kode Pos 71572</p>
                 </div>
                 
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <h3 style="margin: 0; font-size: 18px; text-decoration: underline;">REKAPITULASI LAPORAN PENGAWASAN TERPADU</h3>
-                    <p style="margin: 5px 0 0; font-size: 14px; font-weight: bold;">(PANTAU HARUAI)</p>
+                    <h3 style="margin: 0; font-size: 16px; text-decoration: underline;">REKAPITULASI LAPORAN PENGAWASAN TERPADU</h3>
+                    <p style="margin: 5px 0 0; font-size: 12px; font-weight: bold;">(PANTAU HARUAI)</p>
                     <p style="margin: 5px 0 0; font-size: 12px; font-style: italic;">${periodeTeks}</p>
                 </div>
 
-                <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 40px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 30px;">
                     <thead>
                         <tr style="background-color: #f1f5f9;">
-                            <th style="border: 1px solid #333; padding: 8px; text-align: center; width: 5%;">No</th>
-                            <th style="border: 1px solid #333; padding: 8px; width: 15%;">Waktu</th>
-                            <th style="border: 1px solid #333; padding: 8px; width: 15%;">Kategori</th>
-                            <th style="border: 1px solid #333; padding: 8px; width: 20%;">Nama Pelapor</th>
-                            <th style="border: 1px solid #333; padding: 8px; width: 35%;">Lokasi & Detail</th>
-                            <th style="border: 1px solid #333; padding: 8px; text-align: center; width: 10%;">Status</th>
+                            <th style="border: 1px solid #333; padding: 6px; text-align: center; width: 5%;">No</th>
+                            <th style="border: 1px solid #333; padding: 6px; width: 15%;">Waktu</th>
+                            <th style="border: 1px solid #333; padding: 6px; width: 15%;">Kategori</th>
+                            <th style="border: 1px solid #333; padding: 6px; width: 20%;">Nama Pelapor</th>
+                            <th style="border: 1px solid #333; padding: 6px; width: 35%;">Lokasi & Detail</th>
+                            <th style="border: 1px solid #333; padding: 6px; text-align: center; width: 10%;">Status</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -1220,33 +1219,35 @@
             let no = 1; 
             dataLaporanTerfilter.forEach((item) => { 
                 let tglFormat = item.waktu_tampil || item.waktu; 
-                let statusStyle = item.status === 'Selesai' ? 'color: #166534; font-weight: bold;' : (item.status === 'Ditolak' ? 'color: #991b1b; font-weight: bold;' : 'color: #854d0e; font-weight: bold;');
+                let statusColor = item.status === 'Selesai' ? '#166534' : (item.status === 'Ditolak' ? '#991b1b' : '#854d0e');
 
                 htmlContent += `
                     <tr>
-                        <td style="border: 1px solid #333; padding: 8px; text-align: center;">${no++}</td>
-                        <td style="border: 1px solid #333; padding: 8px;">
+                        <td style="border: 1px solid #333; padding: 6px; text-align: center;">${no++}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">
                             ${tglFormat}<br>
-                            <span style="font-size: 9px; color: #666; font-family: monospace;">ID: ${item.id_laporan || '-'}</span>
+                            <span style="font-size: 8px; color: #666;">ID: ${item.id_laporan || '-'}</span>
                         </td>
-                        <td style="border: 1px solid #333; padding: 8px; font-weight: bold;">${item.kategori}</td>
-                        <td style="border: 1px solid #333; padding: 8px;">${item.nama}</td>
-                        <td style="border: 1px solid #333; padding: 8px;">
+                        <td style="border: 1px solid #333; padding: 6px; font-weight: bold;">${item.kategori}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.nama}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">
                             <strong>Lokasi:</strong> ${item.lokasi}<br>
-                            <span style="color: #444; font-size: 11px;">"${item.laporan ? (item.laporan.length > 100 ? item.laporan.substring(0, 100) + '...' : item.laporan) : '-'}"</span>
+                            <span style="color: #444; font-size: 10px;">"${item.laporan ? (item.laporan.length > 100 ? item.laporan.substring(0, 100) + '...' : item.laporan) : '-'}"</span>
                         </td>
-                        <td style="border: 1px solid #333; padding: 8px; text-align: center;">
-                            <span style="${statusStyle}">${item.status}</span>
+                        <td style="border: 1px solid #333; padding: 6px; text-align: center; color: ${statusColor}; font-weight: bold;">
+                            ${item.status}
                         </td>
                     </tr>`; 
             });
             
+            let tglCetak = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            
             htmlContent += `
                     </tbody>
                 </table>
-                <div style="width: 100%; display: flex; justify-content: flex-end; font-size: 14px;">
-                    <div style="text-align: center; width: 250px;">
-                        <p style="margin: 0;">Haruai, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <div style="width: 100%; text-align: right; font-size: 12px; padding-right: 20px;">
+                    <div style="display: inline-block; text-align: center;">
+                        <p style="margin: 0;">Haruai, ${tglCetak}</p>
                         <p style="margin: 0;">Mengetahui,</p>
                         <p style="margin: 0; font-weight: bold;">Petugas Command Center</p>
                         <br><br><br><br>
@@ -1255,38 +1256,28 @@
                 </div>
             </div>`;
             
-            let tempElement = document.createElement('div');
-            tempElement.innerHTML = htmlContent;
-            
-            // Lempar ke luar layar biar PDF gak blank dan tetep ke-render
-            tempElement.style.position = 'fixed';
-            tempElement.style.left = '-9999px';
-            tempElement.style.top = '0';
-            document.body.appendChild(tempElement);
+            // Panggil API PDF Langsung dari string (tidak usah ditaruh ke layar)
+            let opt = {
+                margin:       0.5,
+                filename:     `Rekap-Pantau-Haruai-${thn}-${bln}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
 
-            setTimeout(() => {
-                html2pdf().set({ 
-                    margin: [0.5, 0.5, 0.5, 0.5], 
-                    filename: `Rekap-Pantau-Haruai-${thn}-${bln}.pdf`, 
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, logging: false }, 
-                    jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } 
-                }).from(tempElement).save().then(() => {
-                    document.body.removeChild(tempElement);
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }).catch(err => {
-                    console.error(err);
-                    document.body.removeChild(tempElement);
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                    tampilkanAlert("Terjadi kesalahan saat memproses PDF. Pastikan jaringan stabil.");
-                });
-            }, 800);
+            html2pdf().set(opt).from(htmlContent).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error(err);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                tampilkanAlert("Terjadi kesalahan saat memproses PDF.");
+            });
         }
 
         // ----------------------------------------------------
-        // RENDER UI LAINNYA & EVENT LISTENERS
+        // RENDER UI Warga & Admin
         // ----------------------------------------------------
         function renderTampilanWarga() {
             document.getElementById('wargaRunningText').innerHTML = textData.split('|').map((t, i) => `<span class="mx-4 ${i%2===0 ? 'text-white' : 'text-slate-300'}">${t.trim()}</span><span class="mx-4 text-yellow-500">|</span>`).join('');
@@ -1297,7 +1288,7 @@
                 let htmlCards = [...validData].reverse().map((g) => `
                     <div onclick="bukaLightbox('${g.url}', '${g.title}', '${g.desc}')" class="relative min-w-[260px] max-w-[260px] bg-slate-900 backdrop-blur rounded-xl border border-white/10 overflow-hidden shadow-lg hover:border-yellow-400/50 cursor-pointer group">
                         <img src="https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png" class="absolute inset-0 m-auto w-20 opacity-30 pointer-events-none z-10 mix-blend-overlay filter brightness-0 invert drop-shadow-md transition-opacity group-hover:opacity-50">
-                        <img src="${g.url}" class="w-full h-32 object-cover relative z-0" onerror="this.src='https://via.placeholder.com/300x200?text=Kosong'">
+                        <img src="${g.url}" class="w-full h-32 object-cover relative z-0" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
                         <div class="p-4 relative z-20 bg-slate-900 border-t border-white/5">
                             <span class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">${g.title}</span>
                             <p class="text-slate-300 text-xs mt-1 leading-snug line-clamp-2">${g.desc}</p>
@@ -1325,7 +1316,7 @@
                     tbody.innerHTML += `
                     <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
                         <td class="p-4 text-center font-bold text-slate-400">${no}</td>
-                        <td class="p-4"><img src="${g.url}" class="w-16 h-12 object-cover rounded border border-slate-600" onerror="this.src='https://via.placeholder.com/100?text=Err'"></td>
+                        <td class="p-4"><img src="${g.url}" class="w-16 h-12 object-cover rounded border border-slate-600" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'"></td>
                         <td class="p-4"><h4 class="text-yellow-400 font-bold text-xs tracking-wider mb-1">${g.title}</h4><p class="text-slate-400 text-[10px] leading-tight">${shortDesc}</p></td>
                         <td class="p-4 text-center">
                             <button onclick="editGaleri(${realIndex})" class="text-blue-400 hover:text-white font-bold text-xs uppercase mr-2">Edit</button>
@@ -1359,7 +1350,7 @@
                     tbody.innerHTML += `
                     <tr class="border-b border-slate-700/50 hover:bg-slate-800/80 transition-colors">
                         <td class="p-4 text-center font-bold text-slate-400">${no}</td>
-                        <td class="p-4 text-center"><img src="${fotoSrc}" class="w-10 h-10 object-cover rounded-full border border-slate-600 mx-auto" onerror="this.src='${defaultFoto}'"></td>
+                        <td class="p-4 text-center"><img src="${fotoSrc}" class="w-10 h-10 object-cover rounded-full border border-slate-600 mx-auto" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'"></td>
                         <td class="p-4"><h4 class="text-white font-bold text-xs tracking-wider mb-1">${p.nama}</h4><p class="text-yellow-400 font-bold text-[10px]">${p.jabatan}</p></td>
                         <td class="p-4 text-center">
                             <button onclick="editProfil(${index})" class="text-blue-400 hover:text-white font-bold text-xs uppercase mr-2">Edit</button>
@@ -1381,26 +1372,93 @@
         }
 
         function renderPengaturanAdmin() {
-            document.getElementById('inputRunningText').value = textData; document.getElementById('inputVideo1').value = videoData.vid1 || ""; document.getElementById('inputVideo2').value = videoData.vid2 || "";
-            const contCCTV = document.getElementById('containerSlideshowAdmin'); contCCTV.innerHTML = '';
-            for(let i=1; i<=3; i++) { let s = slides[i-1] || {url: '', caption: ''}; contCCTV.innerHTML += `<div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl"><h4 class="font-bold mb-2 text-[10px] text-yellow-400">Kamera ${i}</h4><input type="text" id="inputUrlCCTV${i}" value="${s.url}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-2 outline-none" placeholder="URL Foto"><input type="text" id="inputCapCCTV${i}" value="${s.caption}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] font-bold outline-none" placeholder="Keterangan"></div>`; }
+            document.getElementById('inputRunningText').value = textData; 
+            document.getElementById('inputVideo1').value = videoData.vid1 || ""; 
+            document.getElementById('inputVideo2').value = videoData.vid2 || "";
+            
+            const contCCTV = document.getElementById('containerSlideshowAdmin'); 
+            contCCTV.innerHTML = '';
+            for(let i=1; i<=3; i++) { 
+                let s = slides[i-1] || {url: '', caption: ''}; 
+                contCCTV.innerHTML += `<div class="bg-slate-800/50 p-4 border border-slate-600 rounded-2xl"><h4 class="font-bold mb-2 text-[10px] text-yellow-400">Kamera ${i}</h4><input type="text" id="inputUrlCCTV${i}" value="${s.url}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] mb-2 outline-none" placeholder="URL Foto"><input type="text" id="inputCapCCTV${i}" value="${s.caption}" class="w-full px-3 py-2 bg-slate-900 border border-slate-600 text-white rounded-lg text-[10px] font-bold outline-none" placeholder="Keterangan"></div>`; 
+            }
+            
             renderGaleriAdmin();
             renderProfilAdmin();
         }
 
-        function renderUsers() { const tbody = document.getElementById('tabelPengguna'); tbody.innerHTML = ''; dataPengguna.forEach((u, i) => { const isSuper = u.username === 'superadmin'; const statClass = u.status === 'Aktif' ? 'text-green-400 bg-green-900/40 border-green-500' : 'text-red-400 bg-red-900/40 border-red-500'; const action = isSuper ? '<span class="text-xs italic text-slate-500">ROOT</span>' : `<button onclick="editUser(${i})" class="text-blue-400 hover:text-white font-bold mr-3 text-xs uppercase tracking-widest">Edit</button><button onclick="toggleUser(${i})" class="${u.status === 'Aktif' ? 'text-red-500' : 'text-green-500'} hover:text-white font-bold text-xs uppercase tracking-widest">${u.status === 'Aktif' ? 'Blokir' : 'Aktifkan'}</button>`; tbody.innerHTML += `<tr class="border-b border-slate-700/50"><td class="p-6 font-bold text-white">${u.username}</td><td class="p-6 text-slate-300">${u.role}</td><td class="p-6"><span class="px-3 py-1 rounded tracking-widest uppercase text-[10px] font-bold border ${statClass}">${u.status}</span></td><td class="p-6 text-center">${action}</td></tr>`; }); }
-        function toggleUser(i) { dataPengguna[i].status = dataPengguna[i].status === 'Aktif' ? 'Nonaktif' : 'Aktif'; renderUsers(); }
-        function bukaModalTambahPetugas() { editIndex = -1; document.getElementById('modalUserTitle').innerText = "TAMBAH AKUN"; document.getElementById('modalUser').classList.remove('hidden'); document.getElementById('inputNewUser').value = ''; document.getElementById('inputNewPass').value = ''; }
-        function tutupModalUser() { document.getElementById('modalUser').classList.add('hidden'); }
-        function editUser(i) { editIndex = i; document.getElementById('modalUserTitle').innerText = "EDIT AKUN"; document.getElementById('inputNewUser').value = dataPengguna[i].username; document.getElementById('inputNewPass').value = dataPengguna[i].password; document.getElementById('inputNewRole').value = dataPengguna[i].role; document.getElementById('modalUser').classList.remove('hidden'); }
-        function simpanPetugas() { const u = document.getElementById('inputNewUser').value; const p = document.getElementById('inputNewPass').value; const r = document.getElementById('inputNewRole').value; if(!u || !p) return; if(editIndex === -1) { dataPengguna.push({ username: u, password: p, role: r, status: "Aktif" }); } else { dataPengguna[editIndex].username = u; dataPengguna[editIndex].password = p; dataPengguna[editIndex].role = r; } tutupModalUser(); renderUsers(); }
+        function renderUsers() { 
+            const tbody = document.getElementById('tabelPengguna'); 
+            tbody.innerHTML = ''; 
+            
+            dataPengguna.forEach((u, i) => { 
+                const isSuper = u.username === 'superadmin'; 
+                const statClass = u.status === 'Aktif' ? 'text-green-400 bg-green-900/40 border-green-500' : 'text-red-400 bg-red-900/40 border-red-500'; 
+                const action = isSuper ? '<span class="text-xs italic text-slate-500">ROOT</span>' : `<button onclick="editUser(${i})" class="text-blue-400 hover:text-white font-bold mr-3 text-xs uppercase tracking-widest">Edit</button><button onclick="toggleUser(${i})" class="${u.status === 'Aktif' ? 'text-red-500' : 'text-green-500'} hover:text-white font-bold text-xs uppercase tracking-widest">${u.status === 'Aktif' ? 'Blokir' : 'Aktifkan'}</button>`; 
+                
+                tbody.innerHTML += `<tr class="border-b border-slate-700/50"><td class="p-6 font-bold text-white">${u.username}</td><td class="p-6 text-slate-300">${u.role}</td><td class="p-6"><span class="px-3 py-1 rounded tracking-widest uppercase text-[10px] font-bold border ${statClass}">${u.status}</span></td><td class="p-6 text-center">${action}</td></tr>`; 
+            }); 
+        }
 
-        function bukaModalLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
-        function tutupModalLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
+        function toggleUser(i) { 
+            dataPengguna[i].status = dataPengguna[i].status === 'Aktif' ? 'Nonaktif' : 'Aktif'; 
+            renderUsers(); 
+        }
+
+        function bukaModalTambahPetugas() { 
+            editIndex = -1; 
+            document.getElementById('modalUserTitle').innerText = "TAMBAH AKUN"; 
+            document.getElementById('modalUser').classList.remove('hidden'); 
+            document.getElementById('inputNewUser').value = ''; 
+            document.getElementById('inputNewPass').value = ''; 
+        }
+
+        function tutupModalUser() { 
+            document.getElementById('modalUser').classList.add('hidden'); 
+        }
+
+        function editUser(i) { 
+            editIndex = i; 
+            document.getElementById('modalUserTitle').innerText = "EDIT AKUN"; 
+            document.getElementById('inputNewUser').value = dataPengguna[i].username; 
+            document.getElementById('inputNewPass').value = dataPengguna[i].password; 
+            document.getElementById('inputNewRole').value = dataPengguna[i].role; 
+            document.getElementById('modalUser').classList.remove('hidden'); 
+        }
+
+        function simpanPetugas() { 
+            const u = document.getElementById('inputNewUser').value; 
+            const p = document.getElementById('inputNewPass').value; 
+            const r = document.getElementById('inputNewRole').value; 
+            
+            if(!u || !p) return; 
+            
+            if(editIndex === -1) { 
+                dataPengguna.push({ username: u, password: p, role: r, status: "Aktif" }); 
+            } else { 
+                dataPengguna[editIndex].username = u; 
+                dataPengguna[editIndex].password = p; 
+                dataPengguna[editIndex].role = r; 
+            } 
+            
+            tutupModalUser(); 
+            renderUsers(); 
+        }
+
+        // ----------------------------------------------------
+        // LOGIKA LOGIN & SUBMIT FORM
+        // ----------------------------------------------------
+        function bukaModalLogin() { 
+            document.getElementById('modalLogin').classList.remove('hidden'); 
+        }
+        function tutupModalLogin() { 
+            document.getElementById('modalLogin').classList.add('hidden'); 
+        }
         function cekLogin() { 
             const u = document.getElementById('inputUsername').value; 
             const p = document.getElementById('inputPassword').value; 
             const valid = dataPengguna.find(x => x.username === u && x.password === p && x.status === "Aktif"); 
+            
             if (valid) { 
                 tutupModalLogin(); 
                 document.getElementById('viewWarga').classList.add('hidden'); 
@@ -1413,6 +1471,7 @@
                 document.getElementById('errorLogin').classList.remove('hidden'); 
             } 
         }
+
         function kembaliKeWarga() { 
             document.getElementById('viewAdmin').classList.add('hidden'); 
             document.getElementById('viewWarga').classList.remove('hidden'); 
@@ -1420,54 +1479,145 @@
             document.getElementById('bgOverlayWarga').classList.remove('hidden'); 
             document.getElementById('bgCCTVAdmin').classList.add('hidden'); 
         }
+
         function switchAdminTab(tab) { 
             document.getElementById('contentLaporan').classList.toggle('hidden', tab !== 'laporan'); 
             document.getElementById('contentPengaturan').style.display = tab === 'pengaturan' ? 'flex' : 'none'; 
             document.getElementById('contentPengguna').classList.toggle('hidden', tab !== 'pengguna'); 
+            
             const a = "bg-yellow-400 text-blue-900 shadow-lg"; 
             const i = "bg-slate-800 text-gray-300 border border-slate-600 hover:bg-slate-700"; 
+            
             document.getElementById('btnTabLaporan').className = `${tab === 'laporan' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; 
             document.getElementById('btnTabPengaturan').className = `${tab === 'pengaturan' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; 
             document.getElementById('btnTabPengguna').className = `${tab === 'pengguna' ? a : i} px-8 py-3.5 rounded-2xl font-bold text-sm`; 
+            
             if(tab === 'pengaturan') renderPengaturanAdmin(); 
             if(tab === 'pengguna') renderUsers(); 
             if(tab === 'laporan') muatDataGSheet(); 
         }
 
         document.getElementById('formLaporan').addEventListener('submit', async e => {
-            e.preventDefault(); const btn = document.getElementById('btnKirim'); const originalText = btn.innerHTML; const originalClass = btn.className;
-            document.getElementById('modalBuktiLaporan').classList.remove('hidden'); document.getElementById('modalBuktiCard').classList.replace('border-green-500', 'border-blue-500'); document.getElementById('buktiIconLoading').classList.remove('hidden'); document.getElementById('buktiIconSuccess').classList.add('hidden'); document.getElementById('buktiIconContainer').classList.replace('bg-green-100', 'bg-blue-100'); document.getElementById('buktiIconContainer').classList.replace('text-green-500', 'text-blue-500');
-            document.getElementById('buktiTitle').innerText = "Memproses Laporan..."; document.getElementById('buktiDesc').innerText = "Sistem sedang mengamankan data dan mencetak arsip PDF resmi. Mohon tunggu sebentar (± 5-8 detik).";
-            const btnD = document.getElementById('btnDownloadBukti'); btnD.disabled = true; btnD.className = "w-full bg-slate-300 text-slate-500 font-bold py-3.5 rounded-xl transition-all cursor-not-allowed flex justify-center items-center gap-2"; btnD.innerHTML = "⏳ Sedang Memproses...";
-            const btnC = document.getElementById('btnCloseBukti'); btnC.disabled = true; btnC.classList.add('hidden'); document.getElementById('backdropBukti').onclick = null; 
-            btn.disabled = true; btn.className = "w-full bg-slate-500 text-slate-300 font-black py-4 rounded-xl cursor-not-allowed flex justify-center items-center gap-2"; btn.innerHTML = "Memproses...";
-            const kategori = document.getElementById('inputKategori').value; const nama = document.getElementById('inputNama').value; const lokasi = document.getElementById('inputLokasi').value; const laporan = document.getElementById('inputLaporan').value; const fileFoto = document.getElementById('inputFoto').files[0];
-            let fotoBase64 = ""; if (fileFoto) { const reader = new FileReader(); reader.readAsDataURL(fileFoto); await new Promise(r => reader.onload = () => { fotoBase64 = reader.result; r(); }); }
+            e.preventDefault(); 
+            const btn = document.getElementById('btnKirim'); 
+            const originalText = btn.innerHTML; 
+            const originalClass = btn.className;
+            
+            document.getElementById('modalBuktiLaporan').classList.remove('hidden'); 
+            document.getElementById('modalBuktiCard').classList.replace('border-green-500', 'border-blue-500'); 
+            document.getElementById('buktiIconLoading').classList.remove('hidden'); 
+            document.getElementById('buktiIconSuccess').classList.add('hidden'); 
+            document.getElementById('buktiIconContainer').classList.replace('bg-green-100', 'bg-blue-100'); 
+            document.getElementById('buktiIconContainer').classList.replace('text-green-500', 'text-blue-500');
+            document.getElementById('buktiTitle').innerText = "Memproses Laporan..."; 
+            document.getElementById('buktiDesc').innerText = "Sistem sedang mengamankan data dan mencetak arsip PDF resmi. Mohon tunggu sebentar (± 5-8 detik).";
+            
+            const btnD = document.getElementById('btnDownloadBukti'); 
+            btnD.disabled = true; 
+            btnD.className = "w-full bg-slate-300 text-slate-500 font-bold py-3.5 rounded-xl transition-all cursor-not-allowed flex justify-center items-center gap-2"; 
+            btnD.innerHTML = "⏳ Sedang Memproses...";
+            
+            const btnC = document.getElementById('btnCloseBukti'); 
+            btnC.disabled = true; 
+            btnC.classList.add('hidden'); 
+            document.getElementById('backdropBukti').onclick = null; 
+            
+            btn.disabled = true; 
+            btn.className = "w-full bg-slate-500 text-slate-300 font-black py-4 rounded-xl cursor-not-allowed flex justify-center items-center gap-2"; 
+            btn.innerHTML = "Memproses...";
+            
+            const kategori = document.getElementById('inputKategori').value; 
+            const nama = document.getElementById('inputNama').value; 
+            const lokasi = document.getElementById('inputLokasi').value; 
+            const laporan = document.getElementById('inputLaporan').value; 
+            const fileFoto = document.getElementById('inputFoto').files[0];
+            
+            let fotoBase64 = ""; 
+            if (fileFoto) { 
+                const reader = new FileReader(); 
+                reader.readAsDataURL(fileFoto); 
+                await new Promise(r => reader.onload = () => { fotoBase64 = reader.result; r(); }); 
+            }
+            
             try {
                 const res = await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'submit_laporan', kategori, nama, lokasi, laporan, fotoBase64 }) });
                 const result = await res.json();
                 if(result.status === 'success') { 
-                    linkPdfSelesai = result.pdf_url; document.getElementById('modalBuktiCard').classList.replace('border-blue-500', 'border-green-500'); document.getElementById('buktiIconLoading').classList.add('hidden'); document.getElementById('buktiIconSuccess').classList.remove('hidden'); document.getElementById('buktiIconContainer').classList.replace('bg-blue-100', 'bg-green-100'); document.getElementById('buktiIconContainer').classList.replace('text-blue-500', 'text-green-500');
-                    document.getElementById('buktiTitle').innerText = "Laporan Terkirim!"; document.getElementById('buktiDesc').innerText = "Apakah Anda ingin mengunduh bukti Tanda Terima Pelaporan dalam bentuk PDF?";
-                    btnD.disabled = false; btnD.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex justify-center items-center gap-2"; btnD.innerHTML = "Ya, Unduh PDF Bukti Laporan";
-                    btnC.disabled = false; btnC.classList.remove('hidden'); document.getElementById('backdropBukti').onclick = tutupModalBukti; 
-                } else { tutupModalBukti(); tampilkanAlert("Gagal terhubung ke Server. Coba lagi."); } 
-            } catch (err) { tutupModalBukti(); tampilkanAlert("Terjadi kesalahan pengiriman."); } 
-            finally { btn.disabled = false; btn.className = originalClass; btn.innerHTML = originalText; }
+                    linkPdfSelesai = result.pdf_url; 
+                    document.getElementById('modalBuktiCard').classList.replace('border-blue-500', 'border-green-500'); 
+                    document.getElementById('buktiIconLoading').classList.add('hidden'); 
+                    document.getElementById('buktiIconSuccess').classList.remove('hidden'); 
+                    document.getElementById('buktiIconContainer').classList.replace('bg-blue-100', 'bg-green-100'); 
+                    document.getElementById('buktiIconContainer').classList.replace('text-blue-500', 'text-green-500');
+                    document.getElementById('buktiTitle').innerText = "Laporan Terkirim!"; 
+                    document.getElementById('buktiDesc').innerText = "Apakah Anda ingin mengunduh bukti Tanda Terima Pelaporan dalam bentuk PDF?";
+                    btnD.disabled = false; 
+                    btnD.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex justify-center items-center gap-2"; 
+                    btnD.innerHTML = "Ya, Unduh PDF Bukti Laporan";
+                    btnC.disabled = false; 
+                    btnC.classList.remove('hidden'); 
+                    document.getElementById('backdropBukti').onclick = tutupModalBukti; 
+                } else { 
+                    tutupModalBukti(); 
+                    tampilkanAlert("Gagal terhubung ke Server. Coba lagi."); 
+                } 
+            } catch (err) { 
+                tutupModalBukti(); 
+                tampilkanAlert("Terjadi kesalahan pengiriman."); 
+            } finally { 
+                btn.disabled = false; 
+                btn.className = originalClass; 
+                btn.innerHTML = originalText; 
+            }
         });
 
-        function prosesDownloadBukti() { if (linkPdfSelesai && linkPdfSelesai !== "Gagal membuat PDF") { window.open(linkPdfSelesai, '_blank'); } else { tampilkanAlert("Maaf, file PDF gagal di-generate oleh server."); } tutupModalBukti(); }
-        function tutupModalBukti() { document.getElementById('modalBuktiLaporan').classList.add('hidden'); document.getElementById('formLaporan').reset(); muatDataGSheet(); }
+        function prosesDownloadBukti() { 
+            if (linkPdfSelesai && linkPdfSelesai !== "Gagal membuat PDF") { 
+                window.open(linkPdfSelesai, '_blank'); 
+            } else { 
+                tampilkanAlert("Maaf, file PDF gagal di-generate oleh server."); 
+            } 
+            tutupModalBukti(); 
+        }
+
+        function tutupModalBukti() { 
+            document.getElementById('modalBuktiLaporan').classList.add('hidden'); 
+            document.getElementById('formLaporan').reset(); 
+            muatDataGSheet(); 
+        }
 
         let currentSlide = 0;
         function jalankanSlide() {
             let validSlides = slides.filter(s => s.url && s.url.trim() !== ""); 
             if(validSlides.length <= 1) return; 
-            const img = document.getElementById('slideImg'); const cap = document.getElementById('slideCaption'); const cont = document.getElementById('slideCaptionContainer'); if(!img) return;
-            img.classList.replace('opacity-100', 'opacity-0'); cont.classList.replace('opacity-100', 'opacity-0');
-            setTimeout(() => { currentSlide = (currentSlide + 1) % validSlides.length; img.src = validSlides[currentSlide].url; cap.innerText = validSlides[currentSlide].caption; img.classList.replace('opacity-0', 'opacity-100'); cont.classList.replace('opacity-0', 'opacity-100'); }, 800);
+            
+            const img = document.getElementById('slideImg'); 
+            const cap = document.getElementById('slideCaption'); 
+            const cont = document.getElementById('slideCaptionContainer'); 
+            if(!img) return;
+            
+            img.classList.replace('opacity-100', 'opacity-0'); 
+            cont.classList.replace('opacity-100', 'opacity-0');
+            
+            setTimeout(() => { 
+                currentSlide = (currentSlide + 1) % validSlides.length; 
+                img.src = validSlides[currentSlide].url; 
+                cap.innerText = validSlides[currentSlide].caption; 
+                img.classList.replace('opacity-0', 'opacity-100'); 
+                cont.classList.replace('opacity-0', 'opacity-100'); 
+            }, 800);
         }
-        setTimeout(() => { let validSlides = slides.filter(s => s.url && s.url.trim() !== ""); if(validSlides.length > 0) { document.getElementById('slideImg').src = validSlides[0].url; document.getElementById('slideImg').classList.replace('opacity-0', 'opacity-100'); document.getElementById('slideCaption').innerText = validSlides[0].caption; document.getElementById('slideCaptionContainer').classList.replace('opacity-0', 'opacity-100'); } }, 100); 
+        
+        setTimeout(() => { 
+            let validSlides = slides.filter(s => s.url && s.url.trim() !== ""); 
+            if(validSlides.length > 0) { 
+                document.getElementById('slideImg').src = validSlides[0].url; 
+                document.getElementById('slideImg').classList.replace('opacity-0', 'opacity-100'); 
+                document.getElementById('slideCaption').innerText = validSlides[0].caption; 
+                document.getElementById('slideCaptionContainer').classList.replace('opacity-0', 'opacity-100'); 
+            } 
+        }, 100); 
+        
         setInterval(jalankanSlide, 4000);
 
     </script>

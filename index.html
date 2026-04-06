@@ -1201,35 +1201,56 @@
             }
         });
 
+// ========================================================
+        // 2. FIX: CETAK PDF (PAKAI LOGO DYNAMIC FETCH & ANTI FREEZE)
         // ========================================================
-        // 2. FIX: CETAK PDF (PAKAI WINDOW.PRINT CEPAT & ELEGAN)
-        // ========================================================
-        function cetakLaporanResmiCepat() {
+        async function cetakLaporanResmiCepat() {
             if(dataLaporanTerfilter.length === 0) {
                 tampilkanAlert("Tidak ada data untuk dicetak pada periode ini.");
                 return;
             }
 
+            const btn = document.querySelector('button[onclick="cetakLaporanResmiCepat()"]');
+            const originalText = btn.innerHTML;
+            
+            // Ubah teks tombol biar lu tau prosesnya lagi jalan
+            btn.innerHTML = "⏳ Menyiapkan Logo...";
+            btn.disabled = true;
+
+            // Trik ambil logo langsung dari Github dan ubah jadi Base64 di background
+            let logoBase64 = "";
+            try {
+                const logoUrl = "https://raw.githubusercontent.com/vjborneo/VJBorneo/cb8697c7599f1e6932dcbdda7987c7099750f5da/PANTAU%20HARUAI.png";
+                const response = await fetch(logoUrl);
+                const blob = await response.blob();
+                logoBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                });
+            } catch (e) {
+                console.log("Gagal meload logo, lanjut cetak tanpa logo.");
+            }
+
+            btn.innerHTML = "⏳ Menyusun PDF...";
+
             const bln = document.getElementById('filterBulanLaporan').options[document.getElementById('filterBulanLaporan').selectedIndex].text;
             const thn = document.getElementById('filterTahunLaporan').value;
             const periodeTeks = (bln === "Semua Bulan" && thn === "Semua Tahun") ? "Keseluruhan" : `Periode: ${bln} ${thn}`;
 
+            // Susun HTML Kop Surat pakai Tabel biar rapi
             let htmlContent = `
             <html>
             <head>
                 <title>Rekap PANTAU HARUAI</title>
                 <style>
                     body { font-family: Arial, sans-serif; color: #000; background: #fff; padding: 20px; }
-                    .kop { text-align: center; border-bottom: 3px solid #000; margin-bottom: 20px; padding-bottom: 10px; }
-                    .kop h2 { margin: 0; font-size: 18px; font-weight: normal; }
-                    .kop h1 { margin: 0; font-size: 24px; font-weight: bold; }
-                    .kop p { margin: 5px 0 0; font-size: 12px; }
                     .judul { text-align: center; margin-bottom: 20px; }
                     .judul h3 { margin: 0; font-size: 16px; text-decoration: underline; }
                     .judul p { margin: 5px 0 0; font-size: 12px; font-weight: normal; font-style: italic; }
-                    table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 30px; }
-                    th, td { border: 1px solid #000; padding: 6px; }
-                    th { background-color: #f0f0f0; text-align: center; }
+                    .tabel-data { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 30px; }
+                    .tabel-data th, .tabel-data td { border: 1px solid #000; padding: 6px; }
+                    .tabel-data th { background-color: #f0f0f0; text-align: center; }
                     .footer { width: 100%; text-align: right; font-size: 12px; margin-top: 50px; }
                     .footer div { display: inline-block; text-align: center; width: 250px; }
                     @media print {
@@ -1238,11 +1259,19 @@
                 </style>
             </head>
             <body>
-                <div class="kop">
-                    <h2>PEMERINTAH KABUPATEN TABALONG</h2>
-                    <h1>KECAMATAN HARUAI</h1>
-                    <p>Jl. Parsil Desa Nawin Kode Pos 71572</p>
-                </div>
+                <table style="width: 100%; border-bottom: 3px solid #000; margin-bottom: 20px; padding-bottom: 10px; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 15%; text-align: left; vertical-align: middle; border: none;">
+                            ${logoBase64 ? `<img src="${logoBase64}" style="max-width: 80px; height: auto;">` : ''}
+                        </td>
+                        <td style="width: 70%; text-align: center; vertical-align: middle; border: none;">
+                            <h2 style="margin: 0; font-size: 18px; font-weight: normal;">PEMERINTAH KABUPATEN TABALONG</h2>
+                            <h1 style="margin: 0; font-size: 24px; font-weight: bold; letter-spacing: 1px;">KECAMATAN HARUAI</h1>
+                            <p style="margin: 5px 0 0; font-size: 12px;">Jl. Parsil Desa Nawin Kode Pos 71572</p>
+                        </td>
+                        <td style="width: 15%; border: none;"></td>
+                    </tr>
+                </table>
                 
                 <div class="judul">
                     <h3>REKAPITULASI LAPORAN PENGAWASAN TERPADU</h3>
@@ -1250,7 +1279,7 @@
                     <p>${periodeTeks}</p>
                 </div>
 
-                <table>
+                <table class="tabel-data">
                     <thead>
                         <tr>
                             <th style="width: 5%;">No</th>
@@ -1303,7 +1332,9 @@
                 </div>
                 
                 <script>
-                    window.onload = function() { window.print(); }
+                    setTimeout(function() {
+                        window.print();
+                    }, 800); // Kasih nafas dikit biar logo ke-render sempurna sebelum print
                 <\/script>
             </body>
             </html>`;
@@ -1311,6 +1342,14 @@
             let printWindow = window.open('', '_blank');
             printWindow.document.write(htmlContent);
             printWindow.document.close();
+            
+            if (printWindow) {
+                printWindow.focus();
+            }
+
+            // Balikin tombol ke kondisi semula
+            btn.innerHTML = originalText;
+            btn.disabled = false;
         }
 
         // ----------------------------------------------------
